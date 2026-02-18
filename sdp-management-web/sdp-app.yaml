@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sdp-app
+  labels:
+    app: sdp-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sdp-app
+  template:
+    metadata:
+      labels:
+        app: sdp-app
+    spec:
+      containers:
+      - name: sdp-app
+        image: acrsbxdevaks.azurecr.io/sdp-app:1.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8081
+      imagePullSecrets:
+      - name: acr-secret-pwd
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sdp-app
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8081
+    targetPort: 8081
+  selector:
+    app: sdp-app

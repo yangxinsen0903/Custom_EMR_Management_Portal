@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpvmsr.mapper.ConfClusterMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.ConfCluster">
+        <id column="cluster_id" jdbcType="VARCHAR" property="clusterId"/>
+        <result column="cluster_name" jdbcType="VARCHAR" property="clusterName"/>
+        <result column="cluster_release_ver" jdbcType="VARCHAR" property="clusterReleaseVer"/>
+        <result column="region" jdbcType="VARCHAR" property="region"/>
+        <result column="scene" jdbcType="VARCHAR" property="scene"/>
+        <result column="zone" jdbcType="VARCHAR" property="zone"/>
+        <result column="zone_name" jdbcType="VARCHAR" property="zoneName"/>
+        <result column="vnet" jdbcType="VARCHAR" property="vnet"/>
+        <result column="subnet" jdbcType="VARCHAR" property="subnet"/>
+        <result column="config_type" jdbcType="VARCHAR" property="configType"/>
+        <result column="master_security_group" jdbcType="VARCHAR" property="masterSecurityGroup"/>
+        <result column="slave_security_group" jdbcType="VARCHAR" property="slaveSecurityGroup"/>
+        <result column="log_path" jdbcType="VARCHAR" property="logPath"/>
+        <result column="keypair_id" jdbcType="VARCHAR" property="keypairId"/>
+        <result column="delete_protected" jdbcType="VARCHAR" property="deleteProtected"/>
+        <result column="instance_collection_type" jdbcType="VARCHAR" property="instanceCollectionType"/>
+        <result column="publicIp_available" jdbcType="VARCHAR" property="publicipAvailable"/>
+        <result column="ambari_dburl" jdbcType="VARCHAR" property="ambariDburl"/>
+        <result column="ambari_port" jdbcType="VARCHAR" property="ambariPort"/>
+        <result column="ambari_database" jdbcType="VARCHAR" property="ambariDatabase"/>
+        <result column="ambari_db_autocreate" jdbcType="INTEGER" property="ambariDbAutocreate"/>
+        <result column="hive_metadata_dburl" jdbcType="VARCHAR" property="hiveMetadataDburl"/>
+        <result column="hive_metadata_port" jdbcType="VARCHAR" property="hiveMetadataPort"/>
+        <result column="hive_metadata_database" jdbcType="VARCHAR" property="hiveMetadataDatabase"/>
+        <result column="ambari_acount" jdbcType="VARCHAR" property="ambariAcount"/>
+        <result column="is_embed_ambaridb" jdbcType="INTEGER" property="isEmbedAmbariDb"/>
+        <result column="is_ha" jdbcType="INTEGER" property="isHa"/>
+        <result column="src_cluster_id" jdbcType="VARCHAR" property="srcClusterId"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="createdby" jdbcType="VARCHAR" property="createdby"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="modifiedby" jdbcType="VARCHAR" property="modifiedby"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="vm_mi" jdbcType="VARCHAR" property="vmMI"/>
+        <result column="log_mi" jdbcType="VARCHAR" property="logMI"/>
+        <result column="vm_mi_tenant_id" jdbcType="VARCHAR" property="vmMITenantId"/>
+        <result column="vm_mi_client_id" jdbcType="VARCHAR" property="vmMIClientId"/>
+        <result column="log_mi_tenant_id" jdbcType="VARCHAR" property="logMITenantId"/>
+        <result column="log_mi_client_id" jdbcType="VARCHAR" property="logMIClientId"/>
+        <result column="enable_ganglia" jdbcType="INTEGER" property="enableGanglia"/>
+        <result column="creation_sub_state" jdbcType="VARCHAR" property="creationSubState"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        cluster_id, cluster_name, cluster_release_ver, region, scene, zone, zone_name, vnet, subnet, config_type,
+        master_security_group, slave_security_group, log_path, keypair_id, delete_protected,
+        instance_collection_type, publicIp_available, ambari_dburl, ambari_port, ambari_database,ambari_db_autocreate,
+        hive_metadata_dburl, hive_metadata_port, hive_metadata_database, ambari_acount, is_ha, vm_mi, log_mi,
+        vm_mi_tenant_id, vm_mi_client_id, log_mi_tenant_id, log_mi_client_id,
+        src_cluster_id,state, createdby, created_time, modifiedby, modified_time,is_embed_ambaridb,enable_ganglia,
+        creation_sub_state
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from conf_cluster
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.BaseClusterScriptMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.BaseClusterScript">
+    <id column="conf_script_id" jdbcType="VARCHAR" property="confScriptId" />
+    <result column="release_version" jdbcType="VARCHAR" property="releaseVersion" />
+    <result column="script_name" jdbcType="VARCHAR" property="scriptName" />
+    <result column="run_timing" jdbcType="VARCHAR" property="runTiming" />
+    <result column="playbook_uri" jdbcType="VARCHAR" property="playbookUri" />
+    <result column="script_file_uri" jdbcType="VARCHAR" property="scriptFileUri" />
+    <result column="extra_vars" jdbcType="VARCHAR" property="extraVars" />
+    <result column="sort_no" jdbcType="INTEGER" property="sortNo" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    conf_script_id, release_version, script_name, run_timing, playbook_uri, script_file_uri, 
+    extra_vars, sort_no, createdby, created_time
+  </sql>
+  <select id="selectBaseClusterScriptList"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from base_cluster_script
+    where release_version = #{releaseVersion,jdbcType=VARCHAR}
+    and run_timing = #{runTiming,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from base_cluster_script
+    where conf_script_id = #{confScriptId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from base_cluster_script
+    where conf_script_id = #{confScriptId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.BaseClusterScript">
+    insert into base_cluster_script (conf_script_id, release_version, script_name, 
+      run_timing, playbook_uri, script_file_uri, 
+      extra_vars, sort_no, createdby, 
+      created_time)
+    values (#{confScriptId,jdbcType=VARCHAR}, #{releaseVersion,jdbcType=VARCHAR}, #{scriptName,jdbcType=VARCHAR}, 
+      #{runTiming,jdbcType=VARCHAR}, #{playbookUri,jdbcType=VARCHAR}, #{scriptFileUri,jdbcType=VARCHAR}, 
+      #{extraVars,jdbcType=VARCHAR}, #{sortNo,jdbcType=INTEGER}, #{createdby,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.BaseClusterScript">
+    insert into base_cluster_script
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="confScriptId != null">
+        conf_script_id,
+      </if>
+      <if test="releaseVersion != null">
+        release_version,
+      </if>
+      <if test="scriptName != null">
+        script_name,
+      </if>
+      <if test="runTiming != null">
+        run_timing,
+      </if>
+      <if test="playbookUri != null">
+        playbook_uri,
+      </if>
+      <if test="scriptFileUri != null">
+        script_file_uri,
+      </if>
+      <if test="extraVars != null">
+        extra_vars,
+      </if>
+      <if test="sortNo != null">
+        sort_no,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="confScriptId != null">
+        #{confScriptId,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseVersion != null">
+        #{releaseVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="scriptName != null">
+        #{scriptName,jdbcType=VARCHAR},
+      </if>
+      <if test="runTiming != null">
+        #{runTiming,jdbcType=VARCHAR},
+      </if>
+      <if test="playbookUri != null">
+        #{playbookUri,jdbcType=VARCHAR},
+      </if>
+      <if test="scriptFileUri != null">
+        #{scriptFileUri,jdbcType=VARCHAR},
+      </if>
+      <if test="extraVars != null">
+        #{extraVars,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNo != null">
+        #{sortNo,jdbcType=INTEGER},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.BaseClusterScript">
+    update base_cluster_script
+    <set>
+      <if test="releaseVersion != null">
+        release_version = #{releaseVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="scriptName != null">
+        script_name = #{scriptName,jdbcType=VARCHAR},
+      </if>
+      <if test="runTiming != null">
+        run_timing = #{runTiming,jdbcType=VARCHAR},
+      </if>
+      <if test="playbookUri != null">
+        playbook_uri = #{playbookUri,jdbcType=VARCHAR},
+      </if>
+      <if test="scriptFileUri != null">
+        script_file_uri = #{scriptFileUri,jdbcType=VARCHAR},
+      </if>
+      <if test="extraVars != null">
+        extra_vars = #{extraVars,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNo != null">
+        sort_no = #{sortNo,jdbcType=INTEGER},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where conf_script_id = #{confScriptId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.BaseClusterScript">
+    update base_cluster_script
+    set release_version = #{releaseVersion,jdbcType=VARCHAR},
+      script_name = #{scriptName,jdbcType=VARCHAR},
+      run_timing = #{runTiming,jdbcType=VARCHAR},
+      playbook_uri = #{playbookUri,jdbcType=VARCHAR},
+      script_file_uri = #{scriptFileUri,jdbcType=VARCHAR},
+      extra_vars = #{extraVars,jdbcType=VARCHAR},
+      sort_no = #{sortNo,jdbcType=INTEGER},
+      createdby = #{createdby,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where conf_script_id = #{confScriptId,jdbcType=VARCHAR}
+  </update>
+</mapper>

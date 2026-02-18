@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.AzurePriceHistoryMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.AzurePriceHistory">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="execute_time" jdbcType="TIMESTAMP" property="executeTime" />
+    <result column="vm_sku_name" jdbcType="VARCHAR" property="vmSkuName" />
+    <result column="region" jdbcType="VARCHAR" property="region" />
+    <result column="spot_unit_price" jdbcType="DECIMAL" property="spotUnitPrice" />
+    <result column="ondemand_unit_price" jdbcType="DECIMAL" property="ondemandUnitPrice" />
+    <result column="eviction_rate_lower" jdbcType="DECIMAL" property="evictionRateLower" />
+    <result column="eviction_rate_upper" jdbcType="DECIMAL" property="evictionRateUpper" />
+  </resultMap>
+
+  <sql id="All_Column_List">
+      id,execute_time,vm_sku_name,region,spot_unit_price,ondemand_unit_price,eviction_rate_lower,eviction_rate_upper
+  </sql>
+
+    <sql id="Insert_Column_List">
+        execute_time,vm_sku_name,region,spot_unit_price,ondemand_unit_price,eviction_rate_lower,eviction_rate_upper
+    </sql>
+
+
+  <insert id="insert" parameterType="com.sunbox.domain.AzurePriceHistory">
+    insert into azure_price_history (
+    <include refid="Insert_Column_List" />
+    )
+    values (#{executeTime},#{vmSkuName},#{region},#{spotUnitPrice},#{ondemandUnitPrice},#{evictionRateLower},#{evictionRateUpper})
+  </insert>
+
+  <select id="selectByRegionAndDateRange" resultMap="BaseResultMap">
+    select
+    <include refid="All_Column_List" />
+    from azure_price_history
+    where 1=1
+    <if test="region != null and region != ''">
+        and region = #{region}
+    </if>
+    <if test="startDate != null">
+      and execute_time &gt;= #{startDate}
+    </if>
+    <if test="endDate != null">
+      and execute_time &lt;= #{endDate}
+    </if>
+  </select>
+
+  <select id="selectByRegionAndSkuNameAndDateRange" resultMap="BaseResultMap">
+    select
+    <include refid="All_Column_List" />
+    from azure_price_history
+    where 1=1
+    <if test="region != null and region != ''">
+      and region = #{region}
+    </if>
+    <if test="skuName != null and skuName != ''">
+      and vm_sku_name = #{skuName}
+    </if>
+    <if test="startDate != null">
+      and execute_time &gt;= #{startDate}
+    </if>
+    <if test="endDate != null">
+      and execute_time &lt;= #{endDate}
+    </if>
+    order by id
+  </select>
+
+  <select id="selectLatestPrice"  resultMap="BaseResultMap">
+    select
+    <include refid="All_Column_List" />
+    from azure_price_history
+    where vm_sku_name = #{skuName}
+        and region = #{region}
+    order by execute_time desc
+    limit 1
+  </select>
+
+  <select id="selectDayLastByRegionAndDateRange"  resultMap="BaseResultMap">
+    select
+    id,date_format(execute_time,'%Y-%m-%d') as execute_time,vm_sku_name,
+    region,spot_unit_price,ondemand_unit_price,
+    eviction_rate_lower,eviction_rate_upper
+    from azure_price_history
+    where id in (
+        SELECT MAX(id) AS max_id
+        FROM azure_price_history
+        <where>
+          <if test="region != null and region != ''">
+            and region = #{region}
+          </if>
+          <if test="startDate != null">
+            and execute_time &gt;= #{startDate}
+          </if>
+          <if test="endDate != null">
+            and execute_time &lt;= #{endDate}
+          </if>
+          <if test="skuName != null">
+            and vm_sku_name = #{skuName}
+          </if>
+        </where>
+        GROUP BY DATE(execute_time), region, vm_sku_name
+    ) order by execute_time
+  </select>
+
+  <select id="selectSkuLatest" resultMap="BaseResultMap">
+    select
+        <include refid="All_Column_List"/>
+    from azure_price_history
+    where id in (select max(id)
+                  from azure_price_history
+                  <where>
+                    and region = #{region}
+                    and vm_sku_name in
+                    <foreach collection="skuNames" item="skuName" open="(" separator="," close=")">
+                      #{skuName}
+                    </foreach>
+                  </where>
+                group by region, vm_sku_name);
+  </select>
+</mapper>

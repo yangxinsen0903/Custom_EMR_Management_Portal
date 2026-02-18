@@ -1,0 +1,1084 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.5">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="自动创建集群-稳定性测试" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="cfgPath" elementType="Argument">
+            <stringProp name="Argument.name">cfgPath</stringProp>
+            <stringProp name="Argument.value">/data/home/wangda/work/01-doc/01-尚博信/08-SDP/03-设计/自动创建集群JMeter</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP公共配置" enabled="true">
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+          <collectionProp name="Arguments.arguments"/>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain">20.118.145.42</stringProp>
+        <stringProp name="HTTPSampler.port">8081</stringProp>
+        <stringProp name="HTTPSampler.protocol">http</stringProp>
+        <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+        <stringProp name="HTTPSampler.path"></stringProp>
+        <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+        <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+        <stringProp name="HTTPSampler.response_timeout"></stringProp>
+      </ConfigTestElement>
+      <hashTree/>
+      <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header 配置" enabled="true">
+        <collectionProp name="HeaderManager.headers">
+          <elementProp name="" elementType="Header">
+            <stringProp name="Header.name">Content-Type</stringProp>
+            <stringProp name="Header.value">application/json</stringProp>
+          </elementProp>
+        </collectionProp>
+      </HeaderManager>
+      <hashTree/>
+      <CookieManager guiclass="CookiePanel" testclass="CookieManager" testname="HTTP Cookie Manager" enabled="true">
+        <collectionProp name="CookieManager.cookies">
+          <elementProp name="sdptoken" elementType="Cookie" testname="sdptoken">
+            <stringProp name="Cookie.value">${__property(sdptoken)}</stringProp>
+            <stringProp name="Cookie.domain"></stringProp>
+            <stringProp name="Cookie.path"></stringProp>
+            <boolProp name="Cookie.secure">false</boolProp>
+            <longProp name="Cookie.expires">0</longProp>
+            <boolProp name="Cookie.path_specified">true</boolProp>
+            <boolProp name="Cookie.domain_specified">true</boolProp>
+          </elementProp>
+        </collectionProp>
+        <boolProp name="CookieManager.clearEachIteration">false</boolProp>
+        <boolProp name="CookieManager.controlledByThreadGroup">false</boolProp>
+        <stringProp name="CookieManager.policy">netscape</stringProp>
+      </CookieManager>
+      <hashTree/>
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>true</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>true</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <sampleCount>true</sampleCount>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename">${cfgPath}/report/resultTree_${__time(yyMMddHHmmss,)}.txt</stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <SetupThreadGroup guiclass="SetupThreadGroupGui" testclass="SetupThreadGroup" testname="setup-登录" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </SetupThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="登录" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;userName&quot;:&quot;sdpadmin&quot;,&quot;password&quot;:&quot;9b6daa66b84dc456f31011a6e44b5b97&quot;}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/admin/login</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="提取Token" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">token</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.data</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="将Token写入变量" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="script">token = vars.get(&quot;token&quot;);
+log.info(&quot;========== token打印===========&quot;);
+log.info(token);
+log.info(&quot;========== token打印完成===========&quot;);
+${__setProperty(sdptoken, ${token})};
+
+
+String path = vars.get(&quot;cfgPath&quot;);
+String filename = path + &quot;/token.txt&quot;;
+FileWriter writer;
+try {
+	writer = new FileWriter(filename, false);
+	writer.write(token);
+	writer.flush();
+	writer.close();
+} catch (IOException e) {
+	e.printStackTrace();
+}</stringProp>
+          </BeanShellPostProcessor>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="创建集群" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <UserParameters guiclass="UserParametersGui" testclass="UserParameters" testname="生成集群名称" enabled="true">
+          <collectionProp name="UserParameters.names">
+            <stringProp name="-1141738587">clusterName</stringProp>
+            <stringProp name="1493346361">createResult</stringProp>
+          </collectionProp>
+          <collectionProp name="UserParameters.thread_values">
+            <collectionProp name="911568347">
+              <stringProp name="550601017">${__RandomString(10,abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWZXY,clusterName)}</stringProp>
+              <stringProp name="3569038">true</stringProp>
+            </collectionProp>
+          </collectionProp>
+          <boolProp name="UserParameters.per_iteration">true</boolProp>
+        </UserParameters>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="预处理：建Ambari数据库" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;url&quot;: &quot;sunboxdev.mysql.database.azure.com&quot;,&#xd;
+    &quot;account&quot;: &quot;abctest&quot;,&#xd;
+    &quot;password&quot;: &quot;abctest&quot;,&#xd;
+    &quot;port&quot;: &quot;3306&quot;,&#xd;
+    &quot;database&quot;: &quot;sdp_${clusterName}_ambaridb&quot;,&#xd;
+    &quot;type&quot;: 0&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/admin/api/checkconnect</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor" enabled="true">
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="script">// 记录创建数据库信息
+String path = vars.get(&quot;cfgPath&quot;);
+String filename = path + &quot;/clusterCreateAndDestory.log&quot;;
+FileWriter writer;
+try {
+	String logContent = &quot;==============================================================\n&quot;;
+	writer = new FileWriter(filename, true);
+	writer.write(logContent);
+
+	clusterName = vars.get(&quot;clusterName&quot;);
+	logContent = &quot;创建Ambari数据库：sdp_&quot; + clusterName + &quot;_ambaridb\n&quot;;
+	writer.write(logContent);
+	
+	writer.flush();
+	writer.close();
+} catch (IOException e) {
+	e.printStackTrace();
+}</stringProp>
+          </BeanShellPostProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="第一步：创建集群" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;clusterName&quot;: &quot;sdp-${clusterName}&quot;,&#xd;
+    &quot;tagMap&quot;: {&quot;wd&quot;:&quot;test&quot;},&#xd;
+    &quot;instanceGroupVersion&quot;: {&#xd;
+        &quot;clusterReleaseVer&quot;: &quot;SDP-1.0&quot;,&#xd;
+        &quot;clusterApps&quot;: [&#xd;
+            {&#xd;
+                &quot;appName&quot;: &quot;ZooKeeper&quot;,&#xd;
+                &quot;appVersion&quot;: &quot;3.5.7&quot;&#xd;
+            },&#xd;
+            {&#xd;
+                &quot;appName&quot;: &quot;HDFS&quot;,&#xd;
+                &quot;appVersion&quot;: &quot;3.3.2&quot;&#xd;
+            },&#xd;
+            {&#xd;
+                &quot;appName&quot;: &quot;MapReduce2&quot;,&#xd;
+                &quot;appVersion&quot;: &quot;3.3.2&quot;&#xd;
+            },&#xd;
+            {&#xd;
+                &quot;appName&quot;: &quot;Yarn&quot;,&#xd;
+                &quot;appVersion&quot;: &quot;3.3.2&quot;&#xd;
+            },&#xd;
+            {&#xd;
+                &quot;appName&quot;: &quot;Hive&quot;,&#xd;
+                &quot;appVersion&quot;: &quot;3.1.2&quot;&#xd;
+            },&#xd;
+            {&#xd;
+                &quot;appName&quot;: &quot;Spark3&quot;,&#xd;
+                &quot;appVersion&quot;: &quot;3.1.2&quot;&#xd;
+            },&#xd;
+            {&#xd;
+                &quot;appName&quot;: &quot;Sqoop&quot;,&#xd;
+                &quot;appVersion&quot;: &quot;1.4.7&quot;&#xd;
+            },&#xd;
+            {&#xd;
+                &quot;appName&quot;: &quot;Tez&quot;,&#xd;
+                &quot;appVersion&quot;: &quot;0.10.2&quot;&#xd;
+            }&#xd;
+        ]&#xd;
+    },&#xd;
+    &quot;scene&quot;: &quot;&quot;,&#xd;
+    &quot;clusterCfgs&quot;: [&#xd;
+        {&#xd;
+            &quot;cfg&quot;: {&#xd;
+                &quot;yarn.resourcemanager.system-metrics-publisher.enabled&quot;: &quot;true&quot;,&#xd;
+                &quot;yarn.timeline-service.write-direct-logs-to-HDFS&quot;: &quot;false&quot;,&#xd;
+                &quot;yarn.log-aggregation.retain-seconds&quot;: &quot;7200&quot;,&#xd;
+                &quot;yarn.resourcemanager.recovery.enabled&quot;: &quot;true&quot;,&#xd;
+                &quot;yarn.resourcemanager.system-metrics-publisher.timeline-server-v1.enable-batch&quot;: &quot;true&quot;,&#xd;
+                &quot;yarn.resourcemanager.webapp.methods-allowed&quot;: &quot;GET,HEAD,PUT&quot;,&#xd;
+                &quot;yarn.scheduler.minimum-allocation-mb&quot;: &quot;2048&quot;,&#xd;
+                &quot;yarn.timeline-service.ttl-ms&quot;: &quot;172800000&quot;&#xd;
+            },&#xd;
+            &quot;classification&quot;: &quot;yarn-site&quot;,&#xd;
+            &quot;confs&quot;: [&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;yarn.resourcemanager.system-metrics-publisher.enabled&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;yarn.timeline-service.write-direct-logs-to-HDFS&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;yarn.log-aggregation.retain-seconds&quot;,&#xd;
+                    &quot;value&quot;: &quot;7200&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;yarn.resourcemanager.recovery.enabled&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;yarn.resourcemanager.system-metrics-publisher.timeline-server-v1.enable-batch&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;yarn.resourcemanager.webapp.methods-allowed&quot;,&#xd;
+                    &quot;value&quot;: &quot;GET,HEAD,PUT&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;yarn.scheduler.minimum-allocation-mb&quot;,&#xd;
+                    &quot;value&quot;: &quot;2048&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;yarn.timeline-service.ttl-ms&quot;,&#xd;
+                    &quot;value&quot;: &quot;172800000&quot;&#xd;
+                }&#xd;
+            ]&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;cfg&quot;: {&#xd;
+                &quot;apptimelineserver_heapsize&quot;: &quot;4096&quot;,&#xd;
+                &quot;resourcemanager_heapsize&quot;: &quot;98304&quot;&#xd;
+            },&#xd;
+            &quot;classification&quot;: &quot;yarn-env&quot;,&#xd;
+            &quot;confs&quot;: [&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;apptimelineserver_heapsize&quot;,&#xd;
+                    &quot;value&quot;: &quot;4096&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;resourcemanager_heapsize&quot;,&#xd;
+                    &quot;value&quot;: &quot;98304&quot;&#xd;
+                }&#xd;
+            ]&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;cfg&quot;: {&#xd;
+                &quot;hive_heapsize&quot;: &quot;40960&quot;&#xd;
+            },&#xd;
+            &quot;classification&quot;: &quot;hive-env&quot;,&#xd;
+            &quot;confs&quot;: [&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive_heapsize&quot;,&#xd;
+                    &quot;value&quot;: &quot;40960&quot;&#xd;
+                }&#xd;
+            ]&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;cfg&quot;: {&#xd;
+                &quot;dfs.replication&quot;: &quot;2&quot;,&#xd;
+                &quot;dfs.permissions&quot;: &quot;false&quot;,&#xd;
+                &quot;dfs.datanode.max.transfer.threads&quot;: &quot;8192&quot;&#xd;
+            },&#xd;
+            &quot;classification&quot;: &quot;hdfs-site&quot;,&#xd;
+            &quot;confs&quot;: [&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;dfs.replication&quot;,&#xd;
+                    &quot;value&quot;: &quot;2&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;dfs.permissions&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;dfs.datanode.max.transfer.threads&quot;,&#xd;
+                    &quot;value&quot;: &quot;8192&quot;&#xd;
+                }&#xd;
+            ]&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;cfg&quot;: {&#xd;
+                &quot;yarn.scheduler.capacity.root.acl_submit_applications&quot;: &quot;*&quot;,&#xd;
+                &quot;yarn.scheduler.capacity.root.default.acl_submit_applications&quot;: &quot;hadoop&quot;,&#xd;
+                &quot;yarn.scheduler.capacity.root.default.acl_administer_queue&quot;: &quot;hadoop&quot;,&#xd;
+                &quot;yarn.scheduler.capacity.root.acl_administer_queue&quot;: &quot;*&quot;,&#xd;
+                &quot;yarn.scheduler.capacity.resource-calculator&quot;: &quot;org.apache.hadoop.yarn.util.resource.DominantResourceCalculator&quot;&#xd;
+            },&#xd;
+            &quot;classification&quot;: &quot;capacity-scheduler&quot;,&#xd;
+            &quot;confs&quot;: [&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;yarn.scheduler.capacity.root.acl_submit_applications&quot;,&#xd;
+                    &quot;value&quot;: &quot;*&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;yarn.scheduler.capacity.root.default.acl_submit_applications&quot;,&#xd;
+                    &quot;value&quot;: &quot;hadoop&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;yarn.scheduler.capacity.root.default.acl_administer_queue&quot;,&#xd;
+                    &quot;value&quot;: &quot;hadoop&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;yarn.scheduler.capacity.root.acl_administer_queue&quot;,&#xd;
+                    &quot;value&quot;: &quot;*&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;yarn.scheduler.capacity.resource-calculator&quot;,&#xd;
+                    &quot;value&quot;: &quot;org.apache.hadoop.yarn.util.resource.DominantResourceCalculator&quot;&#xd;
+                }&#xd;
+            ]&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;cfg&quot;: {&#xd;
+                &quot;tez.am.node-unhealthy-reschedule-tasks&quot;: &quot;true&quot;,&#xd;
+                &quot;tez.runtime.intermediate-input.compress.codec&quot;: &quot;org.apache.hadoop.io.compress.LzoCodec&quot;,&#xd;
+                &quot;tez.runtime.intermediate-input.is-compressed&quot;: &quot;true&quot;,&#xd;
+                &quot;tez.runtime.intermediate-output.should-compress&quot;: &quot;true&quot;,&#xd;
+                &quot;tez.runtime.intermediate-output.compress.codec&quot;: &quot;org.apache.hadoop.io.compress.LzoCodec&quot;&#xd;
+            },&#xd;
+            &quot;classification&quot;: &quot;tez-site&quot;,&#xd;
+            &quot;confs&quot;: [&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;tez.am.node-unhealthy-reschedule-tasks&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;tez.runtime.intermediate-input.compress.codec&quot;,&#xd;
+                    &quot;value&quot;: &quot;org.apache.hadoop.io.compress.LzoCodec&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;tez.runtime.intermediate-input.is-compressed&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;tez.runtime.intermediate-output.should-compress&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;tez.runtime.intermediate-output.compress.codec&quot;,&#xd;
+                    &quot;value&quot;: &quot;org.apache.hadoop.io.compress.LzoCodec&quot;&#xd;
+                }&#xd;
+            ]&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;cfg&quot;: {&#xd;
+                &quot;mapreduce.map.output.compress&quot;: &quot;true&quot;,&#xd;
+                &quot;mapred.output.committer.class&quot;: &quot;org.apache.hadoop.mapred.FileOutputCommitter&quot;,&#xd;
+                &quot;mapreduce.map.output.compress.codec&quot;: &quot;org.apache.hadoop.io.compress.SnappyCodec&quot;,&#xd;
+                &quot;mapreduce.fileoutputcommitter.algorithm.version&quot;: &quot;2&quot;&#xd;
+            },&#xd;
+            &quot;classification&quot;: &quot;mapred-site&quot;,&#xd;
+            &quot;confs&quot;: [&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;mapreduce.map.output.compress&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;mapred.output.committer.class&quot;,&#xd;
+                    &quot;value&quot;: &quot;org.apache.hadoop.mapred.FileOutputCommitter&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;mapreduce.map.output.compress.codec&quot;,&#xd;
+                    &quot;value&quot;: &quot;org.apache.hadoop.io.compress.SnappyCodec&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;mapreduce.fileoutputcommitter.algorithm.version&quot;,&#xd;
+                    &quot;value&quot;: &quot;2&quot;&#xd;
+                }&#xd;
+            ]&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;cfg&quot;: {&#xd;
+                &quot;hive.arrow.batch.allocator.limit&quot;: &quot;10000000000&quot;,&#xd;
+                &quot;hive.arrow.batch.size&quot;: &quot;1000&quot;,&#xd;
+                &quot;hive.arrow.root.allocator.limit&quot;: &quot;9223372036854775807&quot;,&#xd;
+                &quot;hive.async.log.enabled&quot;: &quot;false&quot;,&#xd;
+                &quot;hive.auto.convert.join&quot;: &quot;false&quot;,&#xd;
+                &quot;hive.auto.convert.join.noconditionaltask.size&quot;: &quot;10000000&quot;,&#xd;
+                &quot;hive.blobstore.optimizations.enabled&quot;: &quot;false&quot;,&#xd;
+                &quot;hive.compactor.initiator.on&quot;: &quot;true&quot;,&#xd;
+                &quot;hive.compactor.worker.threads&quot;: &quot;12&quot;,&#xd;
+                &quot;hive.exec.failure.hooks&quot;: &quot;com.shein.hook.queryHook&quot;,&#xd;
+                &quot;hive.exec.orc.split.strategy&quot;: &quot;ETL&quot;,&#xd;
+                &quot;hive.exec.stagingdir.entropy.dimensions&quot;: &quot;0&quot;,&#xd;
+                &quot;hive.execution.engine&quot;: &quot;tez&quot;,&#xd;
+                &quot;hive.fetch.task.conversion&quot;: &quot;more&quot;,&#xd;
+                &quot;hive.mapjoin.hybridgrace.hashtable&quot;: &quot;false&quot;,&#xd;
+                &quot;hive.mapred.mode&quot;: &quot;nostrict&quot;,&#xd;
+                &quot;hive.mapred.reduce.tasks.speculative.execution&quot;: &quot;false&quot;,&#xd;
+                &quot;hive.mapred.supports.subdirectories&quot;: &quot;true&quot;,&#xd;
+                &quot;hive.merge.mapfiles&quot;: &quot;true&quot;,&#xd;
+                &quot;hive.merge.mapredfiles&quot;: &quot;true&quot;,&#xd;
+                &quot;hive.merge.nway.joins&quot;: &quot;false&quot;,&#xd;
+                &quot;hive.merge.size.per.task&quot;: &quot;256000000&quot;,&#xd;
+                &quot;hive.merge.smallfiles.avgsize&quot;: &quot;256000000&quot;,&#xd;
+                &quot;hive.merge.tezfiles&quot;: &quot;true&quot;,&#xd;
+                &quot;hive.exec.reducers.max&quot;: &quot;3000&quot;,&#xd;
+                &quot;hive.metastore.metrics.enabled&quot;: &quot;true&quot;,&#xd;
+                &quot;hive.metastore.rawstore.extension.enabled&quot;: &quot;true&quot;,&#xd;
+                &quot;hive.optimize.dynamic.partition.hashjoin&quot;: &quot;true&quot;,&#xd;
+                &quot;hive.optimize.sort.dynamic.partition&quot;: &quot;true&quot;,&#xd;
+                &quot;hive.server2.async.exec.threads&quot;: &quot;300&quot;,&#xd;
+                &quot;hive.server2.in.place.progress&quot;: &quot;false&quot;,&#xd;
+                &quot;hive.server2.materializedviews.cache.at.startup&quot;: &quot;false&quot;,&#xd;
+                &quot;hive.server2.metrics.enabled&quot;: &quot;true&quot;,&#xd;
+                &quot;hive.server2.thrift.max.worker.threads&quot;: &quot;500&quot;,&#xd;
+                &quot;hive.stats.fetch.column.stats&quot;: &quot;false&quot;,&#xd;
+                &quot;hive.strict.checks.cartesian.product&quot;: &quot;false&quot;,&#xd;
+                &quot;hive.tez.auto.reducer.parallelism&quot;: &quot;true&quot;,&#xd;
+                &quot;hive.vectorized.execution.mapjoin.minmax.enabled&quot;: &quot;true&quot;,&#xd;
+                &quot;hive.vectorized.execution.mapjoin.native.fast.hashtable.enabled&quot;: &quot;true&quot;,&#xd;
+                &quot;mapred.map.tasks.speculative.execution&quot;: &quot;false&quot;,&#xd;
+                &quot;mapred.reduce.tasks.speculative.execution&quot;: &quot;false&quot;,&#xd;
+                &quot;mapreduce.input.fileinputformat.input.dir.recursive&quot;: &quot;true&quot;,&#xd;
+                &quot;mapreduce.map.speculative&quot;: &quot;false&quot;,&#xd;
+                &quot;mapreduce.reduce.speculative&quot;: &quot;false&quot;,&#xd;
+                &quot;tez.grouping.min-size&quot;: &quot;256000000&quot;,&#xd;
+                &quot;hive.exec.mode.local.auto&quot;: &quot;false&quot;,&#xd;
+                &quot;hive.log.explain.output&quot;: &quot;false&quot;,&#xd;
+                &quot;hive.strict.checks.type.safety&quot;: &quot;false&quot;,&#xd;
+                &quot;hive.vectorized.execution.enabled&quot;: &quot;false&quot;,&#xd;
+                &quot;hive.service.metrics.reporter&quot;: &quot;JSON_FILE,JMX&quot;,&#xd;
+                &quot;hive.stats.column.autogather&quot;: &quot;false&quot;,&#xd;
+                &quot;tez.counters.max&quot;: &quot;20000&quot;,&#xd;
+                &quot;tez.counters.max.groups&quot;: &quot;10000&quot;,&#xd;
+                &quot;hive.optimize.joinreducededuplication&quot;: &quot;false&quot;,&#xd;
+                &quot;hive.convert.join.bucket.mapjoin.tez&quot;: &quot;false&quot;,&#xd;
+                &quot;hive.auto.convert.sortmerge.join&quot;: &quot;false&quot;&#xd;
+            },&#xd;
+            &quot;classification&quot;: &quot;hive-site&quot;,&#xd;
+            &quot;confs&quot;: [&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.arrow.batch.allocator.limit&quot;,&#xd;
+                    &quot;value&quot;: &quot;10000000000&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.arrow.batch.size&quot;,&#xd;
+                    &quot;value&quot;: &quot;1000&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.arrow.root.allocator.limit&quot;,&#xd;
+                    &quot;value&quot;: &quot;9223372036854775807&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.async.log.enabled&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.auto.convert.join&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.auto.convert.join.noconditionaltask.size&quot;,&#xd;
+                    &quot;value&quot;: &quot;10000000&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.blobstore.optimizations.enabled&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.compactor.initiator.on&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.compactor.worker.threads&quot;,&#xd;
+                    &quot;value&quot;: &quot;12&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.exec.failure.hooks&quot;,&#xd;
+                    &quot;value&quot;: &quot;com.shein.hook.queryHook&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.exec.orc.split.strategy&quot;,&#xd;
+                    &quot;value&quot;: &quot;ETL&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.exec.stagingdir.entropy.dimensions&quot;,&#xd;
+                    &quot;value&quot;: &quot;0&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.execution.engine&quot;,&#xd;
+                    &quot;value&quot;: &quot;tez&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.fetch.task.conversion&quot;,&#xd;
+                    &quot;value&quot;: &quot;more&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.mapjoin.hybridgrace.hashtable&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.mapred.mode&quot;,&#xd;
+                    &quot;value&quot;: &quot;nostrict&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.mapred.reduce.tasks.speculative.execution&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.mapred.supports.subdirectories&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.merge.mapfiles&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.merge.mapredfiles&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.merge.nway.joins&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.merge.size.per.task&quot;,&#xd;
+                    &quot;value&quot;: &quot;256000000&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.merge.smallfiles.avgsize&quot;,&#xd;
+                    &quot;value&quot;: &quot;256000000&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.merge.tezfiles&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.exec.reducers.max&quot;,&#xd;
+                    &quot;value&quot;: &quot;3000&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.metastore.metrics.enabled&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.metastore.rawstore.extension.enabled&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.optimize.dynamic.partition.hashjoin&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.optimize.sort.dynamic.partition&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.server2.async.exec.threads&quot;,&#xd;
+                    &quot;value&quot;: &quot;300&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.server2.in.place.progress&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.server2.materializedviews.cache.at.startup&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.server2.metrics.enabled&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.server2.thrift.max.worker.threads&quot;,&#xd;
+                    &quot;value&quot;: &quot;500&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.stats.fetch.column.stats&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.strict.checks.cartesian.product&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.tez.auto.reducer.parallelism&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.vectorized.execution.mapjoin.minmax.enabled&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.vectorized.execution.mapjoin.native.fast.hashtable.enabled&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;mapred.map.tasks.speculative.execution&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;mapred.reduce.tasks.speculative.execution&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;mapreduce.input.fileinputformat.input.dir.recursive&quot;,&#xd;
+                    &quot;value&quot;: &quot;true&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;mapreduce.map.speculative&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;mapreduce.reduce.speculative&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;tez.grouping.min-size&quot;,&#xd;
+                    &quot;value&quot;: &quot;256000000&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.exec.mode.local.auto&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.log.explain.output&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.strict.checks.type.safety&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.vectorized.execution.enabled&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.service.metrics.reporter&quot;,&#xd;
+                    &quot;value&quot;: &quot;JSON_FILE,JMX&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.stats.column.autogather&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;tez.counters.max&quot;,&#xd;
+                    &quot;value&quot;: &quot;20000&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;tez.counters.max.groups&quot;,&#xd;
+                    &quot;value&quot;: &quot;10000&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.optimize.joinreducededuplication&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.convert.join.bucket.mapjoin.tez&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;key&quot;: &quot;hive.auto.convert.sortmerge.join&quot;,&#xd;
+                    &quot;value&quot;: &quot;false&quot;&#xd;
+                }&#xd;
+            ]&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;ambariUsername&quot;: &quot;admin&quot;,&#xd;
+    &quot;ambariPassword&quot;: &quot;&quot;,&#xd;
+    &quot;deleteProtected&quot;: &quot;0&quot;,&#xd;
+    &quot;confClusterScript&quot;: [],&#xd;
+    &quot;vNet&quot;: &quot;Default-VPC&quot;,&#xd;
+    &quot;vNetName&quot;: &quot;Default-VPC&quot;,&#xd;
+    &quot;subNet&quot;: &quot;/subscriptions/9b88bd64-d315-48de-96bc-83051ed25fdc/resourceGroups/isd-dev-aks/providers/Microsoft.Network/virtualNetworks/vnet-sdp-clusters/subnets/subnet-sdp-clusters-sit&quot;,&#xd;
+    &quot;subNetName&quot;: &quot;vnet-sdp-clusters/subnet-sdp-clusters-sit&quot;,&#xd;
+    &quot;masterSecurityGroup&quot;: &quot;/subscriptions/9b88bd64-d315-48de-96bc-83051ed25fdc/resourceGroups/isd-dev-aks/providers/Microsoft.Network/networkSecurityGroups/nsg-sdp-clusters-master-sit&quot;,&#xd;
+    &quot;masterSecurityGroupName&quot;: &quot;nsg-sdp-clusters-master-sit&quot;,&#xd;
+    &quot;slaveSecurityGroup&quot;: &quot;/subscriptions/9b88bd64-d315-48de-96bc-83051ed25fdc/resourceGroups/isd-dev-aks/providers/Microsoft.Network/networkSecurityGroups/nsg-sdp-clusters-master-sit&quot;,&#xd;
+    &quot;slaveSecurityGroupName&quot;: &quot;nsg-sdp-clusters-master-sit&quot;,&#xd;
+    &quot;keypairId&quot;: &quot;sdp-sit-ssh-public-key&quot;,&#xd;
+    &quot;vmMI&quot;: &quot;/subscriptions/9b88bd64-d315-48de-96bc-83051ed25fdc/resourcegroups/isd-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/isd-sdppoc-identity&quot;,&#xd;
+    &quot;isHa&quot;: 1,&#xd;
+    &quot;osDiskType&quot;: &quot;StandardSSD_LRS&quot;,&#xd;
+    &quot;diskSize&quot;: 100,&#xd;
+    &quot;instanceGroupSkuCfgs&quot;: [&#xd;
+        {&#xd;
+            &quot;vmRole&quot;: &quot;Ambari&quot;,&#xd;
+            &quot;osVolumeType&quot;: &quot;StandardSSD_LRS&quot;,&#xd;
+            &quot;osVolumeSize&quot;: 100,&#xd;
+            &quot;cnt&quot;: 1,&#xd;
+            &quot;dataVolumeType&quot;: &quot;StandardSSD_LRS&quot;,&#xd;
+            &quot;dataVolumeSize&quot;: 200,&#xd;
+            &quot;dataVolumeCount&quot;: 1,&#xd;
+            &quot;memoryGB&quot;: 64,&#xd;
+            &quot;skuName&quot;: &quot;Standard_D16s_v5&quot;,&#xd;
+            &quot;vCPUs&quot;: 16,&#xd;
+            &quot;hasNVMeDisk&quot;: false&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;vmRole&quot;: &quot;Master&quot;,&#xd;
+            &quot;osVolumeType&quot;: &quot;StandardSSD_LRS&quot;,&#xd;
+            &quot;osVolumeSize&quot;: 100,&#xd;
+            &quot;cnt&quot;: 2,&#xd;
+            &quot;dataVolumeType&quot;: &quot;StandardSSD_LRS&quot;,&#xd;
+            &quot;dataVolumeSize&quot;: 200,&#xd;
+            &quot;dataVolumeCount&quot;: 1,&#xd;
+            &quot;memoryGB&quot;: 64,&#xd;
+            &quot;skuName&quot;: &quot;Standard_D16s_v5&quot;,&#xd;
+            &quot;vCPUs&quot;: 16,&#xd;
+            &quot;hasNVMeDisk&quot;: false&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;vmRole&quot;: &quot;Core&quot;,&#xd;
+            &quot;osVolumeType&quot;: &quot;StandardSSD_LRS&quot;,&#xd;
+            &quot;osVolumeSize&quot;: 100,&#xd;
+            &quot;cnt&quot;: 2,&#xd;
+            &quot;dataVolumeType&quot;: &quot;StandardSSD_LRS&quot;,&#xd;
+            &quot;dataVolumeSize&quot;: 200,&#xd;
+            &quot;dataVolumeCount&quot;: 1,&#xd;
+            &quot;memoryGB&quot;: 64,&#xd;
+            &quot;skuName&quot;: &quot;Standard_D16s_v5&quot;,&#xd;
+            &quot;vCPUs&quot;: 16,&#xd;
+            &quot;hasNVMeDisk&quot;: false&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;vmRole&quot;: &quot;Task&quot;,&#xd;
+            &quot;osVolumeType&quot;: &quot;StandardSSD_LRS&quot;,&#xd;
+            &quot;osVolumeSize&quot;: 100,&#xd;
+            &quot;cnt&quot;: 1,&#xd;
+            &quot;dataVolumeType&quot;: &quot;StandardSSD_LRS&quot;,&#xd;
+            &quot;dataVolumeSize&quot;: 200,&#xd;
+            &quot;dataVolumeCount&quot;: 1,&#xd;
+            &quot;memoryGB&quot;: 64,&#xd;
+            &quot;skuName&quot;: &quot;Standard_E8s_v5&quot;,&#xd;
+            &quot;vCPUs&quot;: 8,&#xd;
+            &quot;hasNVMeDisk&quot;: false&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;ambariDbCfgs&quot;: {&#xd;
+        &quot;url&quot;: &quot;sunboxdev.mysql.database.azure.com&quot;,&#xd;
+        &quot;account&quot;: &quot;abctest&quot;,&#xd;
+        &quot;password&quot;: &quot;abctest&quot;,&#xd;
+        &quot;port&quot;: &quot;3306&quot;,&#xd;
+        &quot;database&quot;: &quot;sdp_${clusterName}_ambaridb&quot;&#xd;
+    },&#xd;
+    &quot;hiveMetadataDbCfgs&quot;: {&#xd;
+        &quot;url&quot;: &quot;sunboxdev.mysql.database.azure.com&quot;,&#xd;
+        &quot;account&quot;: &quot;abctest&quot;,&#xd;
+        &quot;password&quot;: &quot;abctest&quot;,&#xd;
+        &quot;port&quot;: &quot;3306&quot;,&#xd;
+        &quot;database&quot;: &quot;abctest&quot;&#xd;
+    },&#xd;
+    &quot;logPath&quot;: &quot;https://sasdpscriptstmp.blob.core.windows.net/hadoop-logs-01&quot;,&#xd;
+    &quot;logMI&quot;: &quot;/subscriptions/9b88bd64-d315-48de-96bc-83051ed25fdc/resourcegroups/isd-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/isd-sdppoc-identity&quot;,&#xd;
+    &quot;vmMIName&quot;: &quot;isd-sdppoc-identity&quot;,&#xd;
+    &quot;vmMITenantId&quot;: &quot;e446233b-677e-4f72-aba3-4ef2858fead2&quot;,&#xd;
+    &quot;vmMIClientId&quot;: &quot;db49a7de-986c-4f1d-a08b-6f1ca46bcf12&quot;,&#xd;
+    &quot;logMIName&quot;: &quot;isd-sdppoc-identity&quot;&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/admin/api/createcluster</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="从响应报文中获取集群ID" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">clusterId</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.data.clusterId</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor" enabled="true">
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="script">clusterId = vars.get(&quot;clusterId&quot;);
+log.info(&quot;========== 创建集群，返回的集群ID ===========&quot;);
+log.info(clusterId);
+log.info(&quot;========== 创建集群完成 ===========&quot;);
+
+
+// 记录日志信息
+String path = vars.get(&quot;cfgPath&quot;);
+String filename = path + &quot;/clusterCreateAndDestory.log&quot;;
+FileWriter writer;
+try {
+	writer = new FileWriter(filename, true);
+
+	logContent = &quot;创建集群ID：&quot; + clusterId + &quot;\n&quot;;
+	writer.write(logContent);
+	
+	writer.flush();
+	writer.close();
+} catch (IOException e) {
+	e.printStackTrace();
+}</stringProp>
+          </BeanShellPostProcessor>
+          <hashTree/>
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="创建完集群后休眠10秒" enabled="true">
+            <stringProp name="ConstantTimer.delay">10000</stringProp>
+          </ConstantTimer>
+          <hashTree/>
+        </hashTree>
+        <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="第二步：循环检查集群是否创建成功" enabled="true">
+          <stringProp name="WhileController.condition">${createResult}</stringProp>
+        </WhileController>
+        <hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="第二步：查询集群状态" enabled="true">
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="clusterId" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">${clusterId}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  <stringProp name="Argument.name">clusterId</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain"></stringProp>
+            <stringProp name="HTTPSampler.port"></stringProp>
+            <stringProp name="HTTPSampler.protocol"></stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">/admin/api/getClusterDetail</stringProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="休眠5秒" enabled="true">
+              <stringProp name="TestPlan.comments">两次查询之间休眠5秒钟</stringProp>
+              <stringProp name="ConstantTimer.delay">5000</stringProp>
+            </ConstantTimer>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="提取集群创建状态" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">clusterState</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$.data.state</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+            <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor" enabled="true">
+              <boolProp name="resetInterpreter">false</boolProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="script">state = vars.get(&quot;clusterState&quot;);
+log.info(&quot;======================ClusterState 0 待创建 1 创建中 2 已创建  -1释放中 -2 已释放   ===============&quot;);
+log.info(&quot;当前集群状态：&quot; + state);
+
+// 0 待创建 1 创建中 2 已创建  -1释放中 -2 已释放
+// 0和1时，返回true，循环等待。
+createResult = &quot;1&quot;.equals(state) || &quot;0&quot;.equals(state);
+log.info(&quot;是否继续循环等待？&quot; + createResult);
+
+vars.put(&quot;createResult&quot;, createResult + &quot;&quot;);
+
+success = &quot;创建失败&quot;;
+if (&quot;2&quot;.equals(state)) {
+	success = &quot;创建成功&quot;;
+}
+
+if (!createResult) {
+	// 记录日志信息
+	String path = vars.get(&quot;cfgPath&quot;);
+	String filename = path + &quot;/clusterCreateAndDestory.log&quot;;
+	FileWriter writer;
+	try {
+		writer = new FileWriter(filename, true);
+	
+		logContent = &quot;集群创建结果：&quot; + success + &quot;\n&quot;;
+		writer.write(logContent);
+		
+		writer.flush();
+		writer.close();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+}
+
+
+</stringProp>
+            </BeanShellPostProcessor>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="第三步：销毁集群" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;clusterId&quot;: &quot;${clusterId}&quot;,&#xd;
+    &quot;relieveDeleteProtected&quot;: false&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/admin/api/deletecluster</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="script">
+clusterName = vars.get(&quot;clusterName&quot;);
+clusterState = vars.get(&quot;clusterState&quot;);
+
+log.info(&quot;============== 开始销毁集群 ===============&quot;);
+log.info(&quot;集群名称：&quot; + clusterName);
+log.info(&quot;集群当前状态：&quot; + clusterState);</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+          <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor" enabled="true">
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="script">// 记录日志信息
+String path = vars.get(&quot;cfgPath&quot;);
+String filename = path + &quot;/clusterCreateAndDestory.log&quot;;
+FileWriter writer;
+try {
+	writer = new FileWriter(filename, true);
+
+	logContent = &quot;集群销毁完成\n&quot;;
+	writer.write(logContent);
+	
+	writer.flush();
+	writer.close();
+} catch (IOException e) {
+	e.printStackTrace();
+}</stringProp>
+          </BeanShellPostProcessor>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

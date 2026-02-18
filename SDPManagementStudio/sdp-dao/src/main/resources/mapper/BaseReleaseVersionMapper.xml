@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.BaseReleaseVersionMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.BaseReleaseVersion">
+    <id column="release_version" jdbcType="VARCHAR" property="releaseVersion" />
+    <result column="release_description" jdbcType="VARCHAR" property="releaseDescription" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    release_version, release_description, create_by, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from base_release_version
+    where release_version = #{releaseVersion,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from base_release_version
+    where release_version = #{releaseVersion,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.BaseReleaseVersion">
+    insert into base_release_version (release_version, release_description, 
+      create_by, create_time)
+    values (#{releaseVersion,jdbcType=VARCHAR}, #{releaseDescription,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.BaseReleaseVersion">
+    insert into base_release_version
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="releaseVersion != null">
+        release_version,
+      </if>
+      <if test="releaseDescription != null">
+        release_description,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="releaseVersion != null">
+        #{releaseVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseDescription != null">
+        #{releaseDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.BaseReleaseVersion">
+    update base_release_version
+    <set>
+      <if test="releaseDescription != null">
+        release_description = #{releaseDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where release_version = #{releaseVersion,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.BaseReleaseVersion">
+    update base_release_version
+    set release_description = #{releaseDescription,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where release_version = #{releaseVersion,jdbcType=VARCHAR}
+  </update>
+
+  <select id="listImages" resultType="com.sunbox.domain.images.ImageResponse">
+      select bi.img_id, brvi.release_version, bi.os_image_id, bi.os_image_type, bi.os_version, bi.created_time
+      from base_release_vm_img brvi
+               inner JOIN base_images bi on brvi.img_id = bi.img_id
+      <where>
+        <if test="releaseVersion != null">
+            brvi.release_version = #{releaseVersion,jdbcType=VARCHAR}
+        </if>
+      </where>
+      order by bi.created_time desc
+      limit #{pageStart},#{pageLimit}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from base_release_version order by create_time desc
+  </select>
+
+</mapper>

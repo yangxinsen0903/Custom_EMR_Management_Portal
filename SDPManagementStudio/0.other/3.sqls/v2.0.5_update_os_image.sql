@@ -1,0 +1,16 @@
+
+-- 增加新镜像
+INSERT INTO base_images (img_id,os_image_id,os_image_type,os_version,created_time,createdby) VALUES
+('4112bf6b877f40139d3932d003856ed9','/subscriptions/9b88bd64-d315-48de-96bc-83051ed25fdc/resourceGroups/rg-sunbox-sdp-build/providers/Microsoft.Compute/galleries/sig_sunbox_sdp_images/images/sunbox-sdp/versions/1.0.1042','CustomImage','ubuntu 18.04',now(),'niyang');
+
+-- 更新镜像执行的脚本
+INSERT INTO base_image_scripts (img_script_id,img_id,script_name,run_timing,playbook_uri,script_file_uri,extra_vars,sort_no,createdby,created_time) VALUES
+('ef1630dd1cb441ad86f6b702aa5a2de3','4112bf6b877f40139d3932d003856ed9','安装AmbariServer','install_ambari_server','https://{wgetpath}/sunbox3/shell/2.0.2/ambari.yaml','https://{wgetpath}/sunbox3/shell/2.0.2/ambari-agent.sh,https://{wgetpath}/sunbox3/shell/2.0.2/ambari-server.sh,https://{wgetpath}/sunbox3/shell/2.0.2/initialize.sh,https://{wgetpath}/sunbox3/shell/2.0.2/mountnew.sh,https://{wgetpath}/sunbox3/shell/2.0.2/ganglia-agent.sh,https://{wgetpath}/sunbox3/shell/2.0.2/ganglia-server.sh','-e "type=server host={ambarihost} dburl={ambaridb} dbport={ambaridbport} dbname={ambaridbname} dbuser={dbuser} dbpass={dbpassword} domain={domain} wgetpath={wgetpath} clustername={clustername} logblob={logblob} username={username} clusterid={clusterid} ganglialist={ganglialist} installganglia={installganglia} zone={zone}  miclientid={miclientid}"',0,'niyang',now()),
+('228e0612f84949259a2d128081079d0d','4112bf6b877f40139d3932d003856ed9','安装AmbariAgent','install_ambari_agent','https://{wgetpath}/sunbox3/shell/2.0.2/ambari.yaml','https://{wgetpath}/sunbox3/shell/2.0.2/ambari-agent.sh,https://{wgetpath}/sunbox3/shell/2.0.2/ambari-server.sh,https://{wgetpath}/sunbox3/shell/2.0.2/initialize.sh,https://{wgetpath}/sunbox3/shell/2.0.2/mountnew.sh,https://{wgetpath}/sunbox3/shell/2.0.2/ganglia-agent.sh,https://{wgetpath}/sunbox3/shell/2.0.2/ganglia-server.sh','-e "type=agent host={ambarihost} dburl={ambaridb} dbport={ambaridbport} dbname={ambaridbname} dbuser={dbuser} dbpass={dbpassword} domain={domain} wgetpath={wgetpath} clustername={clustername} logblob={logblob} username={username} clusterid={clusterid} ganglialist={ganglialist} installganglia={installganglia} zone={zone}  miclientid={miclientid}"',0,'niyang',now()),
+('235ae3f7cf994dae85e164413fbf7b9c','4112bf6b877f40139d3932d003856ed9','安装TezUI','install_tez_ui','https://{wgetpath}/sunbox3/shell/2.0.2/tezui.yaml','https://{wgetpath}/sunbox3/shell/2.0.2/tezui.sh','-e "tlhost={tlhost} rmhost={rmhost} username={username}"',0,'niyang',now()),
+('a90a7143c0d24ff6af2e6bd7ceb0d022','4112bf6b877f40139d3932d003856ed9','执行HDFS FSCK','run_hdfs_fsck','','https://{wgetpath}/sunbox3/shell/2.0.2/hdfs.sh','',0,'niyang',now());
+
+-- 更新创建主机时使用的
+update base_release_vm_img
+set os_imageid='/subscriptions/9b88bd64-d315-48de-96bc-83051ed25fdc/resourceGroups/rg-sunbox-sdp-build/providers/Microsoft.Compute/galleries/sig_sunbox_sdp_images/images/sunbox-sdp/versions/1.0.1042',
+img_id='4112bf6b877f40139d3932d003856ed9' where release_version ='SDP-1.0';

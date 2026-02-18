@@ -1,0 +1,1 @@
+ALTER TABLE conf_scaling_task MODIFY COLUMN create_time datetime(3) NULL COMMENT '任务创建时间';

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.BaseImageScriptsMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.BaseImageScripts">
+    <id column="img_script_id" jdbcType="VARCHAR" property="imgScriptId" />
+    <result column="img_id" jdbcType="VARCHAR" property="imgId" />
+    <result column="script_name" jdbcType="VARCHAR" property="scriptName" />
+    <result column="run_timing" jdbcType="VARCHAR" property="runTiming" />
+    <result column="playbook_uri" jdbcType="VARCHAR" property="playbookUri" />
+    <result column="script_file_uri" jdbcType="VARCHAR" property="scriptFileUri" />
+    <result column="extra_vars" jdbcType="VARCHAR" property="extraVars" />
+    <result column="sort_no" jdbcType="INTEGER" property="sortNo" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    img_script_id, img_id, script_name, run_timing, playbook_uri, script_file_uri, extra_vars, 
+    sort_no, createdby, created_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from base_image_scripts
+    where img_script_id = #{imgScriptId,jdbcType=VARCHAR}
+  </select>
+    <select id="getAllByImgIdAndRunTiming" resultType="com.sunbox.domain.BaseImageScripts">
+      select
+      <include refid="Base_Column_List" />
+      from base_image_scripts
+      where img_id = #{imgId,jdbcType=VARCHAR}
+        and run_timing =  #{runTiming,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from base_image_scripts
+    where img_script_id = #{imgScriptId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.BaseImageScripts">
+    insert into base_image_scripts (img_script_id, img_id, script_name, 
+      run_timing, playbook_uri, script_file_uri, 
+      extra_vars, sort_no, createdby, 
+      created_time)
+    values (#{imgScriptId,jdbcType=VARCHAR}, #{imgId,jdbcType=VARCHAR}, #{scriptName,jdbcType=VARCHAR}, 
+      #{runTiming,jdbcType=VARCHAR}, #{playbookUri,jdbcType=VARCHAR}, #{scriptFileUri,jdbcType=VARCHAR}, 
+      #{extraVars,jdbcType=VARCHAR}, #{sortNo,jdbcType=INTEGER}, #{createdby,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.BaseImageScripts">
+    insert into base_image_scripts
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="imgScriptId != null">
+        img_script_id,
+      </if>
+      <if test="imgId != null">
+        img_id,
+      </if>
+      <if test="scriptName != null">
+        script_name,
+      </if>
+      <if test="runTiming != null">
+        run_timing,
+      </if>
+      <if test="playbookUri != null">
+        playbook_uri,
+      </if>
+      <if test="scriptFileUri != null">
+        script_file_uri,
+      </if>
+      <if test="extraVars != null">
+        extra_vars,
+      </if>
+      <if test="sortNo != null">
+        sort_no,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="imgScriptId != null">
+        #{imgScriptId,jdbcType=VARCHAR},
+      </if>
+      <if test="imgId != null">
+        #{imgId,jdbcType=VARCHAR},
+      </if>
+      <if test="scriptName != null">
+        #{scriptName,jdbcType=VARCHAR},
+      </if>
+      <if test="runTiming != null">
+        #{runTiming,jdbcType=VARCHAR},
+      </if>
+      <if test="playbookUri != null">
+        #{playbookUri,jdbcType=VARCHAR},
+      </if>
+      <if test="scriptFileUri != null">
+        #{scriptFileUri,jdbcType=VARCHAR},
+      </if>
+      <if test="extraVars != null">
+        #{extraVars,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNo != null">
+        #{sortNo,jdbcType=INTEGER},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.BaseImageScripts">
+    update base_image_scripts
+    <set>
+      <if test="imgId != null">
+        img_id = #{imgId,jdbcType=VARCHAR},
+      </if>
+      <if test="scriptName != null">
+        script_name = #{scriptName,jdbcType=VARCHAR},
+      </if>
+      <if test="runTiming != null">
+        run_timing = #{runTiming,jdbcType=VARCHAR},
+      </if>
+      <if test="playbookUri != null">
+        playbook_uri = #{playbookUri,jdbcType=VARCHAR},
+      </if>
+      <if test="scriptFileUri != null">
+        script_file_uri = #{scriptFileUri,jdbcType=VARCHAR},
+      </if>
+      <if test="extraVars != null">
+        extra_vars = #{extraVars,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNo != null">
+        sort_no = #{sortNo,jdbcType=INTEGER},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where img_script_id = #{imgScriptId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.BaseImageScripts">
+    update base_image_scripts
+    set img_id = #{imgId,jdbcType=VARCHAR},
+      script_name = #{scriptName,jdbcType=VARCHAR},
+      run_timing = #{runTiming,jdbcType=VARCHAR},
+      playbook_uri = #{playbookUri,jdbcType=VARCHAR},
+      script_file_uri = #{scriptFileUri,jdbcType=VARCHAR},
+      extra_vars = #{extraVars,jdbcType=VARCHAR},
+      sort_no = #{sortNo,jdbcType=INTEGER},
+      createdby = #{createdby,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where img_script_id = #{imgScriptId,jdbcType=VARCHAR}
+  </update>
+
+  <select id="getAllByImgId" resultType="com.sunbox.domain.BaseImageScripts">
+    select
+    <include refid="Base_Column_List" />
+    from base_image_scripts
+    where img_id = #{imgId,jdbcType=VARCHAR}
+    order by created_time desc
+    limit #{pageStart},#{pageLimit}
+  </select>
+
+  <select id="countByImgId" resultType="java.lang.Integer">
+    select
+    count(1)
+    from base_image_scripts
+    where img_id = #{imgId,jdbcType=VARCHAR}
+  </select>
+</mapper>

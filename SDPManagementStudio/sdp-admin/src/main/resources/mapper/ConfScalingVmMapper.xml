@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpadmin.mapper.ConfScalingVmMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.ConfScalingVm">
+        <id column="record_id" jdbcType="VARCHAR" property="recordId"/>
+        <result column="task_id" jdbcType="VARCHAR" property="taskId"/>
+        <result column="cluster_id" jdbcType="VARCHAR" property="clusterId"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="group_id" jdbcType="VARCHAR" property="groupId"/>
+        <result column="scaling_type" jdbcType="INTEGER" property="scalingType"/>
+        <result column="vm_conf_id" jdbcType="VARCHAR" property="vmConfId"/>
+        <result column="internalIp" jdbcType="VARCHAR" property="internalIp"/>
+        <result column="vm_role" jdbcType="VARCHAR" property="vmRole"/>
+        <result column="vm_name" jdbcType="VARCHAR" property="vmName"/>
+        <result column="host_name" jdbcType="VARCHAR" property="hostName"/>
+        <result column="sku_name" jdbcType="VARCHAR" property="skuName"/>
+        <result column="es_rule_id" jdbcType="VARCHAR" property="esRuleId"/>
+        <result column="es_rule_name" jdbcType="VARCHAR" property="esRuleName"/>
+        <result column="before_scaling_count" jdbcType="INTEGER" property="beforeScalingCount"/>
+        <result column="after_scaling_count" jdbcType="INTEGER" property="afterScalingCount"/>
+        <result column="scaling_count" jdbcType="INTEGER" property="scalingCount"/>
+        <result column="expect_count" jdbcType="INTEGER" property="expectCount"/>
+        <result column="default_username" jdbcType="VARCHAR" property="defaultUsername"/>
+        <result column="operation_type" jdbcType="INTEGER" property="operationType"/>
+        <result column="beg_time" jdbcType="TIMESTAMP" property="begTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="created_by" jdbcType="TIMESTAMP" property="createdBy"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        record_id,
+        task_id,
+        internalIp,
+        vm_conf_id,
+        cluster_id,
+        group_name,
+        group_id,
+        scaling_type,
+        vm_role,
+        vm_name,
+        host_name,
+        sku_name,
+        es_rule_id,
+        es_rule_name,
+        before_scaling_count,
+        after_scaling_count,
+        scaling_count,
+        expect_count,
+        default_username,
+        operation_type,
+        beg_time,
+        end_time,
+        state,
+        create_time,
+        created_by,
+        modified_time,
+        modified_by
+    </sql>
+    <select id="selectByTaskId" resultType="com.sunbox.domain.ConfScalingVm">
+        select
+        <include refid="Base_Column_List" />
+        from conf_scaling_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and task_id = #{taskId,jdbcType=VARCHAR}
+    </select>
+</mapper>

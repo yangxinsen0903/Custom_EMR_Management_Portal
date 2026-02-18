@@ -1,0 +1,63 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+stages:
+- stage: Build
+  displayName: "Build and Push"
+  jobs:
+  - job: Build
+    displayName: "Build And Push Docker Image"
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - script: |
+          echo $(ACR_PASSWORD) | docker login $(ACR_NAME).azurecr.io -u $(ACR_USERNAME) --password-stdin
+        displayName: 'Login to ACR'
+      - script:  |
+          cd $(System.DefaultWorkingDirectory)
+        displayName: 'Go to Working Directory'  
+      - script: |
+          docker build -f ./$(SERVICE_NAME)/Dockerfile -t $(ACR_NAME).azurecr.io/$(SERVICE_NAME):$(Build.BuildId) .
+        displayName: 'Build image'
+      - script: |
+          docker push $(ACR_NAME).azurecr.io/$(SERVICE_NAME):$(Build.BuildId)
+        displayName: 'Push Image'
+
+- stage: Deploy
+  dependsOn: Build
+  displayName: "Deploy to AKS"
+  jobs:
+  - job: Deploy
+    displayName: "Deploy to AKS Cluster"
+    pool:
+      vmImage: "windows-latest"
+    steps:
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          # 定义变量
+          $BUILD_ID = $env:BUILD_BUILDID
+          $YAML_FILE_PATH = "$(System.DefaultWorkingDirectory)/$(SERVICE_NAME)/aks-deployment.yml"
+          # 替换变量并覆盖原始文件
+          $content = (Get-Content $YAML_FILE_PATH) -replace "{{TAG_ID}}", "$BUILD_ID"
+          $content | Set-Content $YAML_FILE_PATH
+          $content = (Get-Content $YAML_FILE_PATH) -replace "{{ACR}}", "$(ACR_NAME)"
+          $content | Set-Content $YAML_FILE_PATH
+          # 输出文件内容
+          Write-Output $content
+      displayName: "Replace ACR and TAG_ID"
+    - task: Kubernetes@1
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'aks-sdp-westus2'
+        command: 'apply'
+        useConfigurationFile: true
+        configuration: '$(System.DefaultWorkingDirectory)/$(SERVICE_NAME)/aks-deployment.yml'
+        secretType: 'dockerRegistry'
+        containerRegistryType: 'Azure Container Registry'
+      displayName: "Deploy to AKS"
+
+ 

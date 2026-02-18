@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.InfoClusterPlaybookJobMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoClusterPlaybookJob">
+    <id column="transaction_id" jdbcType="VARCHAR" property="transactionId" />
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="conf_script_id" jdbcType="VARCHAR" property="confScriptId"/>
+    <result column="job_type" jdbcType="VARCHAR" property="jobType"/>
+    <result column="cluster_name" jdbcType="VARCHAR" property="clusterName" />
+    <result column="activity_log_id" jdbcType="VARCHAR" property="activityLogId" />
+    <result column="job_id" jdbcType="VARCHAR" property="jobId" />
+    <result column="playbook_uri" jdbcType="VARCHAR" property="playbookUri" />
+    <result column="extra_vars" jdbcType="VARCHAR" property="extraVars" />
+    <result column="sort_no" jdbcType="INTEGER" property="sortNo" />
+    <result column="job_status" jdbcType="INTEGER" property="jobStatus" />
+    <result column="beg_time" jdbcType="TIMESTAMP" property="begTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.sunbox.domain.InfoClusterPlaybookJobWithBLOBs">
+    <result column="node_list" jdbcType="LONGVARCHAR" property="nodeList" />
+    <result column="script_file_uri" jdbcType="LONGVARCHAR" property="scriptFileUri" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    transaction_id, cluster_id,conf_script_id,job_type,cluster_name, activity_log_id, job_id, playbook_uri,
+    extra_vars, sort_no, job_status, beg_time, end_time
+  </sql>
+  <sql id="Blob_Column_List">
+    node_list, script_file_uri
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from info_cluster_playbook_job
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByActivityLogId" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from info_cluster_playbook_job
+    where activity_log_id = #{activityLogId,jdbcType=VARCHAR}
+  </select>
+  <select id="getPlaybookJobByActivityLogId" resultType="com.sunbox.domain.InfoClusterPlaybookJob">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from info_cluster_playbook_job
+    where activity_log_id = #{activityLogId,jdbcType=VARCHAR}
+  </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from info_cluster_playbook_job
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.InfoClusterPlaybookJobWithBLOBs">
+    insert into info_cluster_playbook_job (transaction_id, cluster_id, conf_script_id,job_type,cluster_name,
+      activity_log_id, job_id, playbook_uri, 
+      extra_vars, sort_no, job_status, 
+      beg_time, end_time, node_list, 
+      script_file_uri)
+    values (#{transactionId,jdbcType=VARCHAR}, #{clusterId,jdbcType=VARCHAR},#{confScriptId,jdbcType=VARCHAR},#{jobType,jdbcType=VARCHAR},
+            #{clusterName,jdbcType=VARCHAR},
+      #{activityLogId,jdbcType=VARCHAR}, #{jobId,jdbcType=VARCHAR}, #{playbookUri,jdbcType=VARCHAR}, 
+      #{extraVars,jdbcType=VARCHAR}, #{sortNo,jdbcType=INTEGER}, #{jobStatus,jdbcType=INTEGER},
+      #{begTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{nodeList,jdbcType=LONGVARCHAR}, 
+      #{scriptFileUri,jdbcType=LONGVARCHAR})
+  </insert>
+
+  <insert id="insertBatch">
+    insert into info_cluster_playbook_job (transaction_id, cluster_id,conf_script_id,job_type, cluster_name,
+    activity_log_id, job_id, node_list,
+    playbook_uri, script_file_uri, extra_vars,
+    sort_no, job_status, beg_time,
+    end_time)
+    values
+    <foreach collection="jobs" item="job" separator=",">
+        (#{transactionId,jdbcType=VARCHAR}, #{clusterId,jdbcType=VARCHAR},#{confScriptId,jdbcType=VARCHAR},#{jobType,jdbcType=VARCHAR},
+         #{clusterName,jdbcType=VARCHAR},
+    #{activityLogId,jdbcType=VARCHAR}, #{jobId,jdbcType=VARCHAR}, #{nodeList,jdbcType=VARCHAR },
+    #{playbookUri,jdbcType=VARCHAR}, #{scriptFileUri,jdbcType=VARCHAR},#{extraVars,jdbcType=VARCHAR},
+    #{sortNo,jdbcType=INTEGER}, #{jobStatus,jdbcType=INTEGER}, #{begTime,jdbcType=TIMESTAMP},
+    #{endTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.sunbox.domain.InfoClusterPlaybookJobWithBLOBs">
+    insert into info_cluster_playbook_job
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="transactionId != null">
+        transaction_id,
+      </if>
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="confScriptId != null">
+        conf_script_id,
+      </if>
+      <if test="jobType != null">
+        job_type,
+      </if>
+      <if test="clusterName != null">
+        cluster_name,
+      </if>
+      <if test="activityLogId != null">
+        activity_log_id,
+      </if>
+      <if test="jobId != null">
+        job_id,
+      </if>
+      <if test="playbookUri != null">
+        playbook_uri,
+      </if>
+      <if test="extraVars != null">
+        extra_vars,
+      </if>
+      <if test="sortNo != null">
+        sort_no,
+      </if>
+      <if test="jobStatus != null">
+        job_status,
+      </if>
+      <if test="begTime != null">
+        beg_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="nodeList != null">
+        node_list,
+      </if>
+      <if test="scriptFileUri != null">
+        script_file_uri,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="transactionId != null">
+        #{transactionId,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="confScriptId != null">
+        #{confScriptId,jdbcType=VARCHAR},
+      </if>
+      <if test="jobType != null">
+        #{jobType,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterName != null">
+        #{clusterName,jdbcType=VARCHAR},
+      </if>
+      <if test="activityLogId != null">
+        #{activityLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="jobId != null">
+        #{jobId,jdbcType=VARCHAR},
+      </if>
+      <if test="playbookUri != null">
+        #{playbookUri,jdbcType=VARCHAR},
+      </if>
+      <if test="extraVars != null">
+        #{extraVars,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNo != null">
+        #{sortNo,jdbcType=INTEGER},
+      </if>
+      <if test="jobStatus != null">
+        #{jobStatus,jdbcType=INTEGER},
+      </if>
+      <if test="begTime != null">
+        #{begTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nodeList != null">
+        #{nodeList,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="scriptFileUri != null">
+        #{scriptFileUri,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.InfoClusterPlaybookJobWithBLOBs">
+    update info_cluster_playbook_job
+    <set>
+      <if test="clusterId != null">
+        cluster_id = #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="confScriptId != null">
+        conf_script_id = #{confScriptId,jdbcType=VARCHAR},
+      </if>
+      <if test="jobType != null">
+        job_type = #{jobType,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterName != null">
+        cluster_name = #{clusterName,jdbcType=VARCHAR},
+      </if>
+      <if test="activityLogId != null">
+        activity_log_id = #{activityLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="jobId != null">
+        job_id = #{jobId,jdbcType=VARCHAR},
+      </if>
+      <if test="playbookUri != null">
+        playbook_uri = #{playbookUri,jdbcType=VARCHAR},
+      </if>
+      <if test="extraVars != null">
+        extra_vars = #{extraVars,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNo != null">
+        sort_no = #{sortNo,jdbcType=INTEGER},
+      </if>
+      <if test="jobStatus != null">
+        job_status = #{jobStatus,jdbcType=INTEGER},
+      </if>
+      <if test="begTime != null">
+        beg_time = #{begTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nodeList != null">
+        node_list = #{nodeList,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="scriptFileUri != null">
+        script_file_uri = #{scriptFileUri,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sunbox.domain.InfoClusterPlaybookJobWithBLOBs">
+    update info_cluster_playbook_job
+    set cluster_id = #{clusterId,jdbcType=VARCHAR},
+        conf_script_id = #{confScriptId,jdbcType=VARCHAR},
+        job_type = #{jobType,jdbcType=VARCHAR},
+      cluster_name = #{clusterName,jdbcType=VARCHAR},
+      activity_log_id = #{activityLogId,jdbcType=VARCHAR},
+      job_id = #{jobId,jdbcType=VARCHAR},
+      playbook_uri = #{playbookUri,jdbcType=VARCHAR},
+      extra_vars = #{extraVars,jdbcType=VARCHAR},
+      sort_no = #{sortNo,jdbcType=INTEGER},
+      job_status = #{jobStatus,jdbcType=INTEGER},
+      beg_time = #{begTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      node_list = #{nodeList,jdbcType=LONGVARCHAR},
+      script_file_uri = #{scriptFileUri,jdbcType=LONGVARCHAR}
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.InfoClusterPlaybookJob">
+    update info_cluster_playbook_job
+    set cluster_id = #{clusterId,jdbcType=VARCHAR},
+        conf_script_id = #{confScriptId,jdbcType=VARCHAR},
+        job_type = #{jobType,jdbcType=VARCHAR},
+      cluster_name = #{clusterName,jdbcType=VARCHAR},
+      activity_log_id = #{activityLogId,jdbcType=VARCHAR},
+      job_id = #{jobId,jdbcType=VARCHAR},
+      playbook_uri = #{playbookUri,jdbcType=VARCHAR},
+      extra_vars = #{extraVars,jdbcType=VARCHAR},
+      sort_no = #{sortNo,jdbcType=INTEGER},
+      job_status = #{jobStatus,jdbcType=INTEGER},
+      beg_time = #{begTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP}
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </update>
+</mapper>

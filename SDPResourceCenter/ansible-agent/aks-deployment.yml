@@ -1,0 +1,56 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ansible-agent
+  namespace: resource-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ansible-agent
+  template:
+    metadata:
+      labels:
+        app: ansible-agent
+    spec:
+      containers:
+        - name: ansible-agent
+          image: {{ACR}}.azurecr.io/ansible-agent:{{TAG_ID}}
+          resources:
+            limits:
+              cpu: 2
+              memory: 4096Mi
+            requests:
+              cpu: 2
+              memory: 4096Mi
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8083
+          volumeMounts:
+            - name: sp-cert-volume
+              mountPath: /mnt/certificates
+              readOnly: true
+          envFrom:
+            - secretRef:
+                name: rm-all-secret
+          env:
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: AZURE_CLIENT_CERT_PATH
+              value: /mnt/certificates/certificate.pem
+      volumes:
+        - name: sp-cert-volume
+          secret:
+            secretName: rm-sp-cert-secret
+            optional: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler

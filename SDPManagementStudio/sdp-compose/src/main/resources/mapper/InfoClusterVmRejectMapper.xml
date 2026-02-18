@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.InfoClusterVmRejectMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoClusterVmReject">
+    <id column="reject_id" jdbcType="VARCHAR" property="rejectId" />
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="vm_name" jdbcType="VARCHAR" property="vmName" />
+    <result column="host_name" jdbcType="VARCHAR" property="hostName" />
+    <result column="internalIp" jdbcType="VARCHAR" property="internalip" />
+    <result column="plan_id" jdbcType="VARCHAR" property="planId"/>
+    <result column="activity_log_id" jdbcType="VARCHAR" property="activityLogId" />
+    <result column="activity_cn_name" jdbcType="VARCHAR" property="activityCnName" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="destroy_time" jdbcType="TIMESTAMP" property="destroyTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.sunbox.domain.InfoClusterVmReject">
+    <result column="reject_reason" jdbcType="LONGVARCHAR" property="rejectReason" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    reject_id, cluster_id, vm_name, host_name, internalIp, activity_log_id, activity_cn_name, 
+    created_time, destroy_time,plan_id
+  </sql>
+  <sql id="Blob_Column_List">
+    reject_reason
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from info_cluster_vm_reject
+    where reject_id = #{rejectId,jdbcType=VARCHAR}
+  </select>
+  <select id="getVmRejectsByPlanId" resultType="com.sunbox.domain.InfoClusterVmReject">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from info_cluster_vm_reject
+    where plan_id = #{planId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from info_cluster_vm_reject
+    where reject_id = #{rejectId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.InfoClusterVmReject">
+    insert into info_cluster_vm_reject (reject_id, cluster_id, vm_name, 
+      host_name, internalIp, activity_log_id, 
+      activity_cn_name, created_time, destroy_time, 
+      reject_reason,plan_id)
+    values (#{rejectId,jdbcType=VARCHAR}, #{clusterId,jdbcType=VARCHAR}, #{vmName,jdbcType=VARCHAR}, 
+      #{hostName,jdbcType=VARCHAR}, #{internalip,jdbcType=VARCHAR}, #{activityLogId,jdbcType=VARCHAR}, 
+      #{activityCnName,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{destroyTime,jdbcType=TIMESTAMP}, 
+      #{rejectReason,jdbcType=LONGVARCHAR},#{planId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.InfoClusterVmReject">
+    insert into info_cluster_vm_reject
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rejectId != null">
+        reject_id,
+      </if>
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="vmName != null">
+        vm_name,
+      </if>
+      <if test="hostName != null">
+        host_name,
+      </if>
+      <if test="internalip != null">
+        internalIp,
+      </if>
+      <if test="activityLogId != null">
+        activity_log_id,
+      </if>
+      <if test="activityCnName != null">
+        activity_cn_name,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="destroyTime != null">
+        destroy_time,
+      </if>
+      <if test="rejectReason != null">
+        reject_reason,
+      </if>
+      <if test="planId != null">
+        plan_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rejectId != null">
+        #{rejectId,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="vmName != null">
+        #{vmName,jdbcType=VARCHAR},
+      </if>
+      <if test="hostName != null">
+        #{hostName,jdbcType=VARCHAR},
+      </if>
+      <if test="internalip != null">
+        #{internalip,jdbcType=VARCHAR},
+      </if>
+      <if test="activityLogId != null">
+        #{activityLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="activityCnName != null">
+        #{activityCnName,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="destroyTime != null">
+        #{destroyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rejectReason != null">
+        #{rejectReason,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="planId != null">
+        #{planId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <insert id="bastchInsert">
+    insert into info_cluster_vm_reject (reject_id, cluster_id, vm_name, host_name, internalIp, activity_log_id, activity_cn_name,
+    created_time, destroy_time,plan_id)
+    values
+    <foreach collection="vms" item="vm" separator=","> <!--open="(" close=")" -->
+      ( #{vm.rejectId,jdbcType=VARCHAR}, #{vm.clusterId,jdbcType=VARCHAR}, #{vm.vmName,jdbcType=VARCHAR},
+      #{vm.hostName,jdbcType=VARCHAR}, #{vm.internalip,jdbcType=VARCHAR}, #{vm.activityLogId,jdbcType=VARCHAR},
+      #{vm.activityCnName,jdbcType=VARCHAR},
+      #{vm.createdTime,jdbcType=TIMESTAMP},
+      #{vm.destroyTime,jdbcType=TIMESTAMP},#{vm.planId,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.InfoClusterVmReject">
+    update info_cluster_vm_reject
+    <set>
+      <if test="clusterId != null">
+        cluster_id = #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="vmName != null">
+        vm_name = #{vmName,jdbcType=VARCHAR},
+      </if>
+      <if test="hostName != null">
+        host_name = #{hostName,jdbcType=VARCHAR},
+      </if>
+      <if test="internalip != null">
+        internalIp = #{internalip,jdbcType=VARCHAR},
+      </if>
+      <if test="activityLogId != null">
+        activity_log_id = #{activityLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="activityCnName != null">
+        activity_cn_name = #{activityCnName,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="destroyTime != null">
+        destroy_time = #{destroyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rejectReason != null">
+        reject_reason = #{rejectReason,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="planId != null">
+        plan_id = #{planId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where reject_id = #{rejectId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sunbox.domain.InfoClusterVmReject">
+    update info_cluster_vm_reject
+    set cluster_id = #{clusterId,jdbcType=VARCHAR},
+      vm_name = #{vmName,jdbcType=VARCHAR},
+      host_name = #{hostName,jdbcType=VARCHAR},
+      internalIp = #{internalip,jdbcType=VARCHAR},
+      activity_log_id = #{activityLogId,jdbcType=VARCHAR},
+      activity_cn_name = #{activityCnName,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      destroy_time = #{destroyTime,jdbcType=TIMESTAMP},
+      reject_reason = #{rejectReason,jdbcType=LONGVARCHAR},
+      plan_id = #{planId,jdbcType=VARCHAR}
+    where reject_id = #{rejectId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.InfoClusterVmReject">
+    update info_cluster_vm_reject
+    set cluster_id = #{clusterId,jdbcType=VARCHAR},
+      vm_name = #{vmName,jdbcType=VARCHAR},
+      host_name = #{hostName,jdbcType=VARCHAR},
+      internalIp = #{internalip,jdbcType=VARCHAR},
+      activity_log_id = #{activityLogId,jdbcType=VARCHAR},
+      activity_cn_name = #{activityCnName,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      destroy_time = #{destroyTime,jdbcType=TIMESTAMP},
+      plan_id = #{planId,jdbcType=VARCHAR}
+    where reject_id = #{rejectId,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateVmRejectsByPlanId">
+      update info_cluster_vm_reject
+      set  destroy_time = now()
+      where plan_id = #{planId,jdbcType=VARCHAR} and destroy_time is null
+  </update>
+</mapper>

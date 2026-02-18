@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpadmin.mapper.ConfKeypairMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.ConfKeypair">
+    <!--@mbg.generated-->
+    <!--@Table conf_keypair-->
+    <id column="keypair_id" jdbcType="VARCHAR" property="keypairId" />
+    <result column="keypair_name" jdbcType="VARCHAR" property="keypairName" />
+    <result column="keypair_type" jdbcType="VARCHAR" property="keypairType" />
+    <result column="public_key" jdbcType="LONGVARCHAR" property="publicKey" />
+    <result column="private_key" jdbcType="LONGVARCHAR" property="privateKey" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    keypair_id, keypair_name, keypair_type, public_key, private_key, createdby, created_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from conf_keypair
+    where keypair_id = #{keypairId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--@mbg.generated-->
+    delete from conf_keypair
+    where keypair_id = #{keypairId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.ConfKeypair">
+    <!--@mbg.generated-->
+    insert into conf_keypair (keypair_id, keypair_name, keypair_type, 
+      public_key, private_key, createdby, 
+      created_time)
+    values (#{keypairId,jdbcType=VARCHAR}, #{keypairName,jdbcType=VARCHAR}, #{keypairType,jdbcType=VARCHAR}, 
+      #{publicKey,jdbcType=LONGVARCHAR}, #{privateKey,jdbcType=LONGVARCHAR}, #{createdby,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.ConfKeypair">
+    <!--@mbg.generated-->
+    insert into conf_keypair
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="keypairId != null">
+        keypair_id,
+      </if>
+      <if test="keypairName != null">
+        keypair_name,
+      </if>
+      <if test="keypairType != null">
+        keypair_type,
+      </if>
+      <if test="publicKey != null">
+        public_key,
+      </if>
+      <if test="privateKey != null">
+        private_key,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="keypairId != null">
+        #{keypairId,jdbcType=VARCHAR},
+      </if>
+      <if test="keypairName != null">
+        #{keypairName,jdbcType=VARCHAR},
+      </if>
+      <if test="keypairType != null">
+        #{keypairType,jdbcType=VARCHAR},
+      </if>
+      <if test="publicKey != null">
+        #{publicKey,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="privateKey != null">
+        #{privateKey,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.ConfKeypair">
+    <!--@mbg.generated-->
+    update conf_keypair
+    <set>
+      <if test="keypairName != null">
+        keypair_name = #{keypairName,jdbcType=VARCHAR},
+      </if>
+      <if test="keypairType != null">
+        keypair_type = #{keypairType,jdbcType=VARCHAR},
+      </if>
+      <if test="publicKey != null">
+        public_key = #{publicKey,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="privateKey != null">
+        private_key = #{privateKey,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where keypair_id = #{keypairId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.ConfKeypair">
+    <!--@mbg.generated-->
+    update conf_keypair
+    set keypair_name = #{keypairName,jdbcType=VARCHAR},
+      keypair_type = #{keypairType,jdbcType=VARCHAR},
+      public_key = #{publicKey,jdbcType=LONGVARCHAR},
+      private_key = #{privateKey,jdbcType=LONGVARCHAR},
+      createdby = #{createdby,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where keypair_id = #{keypairId,jdbcType=VARCHAR}
+  </update>
+</mapper>

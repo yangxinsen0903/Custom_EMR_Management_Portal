@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.InfoClusterComponentLayoutMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoClusterComponentLayout">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="service_code" jdbcType="VARCHAR" property="serviceCode" />
+    <result column="host_group" jdbcType="VARCHAR" property="hostGroup" />
+    <result column="component_code" jdbcType="VARCHAR" property="componentCode" />
+    <result column="is_ha" jdbcType="TINYINT" property="isHa" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, cluster_id, service_code, host_group, component_code, is_ha, state, created_by,
+    created_time, updated_by, updated_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from info_cluster_component_layout
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByClusterId" resultType="com.sunbox.domain.InfoClusterComponentLayout">
+    select
+    <include refid="Base_Column_List" />
+    from info_cluster_component_layout
+    where cluster_id = #{clusterId} and state = 'VALID'
+  </select>
+
+  <select id="getComponentsByClusterIdAndHostGroup" resultType="com.sunbox.domain.InfoClusterComponentLayout">
+    select
+    <include refid="Base_Column_List" />
+    from info_cluster_component_layout
+    where cluster_id = #{clusterId,jdbcType=VARCHAR} and host_group = #{hostGroup,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from info_cluster_component_layout
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <delete id="deleteByClusterId" parameterType="java.lang.String">
+    delete from info_cluster_component_layout
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByClusterIdAndHostGroup" >
+    delete from info_cluster_component_layout
+    where cluster_id = #{clusterId,jdbcType=VARCHAR} and host_group = #{hostGroup,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.sunbox.domain.InfoClusterComponentLayout">
+    insert into info_cluster_component_layout (id, cluster_id, service_code,
+      host_group, component_code, is_ha,
+      state, created_by, created_time,
+      updated_by, updated_time)
+    values (#{id,jdbcType=BIGINT}, #{clusterId,jdbcType=VARCHAR}, #{serviceCode,jdbcType=VARCHAR},
+      #{hostGroup,jdbcType=VARCHAR}, #{componentCode,jdbcType=VARCHAR}, #{isHa,jdbcType=TINYINT},
+      #{state,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP},
+      #{updatedBy,jdbcType=VARCHAR}, #{updatedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.InfoClusterComponentLayout">
+    insert into info_cluster_component_layout
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="serviceCode != null">
+        service_code,
+      </if>
+      <if test="hostGroup != null">
+        host_group,
+      </if>
+      <if test="componentCode != null">
+        component_code,
+      </if>
+      <if test="isHa != null">
+        is_ha,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createdBy != null">
+        created_by,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="updatedBy != null">
+        updated_by,
+      </if>
+      <if test="updatedTime != null">
+        updated_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceCode != null">
+        #{serviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="hostGroup != null">
+        #{hostGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="componentCode != null">
+        #{componentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isHa != null">
+        #{isHa,jdbcType=TINYINT},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedTime != null">
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.InfoClusterComponentLayout">
+    update info_cluster_component_layout
+    <set>
+      <if test="clusterId != null">
+        cluster_id = #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceCode != null">
+        service_code = #{serviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="hostGroup != null">
+        host_group = #{hostGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="componentCode != null">
+        component_code = #{componentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isHa != null">
+        is_ha = #{isHa,jdbcType=TINYINT},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedTime != null">
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.InfoClusterComponentLayout">
+    update info_cluster_component_layout
+    set cluster_id = #{clusterId,jdbcType=VARCHAR},
+      service_code = #{serviceCode,jdbcType=VARCHAR},
+      host_group = #{hostGroup,jdbcType=VARCHAR},
+      component_code = #{componentCode,jdbcType=VARCHAR},
+      is_ha = #{isHa,jdbcType=TINYINT},
+      state = #{state,jdbcType=VARCHAR},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

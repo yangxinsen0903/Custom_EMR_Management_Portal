@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpvmsr.mapper.InfoClusterVmMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoClusterVm">
+        <id column="cluster_id" jdbcType="VARCHAR" property="clusterId"/>
+        <id column="vm_name" jdbcType="VARCHAR" property="vmName"/>
+        <result column="vm_conf_id" jdbcType="VARCHAR" property="vmConfId"/>
+        <result column="host_name" jdbcType="VARCHAR" property="hostName"/>
+        <result column="internalIp" jdbcType="VARCHAR" property="internalip"/>
+        <result column="default_username" jdbcType="VARCHAR" property="defaultUsername"/>
+        <result column="vm_role" jdbcType="VARCHAR" property="vmRole"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="group_id" jdbcType="VARCHAR" property="groupId"/>
+        <result column="ambari_config_group" jdbcType="VARCHAR" property="ambariConfigGroup"/>
+        <result column="sku_name" jdbcType="VARCHAR" property="skuName"/>
+        <result column="purchase_type" jdbcType="VARCHAR" property="purchaseType"/>
+        <result column="ondemond_price" jdbcType="DECIMAL" property="ondemondPrice"/>
+        <result column="spot_price" jdbcType="DECIMAL" property="spotPrice"/>
+        <result column="join_cluster_time" jdbcType="TIMESTAMP" property="joinClusterTime"/>
+        <result column="imageid" jdbcType="VARCHAR" property="imageid"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="scalein_task_id" jdbcType="VARCHAR" property="scaleinTaskId"/>
+        <result column="scaleout_task_id" jdbcType="VARCHAR" property="scaleoutTaskId"/>
+        <result column="create_transcation_id" jdbcType="VARCHAR" property="createTranscationId"/>
+        <result column="create_job_id" jdbcType="VARCHAR" property="createJobId"/>
+        <result column="scale_vm_detail_id" jdbcType="VARCHAR" property="scaleVmDetailId"/>
+        <result column="create_begtime" jdbcType="TIMESTAMP" property="createBegtime"/>
+        <result column="create_endtime" jdbcType="TIMESTAMP" property="createEndtime"/>
+        <result column="maintenance_mode" jdbcType="INTEGER" property="maintenanceMode"/>
+    </resultMap>
+
+    <update id="updateVMStateByClusterIdAndVMName">
+        update info_cluster_vm
+        set state = #{state,jdbcType=INTEGER}
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and vm_name = #{vmName,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

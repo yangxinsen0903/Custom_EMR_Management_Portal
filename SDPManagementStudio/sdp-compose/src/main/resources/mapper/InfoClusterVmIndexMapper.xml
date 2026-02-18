@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.InfoClusterVmIndexMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoClusterVmIndex">
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="vm_role" jdbcType="VARCHAR" property="vmRole" />
+    <result column="end_index" jdbcType="INTEGER" property="endIndex" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="task_id" jdbcType="VARCHAR" property="taskId" />
+    <result column="before_index" jdbcType="INTEGER" property="beforeIndex" />
+    <result column="after_index" jdbcType="INTEGER" property="afterIndex" />
+    <result column="delta_index" jdbcType="INTEGER" property="deltaIndex" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    cluster_id,vm_role,end_index,
+    create_time,
+    modified_time,
+    before_index,
+    after_index,
+    delta_index
+  </sql>
+  <select id="findByClusterIdAndVmRole" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from info_cluster_vm_index
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    and vm_role = #{vmRole,jdbcType=VARCHAR}
+  </select>
+    <select id="findByClusterIdAndTaskId" resultType="com.sunbox.domain.InfoClusterVmIndex">
+      select
+      <include refid="Base_Column_List" />
+      from info_cluster_vm_index
+      where cluster_id = #{clusterId,jdbcType=VARCHAR}
+      and task_id = #{taskId,jdbcType=VARCHAR}
+    </select>
+    <update id="updateEndIndex" parameterType="com.sunbox.domain.InfoClusterVmIndex">
+    update info_cluster_vm_index
+    set end_index = #{endIndex,jdbcType=INTEGER},
+    create_time = #{createTime,jdbcType=TIMESTAMP},
+    modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+    task_id = #{taskId,jdbcType=VARCHAR},
+    before_index = #{beforeIndex,jdbcType=INTEGER},
+    after_index = #{afterIndex,jdbcType=INTEGER},
+    delta_index = #{deltaIndex,jdbcType=INTEGER}
+    where
+    cluster_id = #{clusterId,jdbcType=VARCHAR}
+    and vm_role = #{vmRole,jdbcType=VARCHAR}
+  </update>
+  <insert id="insertEndIndex" parameterType="com.sunbox.domain.InfoClusterVmIndex">
+    insert into info_cluster_vm_index (
+    cluster_id,
+    vm_role,
+    end_index,
+    create_time,
+    modified_time,
+    task_id,
+    before_index,
+    after_index,
+    delta_index
+    ) values (
+    #{clusterId,jdbcType=VARCHAR},
+    #{vmRole,jdbcType=VARCHAR},
+    #{endIndex,jdbcType=INTEGER},
+    #{createTime,jdbcType=TIMESTAMP},
+    #{modifiedTime,jdbcType=TIMESTAMP},
+    #{taskId,jdbcType=VARCHAR},
+    #{beforeIndex,jdbcType=INTEGER},
+    #{afterIndex,jdbcType=INTEGER},
+    #{deltaIndex,jdbcType=INTEGER}
+    )
+  </insert>
+</mapper>

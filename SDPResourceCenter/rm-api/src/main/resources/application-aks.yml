@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+azure:
+  clientId: ${AZURE_CLIENT_ID}
+  clientSecret: ${AZURE_CLIENT_SECRET}
+  clientCert: ${AZURE_CLIENT_CERT_PATH:}
+  clientAuth: ${AZURE_CLIENT_AUTH:secret}
+  tenantId: ${AZURE_TENANT_ID}
+  default-subscriptionId: ${AZURE_DEFAULT_SUBSCRIPTION_ID}
+  dns-subscriptionId: ${AZURE_DNS_ZONE_SUBSCRIPTION_ID}
+  dns-operation-batch-count: ${AZURE_DNS_OPERATION_BATCH_COUNT}
+  dns-operation-batch-interval: ${AZURE_DNS_OPERATION_BATCH_INTERVAL:60}
+  service-bus:
+    replenish-spot:
+      namespace: ${SDP_RM_SERVICE_BUS_NAMESPACE}
+      event-to-rm-topic: ${REPLENISH_SERVICE_BUS_TOPIC}
+      event-to-rm-subscription: ${REPLENISH_SERVICE_BUS_SUBSCRIPTION}
+      rm-to-sdp-topic: ${VM_INFO_TO_SDP_SERVICE_BUS_TOPIC}
+custom:
+  log:
+    root: /app/logs
+    upload:
+      url: ${SDP_LOG_UPLOAD_URL}
+      storageAccount: ${SDP_RM_SA}
+      container: ${SDP_LOG_UPLOAD_SA_CONTAINER}
+sdp:
+  cluster:
+    prefix:
+      rg: ${SDP_CLUSTER_RG_PREFIX:sdp}
+      fleet: ${SDP_CLUSTER_FLEET_PREFIX:sdp}
+springfox:
+  documentation:
+    swagger:
+      use-model-v3: false

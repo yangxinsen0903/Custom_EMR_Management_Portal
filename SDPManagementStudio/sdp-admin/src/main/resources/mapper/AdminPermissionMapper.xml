@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.igsadmin.mapper.AdminPermissionDao">
+
+    <resultMap id="AdminPermission" type="com.sunbox.sdpadmin.core.model.AdminPermission" >
+        <result column="id" property="id" />
+        <result column="pid" property="pid" />
+        <result column="url" property="url" />
+        <result column="alias" property="alias" />
+        <result column="name" property="name" />
+        <result column="createdate" property="createdate" />
+        <result column="status" property="status" />
+        <result column="endtime" property="endtime" />
+        <result column="starttime" property="starttime" />
+        <result column="menu" property="menu" />
+        <result column="reqesttype" property="reqesttype" />
+        <result column="sortIndex" property="sortIndex" />
+        <result column="parentName" property="parentName" />
+        <result column="icon" property="icon" />
+    </resultMap>
+
+    <insert id="save" parameterType="com.sunbox.sdpadmin.core.model.AdminPermission">
+        insert into vm_admin_permission (`id`, `pid`, `url`, `alias`, `name`,
+            `createdate`, `status`, `starttime`, `endtime`, `menu`, `reqesttype`,`sortIndex`,`icon`)
+        values (#{id}, #{pid}, #{url}, #{alias}, #{name},
+            #{createdate}, #{status}, #{starttime}, #{endtime}, #{menu}, #{reqesttype}, #{sortIndex}, #{icon});
+    </insert>
+
+    <update id="update" parameterType="com.sunbox.sdpadmin.core.model.AdminPermission">
+        update vm_admin_permission
+        <set>
+            <if test="url !=null">
+                url = #{url},
+            </if>
+            <if test="alias !=null">
+                alias = #{alias},
+            </if>
+            <if test="name !=null">
+                name = #{name},
+            </if>
+            <if test="menu !=null">
+                menu = #{menu},
+            </if>
+            <if test="status !=null">
+                status = #{status},
+            </if>
+            <if test="sortIndex !=null">
+                sortIndex = #{sortIndex},
+            </if>
+            <if test="pid !=null and pid !=''">
+                pid = #{pid},
+            </if>
+            <if test="icon !=null and icon !=''">
+                icon = #{icon},
+            </if>
+        </set>
+
+        where id=#{id}
+    </update>
+
+    <select id="getPermissionById" parameterType="java.lang.String" resultMap="AdminPermission">
+        SELECT
+            a.id,
+            a.pid,
+            b.`name` AS parentName,
+            a.url,
+            a.alias,
+            a.`name`,
+            a.createdate,
+            a. `status`,
+            a.starttime,
+            a.endtime,
+            a.menu,
+            a.reqesttype,
+            a.sortIndex,
+            a.icon
+        FROM
+            vm_admin_permission a
+        LEFT JOIN vm_admin_permission b ON a.pid = b.id
+        where a.id = #{id}
+    </select>
+
+    <select id="getPermissionList" resultMap="AdminPermission">
+        select id, pid, url, alias, `name`, createdate, status, starttime, endtime, menu, reqesttype
+        from vm_admin_permission
+        <trim prefix="WHERE" prefixOverrides="AND | OR" >
+            <!--<if test="status != null and status != ''">-->
+                status between 0 and 1
+            <!--</if>-->
+            <if test="pid != null and pid != ''">
+                AND pid=#{pid}
+            </if>
+            <if test="roleid != null and roleid != ''">
+                AND id in(select pid from vm_admin_role_permission where rid =#{roleid})
+            </if>
+        </trim>
+        ORDER BY sortIndex ASC
+    </select>
+
+    <select id="getPermissionListByUserid" resultMap="AdminPermission">
+        select id, pid, url, alias, `name`, createdate, status, starttime, endtime, menu, reqesttype
+        from vm_admin_permission
+        <trim prefix="WHERE" prefixOverrides="AND | OR" >
+            <if test="status != null and status != ''">
+                AND status=#{status}
+            </if>
+            <if test="userid != null and userid != ''">
+                AND id in(select pid from vm_admin_role_permission where rid in (SELECT rid FROM `vm_admin_user_role` WHERE userid= #{userid}))
+            </if>
+        </trim>
+    </select>
+
+    <select id="pageList" parameterType="java.util.Map" resultMap="AdminPermission">
+        select id, pid, url, alias, `name`, createdate, status,
+            starttime, endtime, menu, reqesttype
+        from vm_admin_permission AS t
+        <trim prefix="WHERE" prefixOverrides="AND | OR" >
+            <if test="name != null and alias != ''">
+                AND t.name like CONCAT(CONCAT('%', #{name}), '%')
+            </if>
+        </trim>
+        ORDER BY name ASC
+        LIMIT #{page}, #{pageSize};
+    </select>
+
+    <select id="pageCount" parameterType="java.util.Map" resultType="int">
+        SELECT count(1)
+        FROM vm_admin_permission AS t
+        <trim prefix="WHERE" prefixOverrides="AND | OR" >
+            <if test="name != null and alias != ''">
+                AND t.name like CONCAT(CONCAT('%', #{name}), '%')
+            </if>
+        </trim>
+    </select>
+
+    <select id="selectByParams" resultMap="AdminPermission" parameterType="java.util.Map">
+        SELECT DISTINCT a.* FROM vm_admin_permission a
+        LEFT JOIN vm_admin_role_permission b ON a.`id` = b.`pid`
+        LEFT JOIN vm_admin_role c ON b.`rid` = c.`id`
+        LEFT JOIN vm_admin_user_role d ON c.`id` = d.`rid`
+        <where>
+            <if test="userid != null" >
+                AND  d.`userid`= #{userid}
+            </if>
+            <if test="url != null" >
+                AND  a.`url`= #{url}
+            </if>
+            <if test="menu != null" >
+                AND  a.`menu`= #{menu}
+            </if>
+            <if test="rid != null" >
+                AND  b.`rid`=#{rid}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectMenu" resultMap="AdminPermission" parameterType="java.util.Map">
+        SELECT DISTINCT a.* FROM vm_admin_permission a
+        LEFT JOIN vm_admin_role_permission b ON a.`id` = b.`pid`
+        LEFT JOIN vm_admin_role c ON b.`rid` = c.`id`
+        LEFT JOIN vm_admin_user_role d ON c.`id` = d.`rid`
+        <where>
+            1 = 1 and a.status = 1 and a.menu = 1
+            <if test="userid != null" >
+                AND  d.`userid`= #{userid}
+            </if>
+            <if test="url != null" >
+                AND  a.`url`= #{url}
+            </if>
+            <if test="menu != null" >
+                AND  a.`menu`= #{menu}
+            </if>
+            <if test="rid != null" >
+                AND  b.`rid` in (SELECT rid FROM `vm_admin_user_role` WHERE userid= #{rid})
+            </if>
+            <if test="pid != null" >
+                AND  a.`pid`= #{pid}
+            </if>
+            order by a.sortIndex
+        </where>
+    </select>
+
+    <select id="getSortIndex" resultType="int" >
+        select max(sortIndex) from vm_admin_permission
+    </select>
+
+    <select id="selectSortIndex" resultType="int" parameterType="int">
+        select count(1) from vm_admin_permission where sortIndex = #{sortIndex}
+    </select>
+
+    <update id="updateSortIndex" parameterType="int">
+        update vm_admin_permission set sortIndex = sortIndex+1 where sortIndex >= #{sortIndex}
+    </update>
+
+    <select id="selectByPid" resultType="int" parameterType="java.lang.String">
+        select count(1) from vm_admin_permission where pid = #{id} and status != 2
+    </select>
+
+    <select id="selectByStatus" resultType="int" >
+        select count(1) from vm_admin_permission where status = 0 and id = #{id}
+    </select>
+
+
+
+    <update id="updateStatusById" parameterType="map">
+        update vm_admin_permission
+        <set>
+            <if test="status !=null">
+                status = #{status}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="queryChildPermission" parameterType="string" resultMap="AdminPermission">
+        SELECT * FROM vm_admin_permission where pid = #{id} and menu = 1 and status = 1
+    </select>
+
+</mapper>

@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.ConfClusterHostGroupNeoMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.ConfClusterHostGroup">
+        <id column="group_id" jdbcType="VARCHAR" property="groupId"/>
+        <result column="cluster_id" jdbcType="VARCHAR" property="clusterId"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="vm_role" jdbcType="VARCHAR" property="vmRole"/>
+        <result column="ins_count" jdbcType="INTEGER" property="insCount"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="yarn_queue" jdbcType="VARCHAR" property="yarnQueue"/>
+        <result column="createdby" jdbcType="VARCHAR" property="createdby"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="modifiedby" jdbcType="VARCHAR" property="modifiedby"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="purchase_type" jdbcType="INTEGER" property="purchaseType"/>
+        <result column="max_unit" jdbcType="INTEGER" property="maxUnit"/>
+        <result column="min_unit" jdbcType="INTEGER" property="minUnit"/>
+        <result column="enable_afterstart_script" jdbcType="INTEGER" property="enableAfterstartScript"/>
+        <result column="enable_beforestart_script" jdbcType="INTEGER" property="enableBeforestartScript"/>
+        <result column="expect_count" jdbcType="INTEGER" property="expectCount"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        group_id, cluster_id, group_name, vm_role, ins_count, state, yarn_queue, ambari_config_group,createdby,
+        created_time, modifiedby, modified_time,purchase_type,max_unit,min_unit,
+        expect_count,
+        enable_afterstart_script,
+        enable_beforestart_script
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from conf_cluster_host_group
+        where group_id = #{groupId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByClusterId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from conf_cluster_host_group
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </select>
+
+
+    <select id="selectOneByGroupNameAndClusterId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from conf_cluster_host_group
+        <where>
+            <if test="clusterId != null">
+                AND cluster_id = #{clusterId,jdbcType=VARCHAR}
+            </if>
+            <if test="groupName != null">
+                AND group_name = #{groupName,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <select id="selectByVmRoleAndClusterId" resultType="com.sunbox.domain.ConfClusterHostGroup">
+        select
+        <include refid="Base_Column_List"/>
+        from conf_cluster_host_group
+        <where>
+            <if test="clusterId != null">
+                AND cluster_id = #{clusterId,jdbcType=VARCHAR}
+            </if>
+            <if test="vmRole != null">
+                AND vm_role = #{vmRole,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <select id="countRunningClusterHostGroup" resultType="java.lang.Integer">
+        select
+        count(1)
+        from conf_cluster_host_group as cchg
+        inner join conf_cluster as cc on cc.cluster_id = cchg.cluster_id
+        where cc.state = 2
+        and (cc.creation_sub_state = 'FINISHED' or cc.creation_sub_state is null)
+    </select>
+    <select id="listRunningClusterHostGroup" resultType="com.sunbox.domain.ConfClusterHostGroup">
+        select
+        cchg.cluster_id,
+        cchg.group_name,
+        cchg.vm_role,
+        cchg.group_id
+        from conf_cluster_host_group as cchg
+            inner join conf_cluster as cc on cc.cluster_id = cchg.cluster_id
+        where cc.state = 2
+        and (cc.creation_sub_state = 'FINISHED' or cc.creation_sub_state is null)
+    </select>
+    <select id="countRunningSplitClusterHostGroup" resultType="java.lang.Integer">
+        select
+        count(1)
+        from conf_cluster_host_group as cchg
+        inner join conf_cluster as cc on cc.cluster_id = cchg.cluster_id
+        where cc.state = 2
+        and cc.creation_sub_state = 'RUNNING'
+    </select>
+    <select id="listRunningSplitClusterHostGroup" resultType="com.sunbox.domain.ConfClusterHostGroup">
+        select
+        cchg.cluster_id,
+        cchg.group_name,
+        cchg.vm_role,
+        cchg.group_id
+        from conf_cluster_host_group as cchg
+        inner join conf_cluster as cc on cc.cluster_id = cchg.cluster_id
+        where cc.state = 2
+        and cc.creation_sub_state = 'RUNNING'
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from conf_cluster_host_group
+        where group_id = #{groupId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.sunbox.domain.ConfClusterHostGroup">
+        insert into conf_cluster_host_group (group_id, cluster_id, group_name,
+        vm_role, ins_count, state,
+        yarn_queue, ambari_config_group,createdby, created_time,
+        modifiedby, modified_time,purchase_type,max_unit,min_unit)
+        values (#{groupId,jdbcType=VARCHAR}, #{clusterId,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR},
+        #{vmRole,jdbcType=VARCHAR}, #{insCount,jdbcType=INTEGER}, #{state,jdbcType=INTEGER},
+        #{yarnQueue,jdbcType=VARCHAR}, #{ambariConfigGroup,jdbcType=VARCHAR}, #{createdby,jdbcType=VARCHAR},
+        #{createdTime,jdbcType=TIMESTAMP},
+        #{modifiedby,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP},#{purchaseType,jdbcType=INTEGER},
+        #{maxUnit,jdbcType=INTEGER},#{minUnit,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.sunbox.domain.ConfClusterHostGroup">
+        insert into conf_cluster_host_group
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="groupId != null">
+                group_id,
+            </if>
+            <if test="clusterId != null">
+                cluster_id,
+            </if>
+            <if test="groupName != null">
+                group_name,
+            </if>
+            <if test="vmRole != null">
+                vm_role,
+            </if>
+            <if test="insCount != null">
+                ins_count,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="yarnQueue != null">
+                yarn_queue,
+            </if>
+            <if test="ambariConfigGroup != null">
+                ambari_config_group,
+            </if>
+            <if test="createdby != null">
+                createdby,
+            </if>
+            <if test="createdTime != null">
+                created_time,
+            </if>
+            <if test="modifiedby != null">
+                modifiedby,
+            </if>
+            <if test="purchaseType != null">
+                purchase_type,
+            </if>
+            <if test="maxUnit != null">
+                max_unit,
+            </if>
+            <if test="minUnit != null">
+                min_unit,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="groupId != null">
+                #{groupId,jdbcType=VARCHAR},
+            </if>
+            <if test="clusterId != null">
+                #{clusterId,jdbcType=VARCHAR},
+            </if>
+            <if test="groupName != null">
+                #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="vmRole != null">
+                #{vmRole,jdbcType=VARCHAR},
+            </if>
+            <if test="insCount != null">
+                #{insCount,jdbcType=INTEGER},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+            <if test="yarnQueue != null">
+                #{yarnQueue,jdbcType=VARCHAR},
+            </if>
+            <if test="ambariConfigGroup != null">
+                #{ambariConfigGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="createdby != null">
+                #{createdby,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedby != null">
+                #{modifiedby,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedTime != null">
+                #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="purchaseType != null">
+                #{purchaseType,jdbcType=INTEGER},
+            </if>
+            <if test="maxUnit != null">
+                #{maxUnit,jdbcType=INTEGER},
+            </if>
+            <if test="minUnit != null">
+                #{minUnit,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.ConfClusterHostGroup">
+        update conf_cluster_host_group
+        <set>
+            <if test="clusterId != null">
+                cluster_id = #{clusterId,jdbcType=VARCHAR},
+            </if>
+            <if test="groupName != null">
+                group_name = #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="vmRole != null">
+                vm_role = #{vmRole,jdbcType=VARCHAR},
+            </if>
+            <if test="insCount != null">
+                ins_count = #{insCount,jdbcType=INTEGER},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="yarnQueue != null">
+                yarn_queue = #{yarnQueue,jdbcType=VARCHAR},
+            </if>
+            <if test="ambariConfigGroup != null">
+                ambari_config_group = #{ambariConfigGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="createdby != null">
+                createdby = #{createdby,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedby != null">
+                modifiedby = #{modifiedby,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedTime != null">
+                modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="purchaseType != null">
+                purchase_type= #{purchaseType,jdbcType=INTEGER},
+            </if>
+            <if test="maxUnit != null">
+                max_unit= #{maxUnit,jdbcType=INTEGER},
+            </if>
+            <if test="minUnit != null">
+                min_unit= #{minUnit,jdbcType=INTEGER},
+            </if>
+            <if test="expectCount != null">
+                expect_count= #{expectCount,jdbcType=INTEGER},
+            </if>
+        </set>
+        where group_id = #{groupId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.ConfClusterHostGroup">
+        update conf_cluster_host_group
+        set cluster_id = #{clusterId,jdbcType=VARCHAR},
+        group_name = #{groupName,jdbcType=VARCHAR},
+        vm_role = #{vmRole,jdbcType=VARCHAR},
+        ins_count = #{insCount,jdbcType=INTEGER},
+        state = #{state,jdbcType=INTEGER},
+        yarn_queue = #{yarnQueue,jdbcType=VARCHAR},
+        ambari_config_group = #{ambariConfigGroup,jdbcType=VARCHAR},
+        createdby = #{createdby,jdbcType=VARCHAR},
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+        modifiedby = #{modifiedby,jdbcType=VARCHAR},
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+        purchase_type= #{purchaseType,jdbcType=INTEGER},
+        max_unit= #{maxUnit,jdbcType=INTEGER},
+        min_unit= #{minUnit,jdbcType=INTEGER}
+        where group_id = #{groupId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByClusterId">
+        update conf_cluster_host_group
+        set state = #{state,jdbcType=INTEGER},
+            modified_time = now()
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateExpectCount">
+        update conf_cluster_host_group
+        set expect_count = #{expectCount,jdbcType=INTEGER}
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and group_id = #{groupId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateCreationSubStateByClusterId">
+        update conf_cluster_host_group
+        set creation_sub_state = #{creationSubState,jdbcType=INTEGER}
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateCreationSubStateByClusterIdAndGroupName">
+        update conf_cluster_host_group
+        set creation_sub_state = #{creationSubState,jdbcType=INTEGER}
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and group_name = #{groupName,jdbcType=VARCHAR}
+    </update>
+    <update id="updateHostGroupInsCountForEvication">
+        update conf_cluster_host_group
+        set ins_count=ins_count -1
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+          and group_name = #{groupName,jdbcType=VARCHAR}
+          and ins_count >0
+    </update>
+</mapper>

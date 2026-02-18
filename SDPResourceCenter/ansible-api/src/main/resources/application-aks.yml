@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+azure:
+  credential:
+    clientid: ${AZURE_CLIENT_ID}
+    clientsecret: ${AZURE_CLIENT_SECRET}
+    clientCert: ${AZURE_CLIENT_CERT_PATH:}
+    clientAuth: ${AZURE_CLIENT_AUTH:secret}
+    tenantid: ${AZURE_TENANT_ID}
+  default-subscriptionId: ${AZURE_DEFAULT_SUBSCRIPTION_ID}
+  storage:
+    account:
+      name: ${SDP_RM_SA}
+    blob:
+      endpoint: https://${SDP_RM_SA}.blob.core.windows.net/
+  servicebus:
+    namespace: ${SDP_RM_SERVICE_BUS_NAMESPACE}.servicebus.windows.net
+    topicnameapi: ${ANSIBLE_AGENT_TOPIC}
+    subnameapi: sub1
+custom:
+  log:
+    root: /app/logs
+    upload:
+      url: ${SDP_LOG_UPLOAD_URL}
+      storageAccount: ${SDP_RM_SA}
+      container: ${SDP_LOG_UPLOAD_SA_CONTAINER}
+springfox:
+  documentation:
+    swagger:
+      use-model-v3: false
+ansible:
+  agentnum: 5
+server:
+  tomcat:
+    relaxed-query-chars: '{,},[,],|'
+    relaxed-path-chars: '{,},[,],|'

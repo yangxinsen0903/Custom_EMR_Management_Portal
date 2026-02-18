@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.InfoClusterVmReqJobFailedMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoClusterVmReqJobFailed">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="plan_id" jdbcType="VARCHAR" property="planId" />
+    <result column="job_id" jdbcType="VARCHAR" property="jobId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, cluster_id, plan_id, job_id, status, created_time, modified_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from info_cluster_vm_req_job_failed
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="getAllByStatus" resultType="com.sunbox.domain.InfoClusterVmReqJobFailed">
+      select
+      <include refid="Base_Column_List" />
+      from info_cluster_vm_req_job_failed
+      where status = #{status,jdbcType=INTEGER}
+    </select>
+  <select id="getByClusterIdAndPlanIdAndJobId" resultType="com.sunbox.domain.InfoClusterVmReqJobFailed">
+    select
+    <include refid="Base_Column_List" />
+    from info_cluster_vm_req_job_failed
+    where cluster_id=#{clusterId,jdbcType=VARCHAR} and plan_Id = #{planId,jdbcType=VARCHAR}
+        and job_id = #{jobId,jdbcType=VARCHAR}
+  </select>
+  <select id="queryByTime" resultType="com.sunbox.domain.InfoClusterVmReqJobFailedDetail">
+    select
+    jf.*,
+    cc.cluster_name,
+    op.plan_name,cc.region
+    from info_cluster_vm_req_job_failed as jf
+    left join conf_cluster as cc on cc.cluster_id = jf.cluster_id
+    left join info_cluster_operation_plan as op on op.plan_id = jf.plan_id
+    where jf.created_time <![CDATA[ >= ]]> #{beginDate}
+    and jf.created_time <![CDATA[ <= ]]> #{endDate}
+    <if test="planName != null">
+      and op.plan_name = #{planName}
+    </if>
+    <if test="planId != null">
+      and jf.plan_id = #{planId}
+    </if>
+    <if test="clusterId != null">
+      and jf.cluster_id = #{clusterId}
+    </if>
+    <if test="clusterName != null">
+      and cc.cluster_name = #{clusterName}
+    </if>
+    <if test="jobId != null">
+      and jf.job_id = #{jobId}
+    </if>
+    <if test="status != null">
+      and jf.status = #{status}
+    </if>
+    <if test="region != null and region != ''">
+      and cc.region = #{region}
+    </if>
+    order by jf.created_time desc
+    limit #{pageStart},#{pageLimit}
+  </select>
+  <select id="countByTime" resultType="java.lang.Long">
+    select
+    count(jf.id)
+    from info_cluster_vm_req_job_failed as jf
+    left join conf_cluster as cc on cc.cluster_id = jf.cluster_id
+    left join info_cluster_operation_plan as op on op.plan_id = jf.plan_id
+    where jf.created_time <![CDATA[ >= ]]> #{beginDate}
+    and jf.created_time <![CDATA[ <= ]]> #{endDate}
+    <if test="planName != null">
+      and op.plan_name = #{planName}
+    </if>
+    <if test="planId != null">
+      and jf.plan_id = #{planId}
+    </if>
+    <if test="clusterId != null">
+      and jf.cluster_id = #{clusterId}
+    </if>
+    <if test="clusterName != null">
+      and cc.cluster_name = #{clusterName}
+    </if>
+    <if test="jobId != null">
+      and jf.job_id = #{jobId}
+    </if>
+    <if test="status != null">
+      and jf.status = #{status}
+    </if>
+    <if test="region != null and region != ''">
+      and cc.region = #{region}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from info_cluster_vm_req_job_failed
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.InfoClusterVmReqJobFailed">
+    insert into info_cluster_vm_req_job_failed (id, cluster_id, plan_id, 
+      job_id, status, created_time, 
+      modified_time)
+    values (#{id,jdbcType=BIGINT}, #{clusterId,jdbcType=VARCHAR}, #{planId,jdbcType=VARCHAR}, 
+      #{jobId,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.InfoClusterVmReqJobFailed">
+    insert into info_cluster_vm_req_job_failed
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="planId != null">
+        plan_id,
+      </if>
+      <if test="jobId != null">
+        job_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="planId != null">
+        #{planId,jdbcType=VARCHAR},
+      </if>
+      <if test="jobId != null">
+        #{jobId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.InfoClusterVmReqJobFailed">
+    update info_cluster_vm_req_job_failed
+    <set>
+      <if test="clusterId != null">
+        cluster_id = #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="planId != null">
+        plan_id = #{planId,jdbcType=VARCHAR},
+      </if>
+      <if test="jobId != null">
+        job_id = #{jobId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.InfoClusterVmReqJobFailed">
+    update info_cluster_vm_req_job_failed
+    set cluster_id = #{clusterId,jdbcType=VARCHAR},
+      plan_id = #{planId,jdbcType=VARCHAR},
+      job_id = #{jobId,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="vmReqJobFailedSummary" resultType="map" parameterType="java.lang.String">
+    select
+      case status
+        when 0 then 'init'
+        when 1 then 'done'
+        else  'init'
+        end as status,
+      count(*) as vm_req_count
+    from info_cluster_vm_req_job_failed icvrjf
+        inner join conf_cluster cc on icvrjf.cluster_id = cc.cluster_id
+    <where>
+      <if test="region != null and region != ''">
+        cc.region = #{region}
+      </if>
+    </where>
+    group by status ;
+  </select>
+</mapper>

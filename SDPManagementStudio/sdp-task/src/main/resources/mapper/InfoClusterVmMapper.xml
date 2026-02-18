@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdptask.mapper.InfoClusterVmMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoClusterVm">
+        <id column="cluster_id" jdbcType="VARCHAR" property="clusterId"/>
+        <id column="vm_name" jdbcType="VARCHAR" property="vmName"/>
+        <result column="vm_conf_id" jdbcType="VARCHAR" property="vmConfId"/>
+        <result column="host_name" jdbcType="VARCHAR" property="hostName"/>
+        <result column="internalIp" jdbcType="VARCHAR" property="internalip"/>
+        <result column="default_username" jdbcType="VARCHAR" property="defaultUsername"/>
+        <result column="vm_role" jdbcType="VARCHAR" property="vmRole"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="group_id" jdbcType="VARCHAR" property="groupId"/>
+        <result column="ambari_config_group" jdbcType="VARCHAR" property="ambariConfigGroup"/>
+        <result column="sku_name" jdbcType="VARCHAR" property="skuName"/>
+        <result column="purchase_type" jdbcType="VARCHAR" property="purchaseType"/>
+        <result column="ondemond_price" jdbcType="DECIMAL" property="ondemondPrice"/>
+        <result column="spot_price" jdbcType="DECIMAL" property="spotPrice"/>
+        <result column="join_cluster_time" jdbcType="TIMESTAMP" property="joinClusterTime"/>
+        <result column="imageid" jdbcType="VARCHAR" property="imageid"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="scalein_task_id" jdbcType="VARCHAR" property="scaleinTaskId"/>
+        <result column="scaleout_task_id" jdbcType="VARCHAR" property="scaleoutTaskId"/>
+        <result column="create_transcation_id" jdbcType="VARCHAR" property="createTranscationId"/>
+        <result column="create_job_id" jdbcType="VARCHAR" property="createJobId"/>
+        <result column="scale_vm_detail_id" jdbcType="VARCHAR" property="scaleVmDetailId"/>
+        <result column="create_begtime" jdbcType="TIMESTAMP" property="createBegtime"/>
+        <result column="create_endtime" jdbcType="TIMESTAMP" property="createEndtime"/>
+        <result column="maintenance_mode" jdbcType="INTEGER" property="maintenanceMode"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        cluster_id, vm_name, vm_conf_id, host_name, internalIp, default_username, vm_role,group_name,sku_name,
+        purchase_type, imageid,state, create_transcation_id, create_job_id, create_begtime,
+        create_endtime,
+        scalein_task_id,
+        scaleout_task_id,
+        scale_vm_detail_id,
+        group_id,
+        ambari_config_group,
+        ondemond_price,
+        spot_price,
+        join_cluster_time,
+        maintenance_mode
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="com.sunbox.domain.InfoClusterVmKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and vm_name = #{vmName,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByClusterId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByClusterIdAndRole" resultType="com.sunbox.domain.InfoClusterVm">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR} and vm_role=#{role,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByClusterIdAndRoleAndState" resultType="com.sunbox.domain.InfoClusterVm">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR} and vm_role=#{role,jdbcType=VARCHAR}
+        and state = #{state,jdbcType=INTEGER}
+    </select>
+    <select id="selectByClusterIdAndGroupName" resultType="com.sunbox.domain.InfoClusterVm">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR} and
+        group_name =#{groupName,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByClusterIdAndScaleOutTaskId" resultType="com.sunbox.domain.InfoClusterVm">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and scaleout_task_id = #{taskId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByClusterIdAndScaleOutTaskIdAndState" resultType="com.sunbox.domain.InfoClusterVm">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and scaleout_task_id = #{taskId,jdbcType=VARCHAR}
+        and state = #{state,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByClusterIdAndScaleOutTaskIdAndStates" resultType="com.sunbox.domain.InfoClusterVm">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and scaleout_task_id = #{taskId,jdbcType=VARCHAR}
+        and (state = #{state1,jdbcType=VARCHAR}
+          or state = #{state2,jdbcType=VARCHAR})
+    </select>
+    <select id="selectByClusterIdAndGroupNameAndState" resultType="com.sunbox.domain.InfoClusterVm">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR} and
+        group_name =#{groupName,jdbcType=VARCHAR}
+        <if test="state!=null">
+            and state = #{state,jdbcType=INTEGER}
+        </if>
+    </select>
+    <select id="selectByClusterIdAndGroupNameAndStates" resultType="com.sunbox.domain.InfoClusterVm">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR} and
+        group_name =#{groupName,jdbcType=VARCHAR}
+        and (state = #{state1,jdbcType=INTEGER} or state = #{state2,jdbcType=INTEGER})
+    </select>
+    <select id="selectByClusterIdAndScaleInTaskId" resultType="com.sunbox.domain.InfoClusterVm">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and scalein_task_id = #{taskId,jdbcType=VARCHAR}
+    </select>
+    <select id="getGroupNameCount" resultType="java.util.HashMap">
+        select group_name,count(*)as cnt
+        from info_cluster_vm icv
+        where cluster_id =#{clusterId,jdbcType=VARCHAR}
+        and state=1
+        group by group_name ;
+    </select>
+
+    <select id="getVmCountByGroupName" resultType="com.sunbox.domain.InfoClusterVm">
+        select group_name,count(1) as cnt
+        from info_cluster_vm icv
+        where cluster_id =#{clusterId,jdbcType=VARCHAR}
+        and state=1 and group_name = #{groupName,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getVMRoleNameCount" resultType="java.util.HashMap">
+        select vm_role, any_value(vm_conf_id) as vm_conf_id, count(if(state = 1, true, null)) as cnt
+        from info_cluster_vm icv
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        group by vm_role;
+    </select>
+    <select id="selectVmsByGroupNameForScaleIn" resultType="com.sunbox.domain.InfoClusterVm">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and (scalein_task_id is null or scalein_task_id ='')
+        and state = 1
+        and group_name= #{groupName,jdbcType=VARCHAR}
+        order by vm_name desc
+        limit 0,#{cnt,jdbcType=INTEGER}
+    </select>
+    <select id="getClusterInstanceCountByVmRoleAndState" resultType="java.lang.Integer">
+        select count(*)
+        from info_cluster_vm
+        where cluster_id=#{clusterId,jdbcType=VARCHAR}
+        and vm_role = #{vmRole,jdbcType=VARCHAR}
+        <if test="state != null">
+            and state = #{state,jdbcType=INTEGER}
+        </if>
+    </select>
+    <select id="selectVmsByTaskId" resultType="com.sunbox.domain.InfoClusterVm">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR} and scaleout_task_id = #{scaleoutTaskId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByScaleInTaskId" resultType="com.sunbox.domain.InfoClusterVm">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_vm
+        where
+        cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and scalein_task_id = #{ScaleInTaskId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByScaleInTaskIdAndState" resultType="com.sunbox.domain.InfoClusterVm">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_vm
+        where
+        cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and scalein_task_id = #{ScaleInTaskId,jdbcType=VARCHAR}
+        and state = #{state,jdbcType=INTEGER}
+    </select>
+    <select id="countByScaleOutTaskIdAndState" resultType="java.lang.Integer">
+        select
+        count(1)
+        from info_cluster_vm
+        where
+        cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and scaleout_task_id = #{scaleOutTaskId,jdbcType=VARCHAR}
+        and state = #{state,jdbcType=INTEGER}
+    </select>
+    <select id="countByClusterIdAndGroupNameAndState" resultType="java.lang.Integer">
+        select
+        count(1)
+        from info_cluster_vm
+        where
+        cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and group_name = #{groupName,jdbcType=VARCHAR}
+        and state = #{state,jdbcType=INTEGER}
+    </select>
+    <select id="selectAllVmsByRoleAndState" resultType="com.sunbox.domain.InfoClusterVm">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_vm
+        where vm_role=#{vmRole,jdbcType=VARCHAR} and state = #{state,jdbcType=INTEGER}
+    </select>
+    <select id="selectAllAvaliableAmbari" resultType="com.sunbox.domain.InfoClusterVm">
+        select icv.* from info_cluster_vm icv
+        inner join conf_cluster cc on icv.cluster_id = cc.cluster_id
+        and cc.state =2
+        where vm_role ='ambari' and icv.state =1
+    </select>
+    <select id="getCreateVmCountByVmRole" resultType="java.lang.Integer">
+        select count(*)  from info_cluster_vm
+        where scaleout_task_id is null
+          and cluster_id =  #{clusterId,jdbcType=VARCHAR}
+          and vm_role = #{vmRole,jdbcType=VARCHAR}
+
+    </select>
+    <select id="getVMListByClusterIdAndIpsAndScaleOutTaskId" resultType="com.sunbox.domain.InfoClusterVm">
+        select
+        <include refid="Base_Column_List"/>
+         from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        <if test="taskId!=null">
+            and scaleout_task_id = #{taskId,jdbcType=VARCHAR}
+        </if>
+        and internalIp in
+        <foreach collection="vmIps" item="vmIp" index="index" open="(" close=")" separator=",">
+            #{vmIp}
+        </foreach>
+    </select>
+    <select id="getVMListByClusterIdAndHostNamesAndScaleOutTaskId"
+            resultType="com.sunbox.domain.InfoClusterVm">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        <if test="taskId!=null">
+            and scaleout_task_id = #{taskId,jdbcType=VARCHAR}
+        </if>
+        and host_name in
+        <foreach collection="hostNames" item="hostName" index="index" open="(" close=")" separator=",">
+            #{hostName,jdbcType=VARCHAR}
+        </foreach>
+    </select>
+    <select id="selectVMByClusterIdAndHostName" resultType="com.sunbox.domain.InfoClusterVm">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and host_name =#{hostName,jdbcType=VARCHAR}
+    </select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="com.sunbox.domain.InfoClusterVmKey">
+        delete from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and vm_name = #{vmName,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.sunbox.domain.InfoClusterVm">
+        insert into info_cluster_vm (cluster_id, vm_name, vm_conf_id,
+        host_name, internalIp, default_username, vm_role,group_name,
+        sku_name, purchase_type, imageid,state,
+        create_transcation_id, create_job_id, create_begtime,
+        create_endtime,
+        scaleout_task_id,
+        scalein_task_id,
+        scale_vm_detail_id,
+        group_id,
+        ambari_config_group,
+        ondemond_price,
+        spot_price,
+        join_cluster_time,
+        maintenance_mode)
+        values (#{clusterId,jdbcType=VARCHAR}, #{vmName,jdbcType=VARCHAR}, #{vmConfId,jdbcType=VARCHAR},
+        #{hostName,jdbcType=VARCHAR}, #{internalip,jdbcType=VARCHAR}, #{defaultUsername,jdbcType=VARCHAR},
+        #{vmRole,jdbcType=VARCHAR},#{groupName,jdbcType=VARCHAR},
+        #{skuName,jdbcType=VARCHAR}, #{purchaseType,jdbcType=VARCHAR}, #{imageid,jdbcType=VARCHAR},
+        #{state,jdbcType=INTEGER},#{createTranscationId,jdbcType=VARCHAR}, #{createJobId,jdbcType=VARCHAR},
+        #{createBegtime,jdbcType=TIMESTAMP},
+        #{createEndtime,jdbcType=TIMESTAMP},
+        #{scaleoutTaskId,jdbcType=VARCHAR},
+        #{scaleinTaskId,jdbcType=VARCHAR},
+        #{scaleVmDetailId,jdbcType=VARCHAR},
+        #{group_id,jdbcType=VARCHAR},
+        #{ambari_config_group,jdbcType=VARCHAR},
+        #{ondemondPrice,jdbcType=DECIMAL},
+        #{spotPrice,jdbcType=DECIMAL},
+        #{joinClusterTime,jdbcType=TIMESTAMP}),
+        #{maintenanceMode,jdbcType=INTEGER})
+    </insert>
+
+    <insert id="insertBatch">
+        insert into info_cluster_vm (cluster_id, vm_name, vm_conf_id,
+        host_name, internalIp, default_username, vm_role,group_name,
+        sku_name, purchase_type, imageid,state,
+        create_transcation_id, create_job_id, create_begtime,
+        create_endtime,
+        scaleout_task_id,
+        scalein_task_id,
+        scale_vm_detail_id,
+        group_id,
+        ambari_config_group,
+        ondemond_price,
+        spot_price,
+        join_cluster_time,
+        maintenance_mode)
+        values
+        <foreach collection="vms" item="vm" separator=","> <!--open="(" close=")" -->
+            ( #{vm.clusterId,jdbcType=VARCHAR}, #{vm.vmName,jdbcType=VARCHAR}, #{vm.vmConfId,jdbcType=VARCHAR},
+            #{vm.hostName,jdbcType=VARCHAR}, #{vm.internalip,jdbcType=VARCHAR}, #{vm.defaultUsername,jdbcType=VARCHAR},
+            #{vm.vmRole,jdbcType=VARCHAR},
+            #{vm.groupName,jdbcType=VARCHAR},
+            #{vm.skuName,jdbcType=VARCHAR}, #{vm.purchaseType,jdbcType=VARCHAR}, #{vm.imageid,jdbcType=VARCHAR},
+            #{vm.state,jdbcType=INTEGER},
+            #{vm.createTranscationId,jdbcType=VARCHAR}, #{vm.createJobId,jdbcType=VARCHAR},
+            #{vm.createBegtime,jdbcType=TIMESTAMP},
+            #{vm.createEndtime,jdbcType=TIMESTAMP},
+            #{vm.scaleoutTaskId,jdbcType=VARCHAR},
+            #{vm.scaleinTaskId,jdbcType=VARCHAR},
+            #{vm.scaleVmDetailId,jdbcType=VARCHAR},
+            #{vm.groupId,jdbcType=VARCHAR},
+            #{vm.ambariConfigGroup,jdbcType=VARCHAR},
+            #{vm.ondemondPrice,jdbcType=DECIMAL},
+            #{vm.spotPrice,jdbcType=DECIMAL},
+            #{vm.joinClusterTime,jdbcType=TIMESTAMP},
+            #{vm.maintenanceMode,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.sunbox.domain.InfoClusterVm">
+        insert into info_cluster_vm
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="clusterId != null">
+                cluster_id,
+            </if>
+            <if test="vmName != null">
+                vm_name,
+            </if>
+            <if test="vmConfId != null">
+                vm_conf_id,
+            </if>
+            <if test="hostName != null">
+                host_name,
+            </if>
+            <if test="internalip != null">
+                internalIp,
+            </if>
+            <if test="defaultUsername != null">
+                default_username,
+            </if>
+            <if test="vmRole != null">
+                vm_role,
+            </if>
+            <if test="groupName != null">
+                group_name,
+            </if>
+            <if test="skuName != null">
+                sku_name,
+            </if>
+            <if test="purchaseType != null">
+                purchase_type,
+            </if>
+            <if test="imageid != null">
+                imageid,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="createTranscationId != null">
+                create_transcation_id,
+            </if>
+            <if test="createJobId != null">
+                create_job_id,
+            </if>
+            <if test="createBegtime != null">
+                create_begtime,
+            </if>
+            <if test="createEndtime != null">
+                create_endtime,
+            </if>
+            <if test="scaleoutTaskId != null">
+                scaleout_task_id,
+            </if>
+            <if test="scaleinTaskId != null">
+                scalein_task_id,
+            </if>
+            <if test="scaleVmDetailId != null">
+                scale_vm_detail_id,
+            </if>
+            <if test="groupId != null">
+                group_id,
+            </if>
+            <if test="ambariConfigGroup != null">
+                ambari_config_group,
+            </if>
+            <if test="ondemondPrice != null">
+                ondemond_price,
+            </if>
+            <if test="spotPrice != null">
+                spot_price,
+            </if>
+            <if test="joinClusterTime != null">
+                join_cluster_time,
+            </if>
+            <if test="maintenanceMode != null">
+                maintenance_mode,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="clusterId != null">
+                #{clusterId,jdbcType=VARCHAR},
+            </if>
+            <if test="vmName != null">
+                #{vmName,jdbcType=VARCHAR},
+            </if>
+            <if test="vmConfId != null">
+                #{vmConfId,jdbcType=VARCHAR},
+            </if>
+            <if test="hostName != null">
+                #{hostName,jdbcType=VARCHAR},
+            </if>
+            <if test="internalip != null">
+                #{internalip,jdbcType=VARCHAR},
+            </if>
+            <if test="defaultUsername != null">
+                #{defaultUsername,jdbcType=VARCHAR},
+            </if>
+            <if test="vmRole != null">
+                #{vmRole,jdbcType=VARCHAR},
+            </if>
+            <if test="groupName != null">
+                #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="skuName != null">
+                #{skuName,jdbcType=VARCHAR},
+            </if>
+            <if test="purchaseType != null">
+                #{purchaseType,jdbcType=VARCHAR},
+            </if>
+            <if test="imageid != null">
+                #{imageid,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+            <if test="createTranscationId != null">
+                #{createTranscationId,jdbcType=VARCHAR},
+            </if>
+            <if test="createJobId != null">
+                #{createJobId,jdbcType=VARCHAR},
+            </if>
+            <if test="createBegtime != null">
+                #{createBegtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="scaleoutTaskId != null">
+                #{scaleoutTaskId,jdbcType=VARCHAR},
+            </if>
+            <if test="scaleinTaskId != null">
+                #{scaleinTaskId,jdbcType=VARCHAR},
+            </if>
+            <if test="scaleVmDetailId != null">
+                #{scaleVmDetailId,jdbcType=VARCHAR},
+            </if>
+            <if test="groupId != null">
+                #{groupId,jdbcType=VARCHAR},
+            </if>
+            <if test="ambariConfigGroup != null">
+                #{ambariConfigGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="ondemondPrice != null">
+                #{ondemondPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="spotPrice != null">
+                #{spotPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="joinClusterTime != null">
+                #{joinClusterTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="maintenanceMode != null">
+                #{maintenanceMode,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.InfoClusterVm">
+        update info_cluster_vm
+        <set>
+            <if test="vmConfId != null">
+                vm_conf_id = #{vmConfId,jdbcType=VARCHAR},
+            </if>
+            <if test="hostName != null">
+                host_name = #{hostName,jdbcType=VARCHAR},
+            </if>
+            <if test="internalip != null">
+                internalIp = #{internalip,jdbcType=VARCHAR},
+            </if>
+            <if test="defaultUsername != null">
+                default_username = #{defaultUsername,jdbcType=VARCHAR},
+            </if>
+            <if test="skuName != null">
+                sku_name = #{skuName,jdbcType=VARCHAR},
+            </if>
+            <if test="purchaseType != null">
+                purchase_type = #{purchaseType,jdbcType=VARCHAR},
+            </if>
+            <if test="imageid != null">
+                imageid = #{imageid,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="createTranscationId != null">
+                create_transcation_id = #{createTranscationId,jdbcType=VARCHAR},
+            </if>
+            <if test="createJobId != null">
+                create_job_id = #{createJobId,jdbcType=VARCHAR},
+            </if>
+            <if test="createBegtime != null">
+                create_begtime = #{createBegtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createEndtime != null">
+                create_endtime = #{createEndtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="scaleoutTaskId != null">
+                scaleout_task_id = #{scaleoutTaskId,jdbcType=VARCHAR},
+            </if>
+            <if test="scaleinTaskId != null">
+                scalein_task_id = #{scaleinTaskId,jdbcType=VARCHAR},
+            </if>
+            <if test="scaleVmDetailId != null">
+                scale_vm_detail_id = #{scaleVmDetailId,jdbcType=VARCHAR},
+            </if>
+            <if test="groupId != null">
+                group_id=#{groupId,jdbcType=VARCHAR},
+            </if>
+            <if test="ambariConfigGroup != null">
+                ambari_config_group=#{ambariConfigGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="maintenanceMode != null">
+               maintenance_mode = #{maintenanceMode,jdbcType=INTEGER},
+            </if>
+        </set>
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and vm_name = #{vmName,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.InfoClusterVm">
+        update info_cluster_vm
+        set vm_conf_id = #{vmConfId,jdbcType=VARCHAR},
+        host_name = #{hostName,jdbcType=VARCHAR},
+        internalIp = #{internalip,jdbcType=VARCHAR},
+        default_username = #{defaultUsername,jdbcType=VARCHAR},
+        sku_name = #{skuName,jdbcType=VARCHAR},
+        purchase_type = #{purchaseType,jdbcType=VARCHAR},
+        imageid = #{imageid,jdbcType=VARCHAR},
+        state = #{state,jdbcType=INTEGER},
+        create_transcation_id = #{createTranscationId,jdbcType=VARCHAR},
+        create_job_id = #{createJobId,jdbcType=VARCHAR},
+        create_begtime = #{createBegtime,jdbcType=TIMESTAMP},
+        create_endtime = #{createEndtime,jdbcType=TIMESTAMP},
+        scaleout_task_id= #{scaleoutTaskId,jdbcType=VARCHAR},
+        scalein_task_id= #{scaleinTaskId,jdbcType=VARCHAR},
+        group_id=#{groupId,jdbcType=VARCHAR},
+        ambari_config_group=#{ambariConfigGroup,jdbcType=VARCHAR},
+        maintenance_mode = #{maintenanceMode,jdbcType=INTEGER}
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and vm_name = #{vmName,jdbcType=VARCHAR}
+    </update>
+    <update id="updateVMStateByClusterId">
+        update info_cluster_vm
+        set state=#{state,jdbcType=INTEGER}
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateVMStateByClusterIdAndVMName">
+        update info_cluster_vm
+        set state = #{state,jdbcType=INTEGER}
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and vm_name = #{vmName,jdbcType=VARCHAR}
+    </update>
+    <update id="updateVmsStatusByScaleInTaskId">
+        update info_cluster_vm
+        set state = #{state,jdbcType=INTEGER}
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and scalein_task_id = #{taskId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateScaleinTaskIdByClusterIdAndVmNames">
+        update info_cluster_vm
+        set scalein_task_id = #{taskId,jdbcType=VARCHAR},
+        maintenance_mode = 1
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and vm_name in
+        <foreach collection="vmNames" item="vmname" index="index" open="(" close=")" separator=",">
+            #{vmname}
+        </foreach>
+    </update>
+    <update id="updateGroupId" parameterType="com.sunbox.domain.InfoClusterVm">
+        update info_cluster_vm
+        set group_id=#{groupId,jdbcType=VARCHAR}
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and group_name = #{groupName,jdbcType=VARCHAR}
+        and vm_role = #{vmRole,jdbcType=VARCHAR}
+    </update>
+    <update id="updateMaintenanceModeByScaleoutTaskId">
+        update info_cluster_vm
+        set maintenance_mode =#{maintenanceMode,jdbcType=INTEGER}
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and scaleout_task_id = #{scaleOutTaskId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateMaintenanceModeByScaleinTaskId">
+        update info_cluster_vm
+        set maintenance_mode =#{maintenanceMode,jdbcType=INTEGER}
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+          and scalein_task_id = #{scaleInTaskId,jdbcType=VARCHAR}
+    </update>
+    <update id="batchUpdateVMState">
+        update info_cluster_vm
+        set state = #{state,jdbcType=INTEGER}
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and vm_name in
+        <foreach collection="vmNames" item="vmname" index="index" open="(" close=")" separator=",">
+            #{vmname}
+        </foreach>
+    </update>
+    <update id="cleanScaleInTaskId">
+        update info_cluster_vm
+        set  scalein_task_id=null
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and group_name = #{groupName,jdbcType=VARCHAR}
+        and scalein_task_id = #{taskId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateJoinClusterTimeOnCompleteCreate">
+     update info_cluster_vm
+     set join_cluster_time =now()
+     where cluster_id=#{clusterId,jdbcType=VARCHAR}
+       and join_cluster_time is null
+    </update>
+    <update id="updateJoinClusterTimeOnCompleteScaleOut">
+        update info_cluster_vm
+        set join_cluster_time =now()
+        where cluster_id=#{clusterId,jdbcType=VARCHAR}
+          and scaleout_task_id=#{taskId,jdbcType=VARCHAR}
+          and join_cluster_time is null
+    </update>
+</mapper>

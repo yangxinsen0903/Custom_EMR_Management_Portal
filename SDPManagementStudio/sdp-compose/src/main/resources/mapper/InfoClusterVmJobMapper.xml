@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.InfoClusterVmJobMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoClusterVmJob">
+    <id column="transaction_id" jdbcType="VARCHAR" property="transactionId" />
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="cluster_name" jdbcType="VARCHAR" property="clusterName" />
+    <result column="operation_type" jdbcType="VARCHAR" property="operationType" />
+    <result column="activity_log_id" jdbcType="VARCHAR" property="activityLogId" />
+    <result column="job_id" jdbcType="VARCHAR" property="jobId" />
+    <result column="job_status" jdbcType="INTEGER" property="jobStatus" />
+    <result column="beg_time" jdbcType="TIMESTAMP" property="begTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    transaction_id, cluster_id, cluster_name, operation_type, activity_log_id,job_id, job_status, beg_time,
+    end_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from info_cluster_vm_job
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </select>
+  <select id="getVmJobByClusterIdAndOperation" resultType="com.sunbox.domain.InfoClusterVmJob">
+    select
+    <include refid="Base_Column_List" />
+    from info_cluster_vm_job
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+       and operation_type= #{operationType,jdbcType=VARCHAR}
+    <if test="activityLogId != null and activityLogId != ''">
+       and activity_log_id = #{activityLogId,jdbcType=VARCHAR}
+    </if>
+  </select>
+  <select id="getVmJobByJobId" resultType="com.sunbox.domain.InfoClusterVmJob">
+    select
+    <include refid="Base_Column_List" />
+    from info_cluster_vm_job
+    where job_id = #{jobId,jdbcType=VARCHAR}
+  </select>
+    <select id="getVmJobByActivityLogID" resultType="com.sunbox.domain.InfoClusterVmJob">
+      select
+      <include refid="Base_Column_List" />
+      from info_cluster_vm_job
+      where activity_log_id = #{activityLogId,jdbcType=VARCHAR}
+    </select>
+    <select id="getVmJobByPlanId" resultType="com.sunbox.domain.InfoClusterVmJob">
+      select icvj.* from info_cluster_vm_job icvj
+       inner join  info_cluster_operation_plan_activity_log icopal  on icvj.activity_log_id=icopal.activity_log_id
+       and icvj.operation_type='scaleout' and icopal.plan_id =#{planId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from info_cluster_vm_job
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.InfoClusterVmJob">
+    insert into info_cluster_vm_job (transaction_id, cluster_id, cluster_name, 
+      operation_type,activity_log_id, job_id, job_status,
+      beg_time, end_time)
+    values (#{transactionId,jdbcType=VARCHAR}, #{clusterId,jdbcType=VARCHAR}, #{clusterName,jdbcType=VARCHAR}, 
+      #{operationType,jdbcType=VARCHAR},#{activityLogId,jdbcType=VARCHAR}, #{jobId,jdbcType=VARCHAR}, #{jobStatus,jdbcType=INTEGER},
+      #{begTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.InfoClusterVmJob">
+    insert into info_cluster_vm_job
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="transactionId != null">
+        transaction_id,
+      </if>
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="clusterName != null">
+        cluster_name,
+      </if>
+      <if test="operationType != null">
+        operation_type,
+      </if>
+      <if test="activityLogId != null">
+        activity_log_id,
+      </if>
+      <if test="jobId != null">
+        job_id,
+      </if>
+      <if test="jobStatus != null">
+        job_status,
+      </if>
+      <if test="begTime != null">
+        beg_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="transactionId != null">
+        #{transactionId,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterName != null">
+        #{clusterName,jdbcType=VARCHAR},
+      </if>
+      <if test="operationType != null">
+        #{operationType,jdbcType=VARCHAR},
+      </if>
+      <if test="activityLogId != null">
+        #{activityLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="jobId != null">
+        #{jobId,jdbcType=VARCHAR},
+      </if>
+      <if test="jobStatus != null">
+        #{jobStatus,jdbcType=INTEGER},
+      </if>
+      <if test="begTime != null">
+        #{begTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.InfoClusterVmJob">
+    update info_cluster_vm_job
+    <set>
+      <if test="clusterId != null">
+        cluster_id = #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterName != null">
+        cluster_name = #{clusterName,jdbcType=VARCHAR},
+      </if>
+      <if test="operationType != null">
+        operation_type = #{operationType,jdbcType=VARCHAR},
+      </if>
+      <if test="activityLogId != null">
+        activity_log_id = #{activityLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="jobId != null">
+        job_id = #{jobId,jdbcType=VARCHAR},
+      </if>
+      <if test="jobStatus != null">
+        job_status = #{jobStatus,jdbcType=INTEGER},
+      </if>
+      <if test="begTime != null">
+        beg_time = #{begTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.InfoClusterVmJob">
+    update info_cluster_vm_job
+    set cluster_id = #{clusterId,jdbcType=VARCHAR},
+      cluster_name = #{clusterName,jdbcType=VARCHAR},
+      operation_type = #{operationType,jdbcType=VARCHAR},
+       activity_log_id= #{activityLogId,jdbcType=VARCHAR},
+      job_id = #{jobId,jdbcType=VARCHAR},
+      job_status = #{jobStatus,jdbcType=INTEGER},
+      beg_time = #{begTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP}
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: ansible-agent
+  main:
+    web-application-type: none
+server:
+  port: 8083

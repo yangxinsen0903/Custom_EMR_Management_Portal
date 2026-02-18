@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunbox.igsadmin.mapper.AdminRequrlroleDao">
+    <resultMap id="BaseResultMap" type="com.sunbox.sdpadmin.core.model.AdminRequrlrole">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="requrl" property="requrl" jdbcType="VARCHAR"/>
+        <result column="islogin" property="islogin" jdbcType="VARCHAR"/>
+        <result column="roleids" property="roleids" jdbcType="VARCHAR"/>
+        <result column="permids" property="permids" jdbcType="VARCHAR"/>
+        <result column="createdate" property="createdate" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="sort" property="sort" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, requrl, islogin, roleids, permids, createdate, status, sort
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from vm_admin_requrlrole
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List"/>
+        from vm_admin_requrlrole
+        ORDER BY sort ASC
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from vm_admin_requrlrole
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.sunbox.sdpadmin.core.model.AdminRequrlrole">
+    insert into vm_admin_requrlrole (id, requrl, islogin,
+      roleids, permids, createdate, 
+      status, sort)
+    values (#{id,jdbcType=VARCHAR}, #{requrl,jdbcType=VARCHAR}, #{islogin,jdbcType=VARCHAR}, 
+      #{roleids,jdbcType=VARCHAR}, #{permids,jdbcType=VARCHAR}, #{createdate,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER}, #{sort,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="com.sunbox.sdpadmin.core.model.AdminRequrlrole">
+        insert into vm_admin_requrlrole
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="requrl != null">
+                requrl,
+            </if>
+            <if test="islogin != null">
+                islogin,
+            </if>
+            <if test="roleids != null">
+                roleids,
+            </if>
+            <if test="permids != null">
+                permids,
+            </if>
+            <if test="createdate != null">
+                createdate,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="sort != null">
+                sort,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="requrl != null">
+                #{requrl,jdbcType=VARCHAR},
+            </if>
+            <if test="islogin != null">
+                #{islogin,jdbcType=VARCHAR},
+            </if>
+            <if test="roleids != null">
+                #{roleids,jdbcType=VARCHAR},
+            </if>
+            <if test="permids != null">
+                #{permids,jdbcType=VARCHAR},
+            </if>
+            <if test="createdate != null">
+                #{createdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="sort != null">
+                #{sort,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.sdpadmin.core.model.AdminRequrlrole">
+        update vm_admin_requrlrole
+        <set>
+            <if test="requrl != null">
+                requrl = #{requrl,jdbcType=VARCHAR},
+            </if>
+            <if test="islogin != null">
+                islogin = #{islogin,jdbcType=VARCHAR},
+            </if>
+            <if test="roleids != null">
+                roleids = #{roleids,jdbcType=VARCHAR},
+            </if>
+            <if test="permids != null">
+                permids = #{permids,jdbcType=VARCHAR},
+            </if>
+            <if test="createdate != null">
+                createdate = #{createdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="sort != null">
+                sort = #{sort,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.sunbox.sdpadmin.core.model.AdminRequrlrole">
+    update vm_admin_requrlrole
+    set requrl = #{requrl,jdbcType=VARCHAR},
+      islogin = #{islogin,jdbcType=VARCHAR},
+      roleids = #{roleids,jdbcType=VARCHAR},
+      permids = #{permids,jdbcType=VARCHAR},
+      createdate = #{createdate,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      sort = #{sort,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

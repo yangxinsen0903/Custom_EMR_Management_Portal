@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.InfoClusterFinalBlueprintMapper">
+
+    <resultMap type="com.sunbox.domain.InfoClusterFinalBlueprint" id="InfoClusterFinalBlueprintMap">
+        <result property="clusterId" column="cluster_id" jdbcType="VARCHAR"/>
+        <result property="clusterName" column="cluster_name" jdbcType="VARCHAR"/>
+        <result property="ambariHost" column="ambari_host" jdbcType="VARCHAR"/>
+        <result property="blueprintContent" column="blueprint_content" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="InfoClusterFinalBlueprintMap">
+        select cluster_id,
+               cluster_name,
+               ambari_host,
+               blueprint_content,
+               create_time
+        from info_cluster_final_blueprint
+        where cluster_id = #{clusterId}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from info_cluster_final_blueprint
+        <where>
+            <if test="clusterId != null and clusterId != ''">
+                and cluster_id = #{clusterId}
+            </if>
+            <if test="clusterName != null and clusterName != ''">
+                and cluster_name = #{clusterName}
+            </if>
+            <if test="ambariHost != null and ambariHost != ''">
+                and ambari_host = #{ambariHost}
+            </if>
+            <if test="blueprintContent != null and blueprintContent != ''">
+                and blueprint_content = #{blueprintContent}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="clusterId" useGeneratedKeys="true">
+        insert into info_cluster_final_blueprint(cluster_id,cluster_name, ambari_host, blueprint_content, create_time)
+        values (#{clusterId},#{clusterName}, #{ambariHost}, #{blueprintContent}, #{createTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="clusterId" useGeneratedKeys="true">
+        insert into info_cluster_final_blueprint(cluster_name, ambari_host, blueprint_content, create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.clusterName}, #{entity.ambariHost}, #{entity.blueprintContent}, #{entity.createTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="clusterId" useGeneratedKeys="true">
+        insert into info_cluster_final_blueprint(cluster_name, ambari_host, blueprint_content, create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.clusterName}, #{entity.ambariHost}, #{entity.blueprintContent}, #{entity.createTime})
+        </foreach>
+        on duplicate key update
+        cluster_name = values(cluster_name),
+        ambari_host = values(ambari_host),
+        blueprint_content = values(blueprint_content),
+        create_time = values(create_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update info_cluster_final_blueprint
+        <set>
+            <if test="clusterName != null and clusterName != ''">
+                cluster_name = #{clusterName},
+            </if>
+            <if test="ambariHost != null and ambariHost != ''">
+                ambari_host = #{ambariHost},
+            </if>
+            <if test="blueprintContent != null and blueprintContent != ''">
+                blueprint_content = #{blueprintContent},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+        </set>
+        where cluster_id = #{clusterId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from info_cluster_final_blueprint
+        where cluster_id = #{clusterId}
+    </delete>
+
+</mapper>
+

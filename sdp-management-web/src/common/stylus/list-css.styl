@@ -1,0 +1,43 @@
+.list-css {
+  width 100%;
+  height 100%;
+  display flex;
+  flex-direction: column;
+  padding 10px;
+  overflow hidden;
+  background-color white;
+
+  .functions-row {
+    margin-top 15px;
+  }
+
+  .full-container {
+    margin-top 15px;
+    flex 1;
+    text-align center;
+
+    // 表头
+    .theader {
+      td, th {
+        background-color: #F8F8F8 !important;
+        .cell {
+          word-break break-word;
+        }
+      }
+    }
+
+    .el-table__cell {
+      .el-button {
+        padding-left 0;
+        padding-right 0;
+      }
+    }
+  }
+
+  .footer-tools {
+    display flex;
+    align-items center;
+    padding 10px 0px 10px;
+    //justify-content space-between;
+  }
+}

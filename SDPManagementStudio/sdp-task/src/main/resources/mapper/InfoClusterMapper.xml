@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdptask.mapper.InfoClusterMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoCluster">
+    <!--@mbg.generated-->
+    <!--@Table info_cluster-->
+    <id column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="ambari_username" jdbcType="VARCHAR" property="ambariUsername" />
+    <result column="ambari_password" jdbcType="VARCHAR" property="ambariPassword" />
+    <result column="ambari_host" jdbcType="VARCHAR" property="ambariHost" />
+    <result column="master_ips" jdbcType="VARCHAR" property="masterIps" />
+    <result column="ambari_count" jdbcType="INTEGER" property="ambariCount" />
+    <result column="master_vms_count" jdbcType="INTEGER" property="masterVmsCount" />
+    <result column="core_vms_count" jdbcType="INTEGER" property="coreVmsCount" />
+    <result column="task_vms_count" jdbcType="INTEGER" property="taskVmsCount" />
+    <result column="apps_count" jdbcType="INTEGER" property="appsCount" />
+    <result column="cluster_create_begtime" jdbcType="TIMESTAMP" property="clusterCreateBegtime" />
+    <result column="cluster_create_endtime" jdbcType="TIMESTAMP" property="clusterCreateEndtime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    cluster_id, ambari_username, ambari_password, ambari_host, master_ips, ambari_count, master_vms_count, core_vms_count,
+    task_vms_count, apps_count, cluster_create_begtime, cluster_create_endtime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from info_cluster
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--@mbg.generated-->
+    delete from info_cluster
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.InfoCluster">
+    <!--@mbg.generated-->
+    insert into info_cluster (cluster_id, ambari_username, ambari_password,
+    ambari_host, ambari_count, master_vms_count, core_vms_count,
+    task_vms_count, apps_count, cluster_create_begtime,
+    cluster_create_endtime)
+    values (#{clusterId,jdbcType=VARCHAR}, #{ambariUsername,jdbcType=VARCHAR}, #{ambariPassword,jdbcType=VARCHAR},
+    #{ambariHost,jdbcType=VARCHAR}, #{ambariCount,jdbcType=INTEGER}, #{masterVmsCount,jdbcType=INTEGER}, #{coreVmsCount,jdbcType=INTEGER},
+    #{taskVmsCount,jdbcType=INTEGER}, #{appsCount,jdbcType=INTEGER}, #{clusterCreateBegtime,jdbcType=TIMESTAMP},
+    #{clusterCreateEndtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.InfoCluster">
+    <!--@mbg.generated-->
+    insert into info_cluster
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="ambariUsername != null">
+        ambari_username,
+      </if>
+      <if test="ambariPassword != null">
+        ambari_password,
+      </if>
+      <if test="ambariHost != null">
+        ambari_host,
+      </if>
+      <if test="ambariCount != null">
+        ambari_count,
+      </if>
+      <if test="masterVmsCount != null">
+        master_vms_count,
+      </if>
+      <if test="coreVmsCount != null">
+        core_vms_count,
+      </if>
+      <if test="taskVmsCount != null">
+        task_vms_count,
+      </if>
+      <if test="appsCount != null">
+        apps_count,
+      </if>
+      <if test="clusterCreateBegtime != null">
+        cluster_create_begtime,
+      </if>
+      <if test="clusterCreateEndtime != null">
+        cluster_create_endtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="ambariUsername != null">
+        #{ambariUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="ambariPassword != null">
+        #{ambariPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="ambariHost != null">
+        #{ambariHost,jdbcType=VARCHAR},
+      </if>
+      <if test="ambariCount != null">
+        #{ambariCount,jdbcType=INTEGER},
+      </if>
+      <if test="masterVmsCount != null">
+        #{masterVmsCount,jdbcType=INTEGER},
+      </if>
+      <if test="coreVmsCount != null">
+        #{coreVmsCount,jdbcType=INTEGER},
+      </if>
+      <if test="taskVmsCount != null">
+        #{taskVmsCount,jdbcType=INTEGER},
+      </if>
+      <if test="appsCount != null">
+        #{appsCount,jdbcType=INTEGER},
+      </if>
+      <if test="clusterCreateBegtime != null">
+        #{clusterCreateBegtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="clusterCreateEndtime != null">
+        #{clusterCreateEndtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.InfoCluster">
+    <!--@mbg.generated-->
+    update info_cluster
+    <set>
+      <if test="ambariUsername != null">
+        ambari_username = #{ambariUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="ambariPassword != null">
+        ambari_password = #{ambariPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="ambariHost != null">
+        ambari_host = #{ambariHost,jdbcType=VARCHAR},
+      </if>
+      <if test="masterIps != null">
+        master_ips = #{masterIps,jdbcType=VARCHAR},
+      </if>
+      <if test="ambariCount != null">
+        ambari_count = #{ambariCount,jdbcType=INTEGER},
+      </if>
+      <if test="masterVmsCount != null">
+        master_vms_count = #{masterVmsCount,jdbcType=INTEGER},
+      </if>
+      <if test="coreVmsCount != null">
+        core_vms_count = #{coreVmsCount,jdbcType=INTEGER},
+      </if>
+      <if test="taskVmsCount != null">
+        task_vms_count = #{taskVmsCount,jdbcType=INTEGER},
+      </if>
+      <if test="appsCount != null">
+        apps_count = #{appsCount,jdbcType=INTEGER},
+      </if>
+      <if test="clusterCreateBegtime != null">
+        cluster_create_begtime = #{clusterCreateBegtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="clusterCreateEndtime != null">
+        cluster_create_endtime = #{clusterCreateEndtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.InfoCluster">
+    <!--@mbg.generated-->
+    update info_cluster
+    set ambari_username = #{ambariUsername,jdbcType=VARCHAR},
+    ambari_password = #{ambariPassword,jdbcType=VARCHAR},
+    ambari_host = #{ambariHost,jdbcType=VARCHAR},
+    master_ips = #{masterIps,jdbcType=VARCHAR},
+    ambari_count = #{ambariCount,jdbcType=INTEGER},
+    master_vms_count = #{masterVmsCount,jdbcType=INTEGER},
+    core_vms_count = #{coreVmsCount,jdbcType=INTEGER},
+    task_vms_count = #{taskVmsCount,jdbcType=INTEGER},
+    apps_count = #{appsCount,jdbcType=INTEGER},
+    cluster_create_begtime = #{clusterCreateBegtime,jdbcType=TIMESTAMP},
+    cluster_create_endtime = #{clusterCreateEndtime,jdbcType=TIMESTAMP}
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+  </update>
+</mapper>

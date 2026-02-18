@@ -1,0 +1,1 @@
+update base_cluster_operation_template_activity set timeout=2000 where activity_id ='cd35f159-9c00-11ed-922d-6045bdc792d8';

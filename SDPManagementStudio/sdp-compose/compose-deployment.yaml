@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: compose
+  labels:
+    app: compose
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: compose
+  template:
+    metadata:
+      labels:
+        app: compose
+    spec:
+      containers:
+        - name: compose
+          resources:
+            requests:
+              memory: 2Gi
+              cpu: 1
+            limits:
+              memory: 4Gi
+              cpu: 2
+          image: acrsbxdevaks.azurecr.io/compose:2.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 30462
+          env:
+            - name: REGSERVER_URL
+              value: http://igs:igscd@regserver:30000/eureka/
+            - name: LOGBACK_FILE_PATH
+              value: classpath:log/logback-custom.xml
+          lifecycle:
+            preStop:
+              httpGet:
+                path: /maintain/stop
+                port: 30462
+                scheme: HTTP
+          livenessProbe:
+            httpGet:
+              path: /health/status
+              port: 30462
+              scheme: HTTP
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 30462
+              scheme: HTTP
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
+            periodSeconds: 5
+      terminationGracePeriodSeconds: 60
+      imagePullSecrets:
+        - name: acr-secret-pwd

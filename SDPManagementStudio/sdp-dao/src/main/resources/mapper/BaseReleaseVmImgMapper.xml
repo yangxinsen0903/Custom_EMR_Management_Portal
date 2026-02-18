@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.BaseReleaseVmImgMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.BaseReleaseVmImg">
+    <!--@mbg.generated-->
+    <!--@Table base_release_vm_img-->
+    <id column="release_version" jdbcType="VARCHAR" property="releaseVersion" />
+    <id column="vm_role" jdbcType="VARCHAR" property="vmRole" />
+    <result column="img_id" jdbcType="VARCHAR" property="imgId"/>
+    <result column="os_imageid" jdbcType="VARCHAR" property="osImageid" />
+    <result column="os_image_type" jdbcType="VARCHAR" property="osImageType" />
+    <result column="os_version" jdbcType="VARCHAR" property="osVersion" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    release_version, vm_role, os_imageid, os_image_type, os_version, createdby, created_time,img_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    brvi.release_version, brvi.vm_role, bimg.os_image_id as os_imageid, brvi.os_image_type, brvi.os_version,
+    brvi.createdby, brvi.created_time,brvi.img_id
+    from base_release_vm_img brvi
+    inner join base_images bimg on brvi.img_id=bimg.img_id
+    where brvi.release_version = #{releaseVersion,jdbcType=VARCHAR}
+      and brvi.vm_role = #{vmRole,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectOneByImgId" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select bimg.img_id, bimg.os_image_id as os_imageid
+    from (select img_id
+    from base_release_vm_img
+    where release_version = (select release_version
+    from base_release_vm_img
+    where img_id = #{imgId}
+    limit 1)
+    group by img_id) a,
+    base_images bimg
+    where a.img_id = bimg.img_id
+  </select>
+
+  <select id="selectAllStackVersion" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+      brvi.release_version, brvi.vm_role, bimg.os_image_id as os_imageid, brvi.os_image_type, brvi.os_version,
+      brvi.createdby, brvi.created_time,brvi.img_id
+    from base_release_vm_img brvi
+        inner join base_images bimg on brvi.img_id=bimg.img_id
+    where brvi.vm_role = 'ambari'
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    <!--@mbg.generated-->
+    delete from base_release_vm_img
+    where release_version = #{releaseVersion,jdbcType=VARCHAR}
+      and vm_role = #{vmRole,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.BaseReleaseVmImg">
+    <!--@mbg.generated-->
+    insert into base_release_vm_img (release_version, vm_role, os_imageid, 
+      os_image_type, os_version, createdby, 
+      created_time,img_id)
+    values (#{releaseVersion,jdbcType=VARCHAR}, #{vmRole,jdbcType=VARCHAR}, #{osImageid,jdbcType=VARCHAR}, 
+      #{osImageType,jdbcType=VARCHAR}, #{osVersion,jdbcType=VARCHAR}, #{createdby,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{imgId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.BaseReleaseVmImg">
+    <!--@mbg.generated-->
+    insert into base_release_vm_img
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="releaseVersion != null">
+        release_version,
+      </if>
+      <if test="vmRole != null">
+        vm_role,
+      </if>
+      <if test="osImageid != null">
+        os_imageid,
+      </if>
+      <if test="osImageType != null">
+        os_image_type,
+      </if>
+      <if test="osVersion != null">
+        os_version,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="imgId != null">
+        img_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="releaseVersion != null">
+        #{releaseVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="vmRole != null">
+        #{vmRole,jdbcType=VARCHAR},
+      </if>
+      <if test="osImageid != null">
+        #{osImageid,jdbcType=VARCHAR},
+      </if>
+      <if test="osImageType != null">
+        #{osImageType,jdbcType=VARCHAR},
+      </if>
+      <if test="osVersion != null">
+        #{osVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="imgId != null">
+        #{imgId,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.BaseReleaseVmImg">
+    <!--@mbg.generated-->
+    update base_release_vm_img
+    <set>
+      <if test="osImageid != null">
+        os_imageid = #{osImageid,jdbcType=VARCHAR},
+      </if>
+      <if test="osImageType != null">
+        os_image_type = #{osImageType,jdbcType=VARCHAR},
+      </if>
+      <if test="osVersion != null">
+        os_version = #{osVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="imgId != null">
+        img_id = #{imgId,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where release_version = #{releaseVersion,jdbcType=VARCHAR}
+      and vm_role = #{vmRole,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.BaseReleaseVmImg">
+    <!--@mbg.generated-->
+    update base_release_vm_img
+    set os_imageid = #{osImageid,jdbcType=VARCHAR},
+      os_image_type = #{osImageType,jdbcType=VARCHAR},
+      os_version = #{osVersion,jdbcType=VARCHAR},
+      createdby = #{createdby,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      img_id = #{imgId,jdbcType=VARCHAR}
+    where release_version = #{releaseVersion,jdbcType=VARCHAR}
+      and vm_role = #{vmRole,jdbcType=VARCHAR}
+  </update>
+
+  <select id="listImageByReleaseVersion" resultType="com.sunbox.domain.images.ImageResponse">
+    select bi.img_id, brvi.release_version, bi.os_image_id, bi.os_image_type, bi.os_version, bi.created_time
+    from base_release_vm_img brvi
+    inner JOIN base_images bi on brvi.img_id = bi.img_id
+    <where>
+      <if test="releaseVersion != null and releaseVersion != ''">
+        brvi.release_version = #{releaseVersion,jdbcType=VARCHAR}
+      </if>
+    </where>
+    order by bi.created_time desc
+    limit #{pageStart},#{pageLimit}
+  </select>
+
+  <select id="countImageByReleaseVersion" resultType="java.lang.Integer">
+    select count(1)
+    from base_release_vm_img brvi
+    inner JOIN base_images bi on brvi.img_id = bi.img_id
+    <where>
+      <if test="releaseVersion != null and releaseVersion != ''">
+        brvi.release_version = #{releaseVersion,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+</mapper>

@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpadmin.mapper.ConfClusterVmMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.ConfClusterVm">
+        <!--@mbg.generated-->
+        <!--@Table conf_cluster_vm-->
+        <id column="vm_conf_id" jdbcType="VARCHAR" property="vmConfId"/>
+        <result column="cluster_id" jdbcType="VARCHAR" property="clusterId"/>
+        <result column="vm_role" jdbcType="VARCHAR" property="vmRole"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="group_id" jdbcType="VARCHAR" property="groupId"/>
+        <result column="elastic_rule_id" jdbcType="VARCHAR" property="elasticRuleId"/>
+        <result column="sku" jdbcType="VARCHAR" property="sku"/>
+        <result column="os_imageid" jdbcType="VARCHAR" property="osImageid"/>
+        <result column="os_image_type" jdbcType="VARCHAR" property="osImageType"/>
+        <result column="os_version" jdbcType="VARCHAR" property="osVersion"/>
+        <result column="os_volume_size" jdbcType="INTEGER" property="osVolumeSize"/>
+        <result column="os_volume_type" jdbcType="VARCHAR" property="osVolumeType"/>
+        <result column="vcpus" jdbcType="VARCHAR" property="vcpus"/>
+        <result column="memory" jdbcType="VARCHAR" property="memory"/>
+        <result column="count" jdbcType="INTEGER" property="count"/>
+        <result column="purchase_type" jdbcType="INTEGER" property="purchaseType"/>
+        <result column="init_script_path" jdbcType="VARCHAR" property="initScriptPath"/>
+        <result column="img_id" jdbcType="VARCHAR" property="imgId"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="createdby" jdbcType="VARCHAR" property="createdby"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="modifiedby" jdbcType="VARCHAR" property="modifiedby"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="price_strategy" jdbcType="INTEGER" property="priceStrategy"/>
+        <result column="max_price" jdbcType="DECIMAL" property="maxPrice"/>
+        <result column="purchase_priority" jdbcType="INTEGER" property="purchasePriority"/>
+        <result column="group_id" jdbcType="VARCHAR" property="groupId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        vm_conf_id, cluster_id, vm_role, group_name, group_id, elastic_rule_id, sku, os_imageid, os_image_type, os_version,
+        os_volume_size, os_volume_type, vcpus, memory, `count`, purchase_type, init_script_path, `state`, createdby,
+        created_time, modifiedby, modified_time, img_id,group_id, price_strategy, max_price, purchase_priority, provision_type
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from conf_cluster_vm
+        where vm_conf_id = #{vmConfId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        <!--@mbg.generated-->
+        delete from conf_cluster_vm
+        where vm_conf_id = #{vmConfId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.sunbox.domain.ConfClusterVm">
+        <!--@mbg.generated-->
+        insert into conf_cluster_vm (vm_conf_id, cluster_id, vm_role,group_name,group_id,elastic_rule_id,
+        sku, os_imageid, os_image_type,
+        os_version, os_volume_size, os_volume_type,
+        vcpus, memory, `count`,
+        purchase_type, init_script_path, `state`,
+        createdby, created_time, modifiedby,
+        modified_time,img_id,price_strategy,max_price,purchase_priority)
+        values (#{vmConfId,jdbcType=VARCHAR}, #{clusterId,jdbcType=VARCHAR},
+        #{vmRole,jdbcType=VARCHAR},#{groupName,jdbcType=VARCHAR},#{groupId,jdbcType=VARCHAR},
+        #{elasticRuleId,jdbcType=VARCHAR},#{sku,jdbcType=VARCHAR}, #{osImageid,jdbcType=VARCHAR},
+        #{osImageType,jdbcType=VARCHAR},
+        #{osVersion,jdbcType=VARCHAR}, #{osVolumeSize,jdbcType=INTEGER}, #{osVolumeType,jdbcType=VARCHAR},
+        #{vcpus,jdbcType=VARCHAR}, #{memory,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER},
+        #{purchaseType,jdbcType=INTEGER}, #{initScriptPath,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER},
+        #{createdby,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifiedby,jdbcType=VARCHAR},
+        #{modifiedTime,jdbcType=TIMESTAMP},#{imgId,jdbcType=VARCHAR},
+        #{priceStrategy,jdbcType=INTEGER},#{maxPrice,jdbcType=DECIMAL},
+        #{purchasePriority,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.sunbox.domain.ConfClusterVm">
+        <!--@mbg.generated-->
+        insert into conf_cluster_vm
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="vmConfId != null">
+                vm_conf_id,
+            </if>
+            <if test="clusterId != null">
+                cluster_id,
+            </if>
+            <if test="vmRole != null">
+                vm_role,
+            </if>
+            <if test="groupName != null">
+                group_name,
+            </if>
+            <if test="groupId != null">
+                group_id,
+            </if>
+            <if test="elasticRuleId != null">
+                elastic_rule_id,
+            </if>
+            <if test="sku != null">
+                sku,
+            </if>
+            <if test="osImageid != null">
+                os_imageid,
+            </if>
+            <if test="osImageType != null">
+                os_image_type,
+            </if>
+            <if test="osVersion != null">
+                os_version,
+            </if>
+            <if test="osVolumeSize != null">
+                os_volume_size,
+            </if>
+            <if test="osVolumeType != null">
+                os_volume_type,
+            </if>
+            <if test="vcpus != null">
+                vcpus,
+            </if>
+            <if test="memory != null">
+                memory,
+            </if>
+            <if test="count != null">
+                `count`,
+            </if>
+            <if test="purchaseType != null">
+                purchase_type,
+            </if>
+            <if test="initScriptPath != null">
+                init_script_path,
+            </if>
+            <if test="state != null">
+                `state`,
+            </if>
+            <if test="createdby != null">
+                createdby,
+            </if>
+            <if test="createdTime != null">
+                created_time,
+            </if>
+            <if test="modifiedby != null">
+                modifiedby,
+            </if>
+            <if test="modifiedTime != null">
+                modified_time,
+            </if>
+            <if test="imgId != null">
+                img_id,
+            </if>
+            <if test="priceStrategy != null">
+                price_strategy,
+            </if>
+            <if test="maxPrice != null">
+                max_price,
+            </if>
+            <if test="purchasePriority != null">
+                purchase_priority,
+            </if>
+            <if test="provisionType != null">
+                provision_type,
+            </if>
+            <if test="cpuType != null">
+                cpu_type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="vmConfId != null">
+                #{vmConfId,jdbcType=VARCHAR},
+            </if>
+            <if test="clusterId != null">
+                #{clusterId,jdbcType=VARCHAR},
+            </if>
+            <if test="vmRole != null">
+                #{vmRole,jdbcType=VARCHAR},
+            </if>
+            <if test="groupName != null">
+                #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="groupId != null">
+                #{groupId,jdbcType=VARCHAR},
+            </if>
+            <if test="elasticRuleId != null">
+                #{elasticRuleId,jdbcType=VARCHAR},
+            </if>
+            <if test="sku != null">
+                #{sku,jdbcType=VARCHAR},
+            </if>
+            <if test="osImageid != null">
+                #{osImageid,jdbcType=VARCHAR},
+            </if>
+            <if test="osImageType != null">
+                #{osImageType,jdbcType=VARCHAR},
+            </if>
+            <if test="osVersion != null">
+                #{osVersion,jdbcType=VARCHAR},
+            </if>
+            <if test="osVolumeSize != null">
+                #{osVolumeSize,jdbcType=INTEGER},
+            </if>
+            <if test="osVolumeType != null">
+                #{osVolumeType,jdbcType=VARCHAR},
+            </if>
+            <if test="vcpus != null">
+                #{vcpus,jdbcType=VARCHAR},
+            </if>
+            <if test="memory != null">
+                #{memory,jdbcType=VARCHAR},
+            </if>
+            <if test="count != null">
+                #{count,jdbcType=INTEGER},
+            </if>
+            <if test="purchaseType != null">
+                #{purchaseType,jdbcType=INTEGER},
+            </if>
+            <if test="initScriptPath != null">
+                #{initScriptPath,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+            <if test="createdby != null">
+                #{createdby,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedby != null">
+                #{modifiedby,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedTime != null">
+                #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="imgId != null">
+                #{imgId,jdbcType=VARCHAR},
+            </if>
+            <if test="priceStrategy != null">
+                #{priceStrategy,jdbcType=INTEGER},
+            </if>
+            <if test="maxPrice != null">
+                #{maxPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="purchasePriority != null">
+                #{purchasePriority,jdbcType=INTEGER},
+            </if>
+            <if test="provisionType != null">
+                #{provisionType,jdbcType=INTEGER},
+            </if>
+            <if test="cpuType != null">
+                #{cpuType,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.ConfClusterVm">
+        <!--@mbg.generated-->
+        update conf_cluster_vm
+        <set>
+            <if test="clusterId != null">
+                cluster_id = #{clusterId,jdbcType=VARCHAR},
+            </if>
+            <if test="vmRole != null">
+                vm_role = #{vmRole,jdbcType=VARCHAR},
+            </if>
+            <if test="groupName != null">
+                group_name = #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="groupId != null">
+                group_id = #{groupId,jdbcType=VARCHAR},
+            </if>
+            <if test="elasticRuleId != null">
+                elastic_rule_id = #{elasticRuleId,jdbcType=VARCHAR},
+            </if>
+            <if test="sku != null">
+                sku = #{sku,jdbcType=VARCHAR},
+            </if>
+            <if test="osImageid != null">
+                os_imageid = #{osImageid,jdbcType=VARCHAR},
+            </if>
+            <if test="osImageType != null">
+                os_image_type = #{osImageType,jdbcType=VARCHAR},
+            </if>
+            <if test="osVersion != null">
+                os_version = #{osVersion,jdbcType=VARCHAR},
+            </if>
+            <if test="osVolumeSize != null">
+                os_volume_size = #{osVolumeSize,jdbcType=INTEGER},
+            </if>
+            <if test="osVolumeType != null">
+                os_volume_type = #{osVolumeType,jdbcType=VARCHAR},
+            </if>
+            <if test="vcpus != null">
+                vcpus = #{vcpus,jdbcType=VARCHAR},
+            </if>
+            <if test="memory != null">
+                memory = #{memory,jdbcType=VARCHAR},
+            </if>
+            <if test="count != null">
+                `count` = #{count,jdbcType=INTEGER},
+            </if>
+            <if test="purchaseType != null">
+                purchase_type = #{purchaseType,jdbcType=INTEGER},
+            </if>
+            <if test="initScriptPath != null">
+                init_script_path = #{initScriptPath,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                `state` = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="createdby != null">
+                createdby = #{createdby,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedby != null">
+                modifiedby = #{modifiedby,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedTime != null">
+                modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="imgId != null">
+                img_id = #{imgId,jdbcType=VARCHAR},
+            </if>
+            <if test="priceStrategy != null">
+                price_strategy=#{priceStrategy,jdbcType=INTEGER},
+            </if>
+            <if test="maxPrice != null">
+                max_price=#{maxPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="purchasePriority != null">
+                purchase_priority=#{purchasePriority,jdbcType=INTEGER},
+            </if>
+
+        </set>
+        where vm_conf_id = #{vmConfId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.ConfClusterVm">
+        <!--@mbg.generated-->
+        update conf_cluster_vm
+        set cluster_id = #{clusterId,jdbcType=VARCHAR},
+        vm_role = #{vmRole,jdbcType=VARCHAR},
+        group_name = #{groupName,jdbcType=VARCHAR},
+        group_id = #{groupId,jdbcType=VARCHAR},
+        elastic_rule_id = #{elasticRuleId,jdbcType=VARCHAR},
+        sku = #{sku,jdbcType=VARCHAR},
+        os_imageid = #{osImageid,jdbcType=VARCHAR},
+        os_image_type = #{osImageType,jdbcType=VARCHAR},
+        os_version = #{osVersion,jdbcType=VARCHAR},
+        os_volume_size = #{osVolumeSize,jdbcType=INTEGER},
+        os_volume_type = #{osVolumeType,jdbcType=VARCHAR},
+        vcpus = #{vcpus,jdbcType=VARCHAR},
+        memory = #{memory,jdbcType=VARCHAR},
+        `count` = #{count,jdbcType=INTEGER},
+        purchase_type = #{purchaseType,jdbcType=INTEGER},
+        init_script_path = #{initScriptPath,jdbcType=VARCHAR},
+        `state` = #{state,jdbcType=INTEGER},
+        createdby = #{createdby,jdbcType=VARCHAR},
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+        modifiedby = #{modifiedby,jdbcType=VARCHAR},
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+        img_id = #{imgId,jdbcType=VARCHAR},
+        price_strategy=#{priceStrategy,jdbcType=INTEGER},
+        max_price=#{maxPrice,jdbcType=DECIMAL},
+        purchase_priority=#{purchasePriority,jdbcType=INTEGER}
+        where vm_conf_id = #{vmConfId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByClusterIdAndGroupNameAndVmRole" parameterType="com.sunbox.domain.ConfClusterVm">
+        update conf_cluster_vm
+        set `state` = #{state,jdbcType=INTEGER}
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and vm_role = #{vmRole,jdbcType=VARCHAR}
+        and group_name = #{groupName,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectByObject" resultType="java.util.Map" parameterType="map">
+        select
+        vm_conf_id, cluster_id, vm_role,group_name,group_id,elastic_rule_id,sku, os_imageid, os_image_type, os_version,
+        os_volume_size,
+        os_volume_type, vcpus, memory, `count`, purchase_type, init_script_path, `state`,
+        createdby, created_time, modifiedby, modified_time from conf_cluster_vm where 1=1
+        <if test="id != null">
+            and cluster_id = #{id,jdbcType=VARCHAR}
+        </if>
+        <if test="vmRole != null and vmRole !=''">
+            and vm_role = #{vmRole,jdbcType=VARCHAR}
+        </if>
+        <if test="vmRoles!=null and vmRoles.size>0">
+            and vm_role in
+            <foreach collection="vmRoles" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        order by created_time desc
+    </select>
+
+    <select id="countByClusterId" resultType="int" parameterType="java.lang.String">
+        select count(1) from conf_cluster_vm where 1=1
+        <if test="clusterId != null">
+            and cluster_id = #{clusterId,jdbcType=VARCHAR}
+        </if>
+        <if test="vmRole != null">
+            and vm_role = #{vmRole,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="selectByClusterIdAndVmRole" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from conf_cluster_vm
+        where 1=1
+        <if test="clusterId != null and clusterId != ''">
+            and cluster_id = #{clusterId,jdbcType=VARCHAR}
+        </if>
+        <if test="vmRole != null and vmRole != ''">
+            and vm_role = #{vmRole,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="selectByAny" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from conf_cluster_vm
+        where 1=1
+        <if test="clusterId != null and clusterId != ''">
+            and cluster_id = #{clusterId,jdbcType=VARCHAR}
+        </if>
+        <if test="vmRole != null and vmRole != ''">
+            and vm_role = #{vmRole,jdbcType=VARCHAR}
+        </if>
+        <if test="groupName != null and groupName != ''">
+            and group_name = #{groupName,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="selectByValidClusterId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from conf_cluster_vm
+        where
+        cluster_id = #{clusterId,jdbcType=VARCHAR}
+        order by group_name
+    </select>
+    <select id="selectByClusterId" resultType="com.sunbox.domain.ConfClusterVm">
+        select
+        <include refid="Base_Column_List"/>
+        from conf_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </select>
+</mapper>

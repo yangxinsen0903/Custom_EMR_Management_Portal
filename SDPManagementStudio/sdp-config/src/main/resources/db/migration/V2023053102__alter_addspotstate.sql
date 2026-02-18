@@ -1,0 +1,1 @@
+ALTER TABLE conf_cluster_host_group ADD spot_state int NULL COMMENT '0 关闭竞价买入和缩容流程 1 关闭买入，开放缩容 2 开发买入，关闭缩容 3 开放买入和缩容';

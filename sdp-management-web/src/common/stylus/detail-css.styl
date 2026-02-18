@@ -1,0 +1,129 @@
+.detail-css {
+  width 100%;
+  height 100%;
+  background-color white;
+
+  .theader {
+    td, th {
+      background-color: #F8F8F8 !important;
+    }
+  }
+
+  .page-title {
+    font-size 30px;
+    color black;
+  }
+
+  .detail-block-div {
+    padding-bottom 10px;
+    overflow hidden;
+    .sub-title {
+      font-size 16px;
+      line-height 1;
+      margin-bottom 20px;
+      display flex;
+      justify-content space-between;
+    }
+    .detail-items {
+
+      .flex-row {
+        display flex;
+        align-items flex-start;
+        padding-bottom 16px;
+        .detail-item {
+          flex 1;
+          display flex;
+          align-items flex-start;
+          overflow hidden;
+          .label {
+            color #606266;
+            text-align left;
+            width 110px;
+            font-size 14px;
+            line-height 1.4;
+          }
+          .value {
+            flex 1;
+            font-size 14px;
+            line-height 1.4;
+            overflow hidden;
+            word-break break-all;
+            padding-right 15px;
+          }
+        }
+      }
+    }
+  }
+
+  .full-page-block-div {
+    padding-bottom 15px;
+    overflow hidden;
+
+    .block-title {
+      padding-left 10px;
+      border-left 3px solid #535E85;
+      font-size 20px;
+      font-weight bold;
+      line-height 1;
+      margin-bottom 30px;
+    }
+
+    .sub-title {
+      margin-top 6px;
+      font-size 15px;
+      line-height 1;
+      margin-bottom 15px;
+    }
+
+    .flex-row {
+      display flex;
+      align-items center;
+      flex-wrap wrap;
+    }
+
+    .el-form-item {
+      margin-bottom 30px;
+
+      &.el-form-item--large .el-form-item__error {
+        width 100%;
+        background-color white;
+      }
+
+      .input-width {
+        width: 400px;
+      }
+
+      .input-width-2 {
+        width: 300px;
+      }
+      .input-width-2:nth-child(n + 2) {
+        margin-left 15px;
+      }
+    }
+
+    .add-btn {
+      cursor pointer;
+      border 1px dashed #ddd;
+      width 100%;
+      font-size 14px;
+      text-align center;
+      height 32px;
+      line-height 30px;
+      color #7f7f7f;
+    }
+  }
+
+  .full-page-buttons {
+    display flex;
+    align-items center;
+    justify-content flex-end;
+    .pre-step {
+      width 120px;
+    }
+    .next-step {
+      width 120px;
+      background-color #535E85;
+      color white;
+    }
+  }
+}

@@ -1,0 +1,1 @@
+ALTER TABLE info_ambari_config_group MODIFY COLUMN sdp_group_name varchar(100) DEFAULT NULL COMMENT 'sdp实例组名称';

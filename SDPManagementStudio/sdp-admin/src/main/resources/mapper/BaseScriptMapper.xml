@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpadmin.mapper.BaseScriptMapper">
+    <resultMap type="com.sunbox.domain.BaseScript" id="BaseScriptMap">
+        <result property="scriptId" column="script_id" jdbcType="VARCHAR"/>
+        <result property="scriptName" column="script_name" jdbcType="VARCHAR"/>
+        <result property="blobPath" column="blob_path" jdbcType="VARCHAR"/>
+        <result property="uploadTime" column="upload_time" jdbcType="TIMESTAMP"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="state" column="state" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 通过ID查询单条数据 -->
+    <select id="queryById" resultMap="BaseScriptMap">
+        select
+        script_id,script_name,blob_path,upload_time,remark,state
+        from base_script
+        where script_id = #{scriptId}
+    </select>
+
+
+    <select id="queryByScriptName" resultMap="BaseScriptMap">
+        select
+        script_id,script_name,blob_path,upload_time,remark,state
+        from base_script
+        where script_name = #{scriptName}
+    </select>
+
+    <!--分页查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseScriptMap">
+        select
+        script_id,script_name,blob_path,upload_time,remark,state
+        from base_script
+        <where>
+            <if test="baseScript.scriptId != null and baseScript.scriptId != ''">
+                and script_id = #{baseScript.scriptId}
+            </if>
+            <if test="baseScript.scriptName != null and baseScript.scriptName != ''">
+                and script_name like CONCAT(CONCAT('%', #{baseScript.scriptName}), '%')
+            </if>
+            <if test="baseScript.uploadTime != null ">
+                and upload_time = #{baseScript.uploadTime}
+            </if>
+            <if test="baseScript.remark != null and baseScript.remark != ''">
+                and remark = #{baseScript.remark}
+            </if>
+            <if test="baseScript.state != null and baseScript.state != ''">
+                and state = #{baseScript.state}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from base_script
+        <where>
+            <if test="scriptId != null and scriptId != ''">
+                and script_id = #{scriptId}
+            </if>
+            <if test="scriptName != null and scriptName != ''">
+                and script_name like CONCAT(CONCAT('%', #{scriptName}), '%')
+            </if>
+            <if test="uploadTime != null ">
+                and upload_time = #{uploadTime}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="state != null and state != ''">
+                and state = #{state}
+            </if>
+        </where>
+    </select>
+
+    <!--新增数据-->
+    <insert id="insert" parameterType="com.sunbox.domain.BaseScript" >
+        insert into base_script(script_id,script_name,blob_path,upload_time,remark,state)
+        values (#{scriptId},#{scriptName},#{blobPath},#{uploadTime},#{remark},#{state})
+    </insert>
+
+    <!-- 批量新增数据 -->
+    <insert id="insertBatch" keyProperty="script_id" useGeneratedKeys="true">
+        insert into base_script(script_id,script_name,blob_path,upload_time,remark,state)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.scriptId},#{entity.scriptName},#{entity.blobPath},#{entity.uploadTime},#{entity.remark},#{entity.state})
+        </foreach>
+    </insert>
+
+    <!-- 批量新增或按主键更新数据 -->
+    <insert id="insertOrUpdateBatch" keyProperty="script_id" useGeneratedKeys="true">
+        insert into base_script(script_id,script_name,blob_path,upload_time,remark,state)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.scriptId},#{entity.scriptName},#{entity.blobPath},#{entity.uploadTime},#{entity.remark},#{entity.state})
+        </foreach>
+        on duplicate key update
+        script_id=values(script_id),
+        script_name=values(script_name),
+        blob_path=values(blob_path),
+        upload_time=values(upload_time),
+        remark=values(remark),
+        state=values(state)
+    </insert>
+
+    <!-- 更新数据 -->
+    <update id="update">
+        update base_script
+        <set>
+            <if test="scriptId != null and scriptId != ''">
+                script_id = #{scriptId},
+            </if>
+            <if test="scriptName != null and scriptName != ''">
+                script_name = #{scriptName},
+            </if>
+            <if test="blobPath != null and blobPath != ''">
+                blob_path = #{blobPath},
+            </if>
+            <if test="uploadTime != null and uploadTime != ''">
+                upload_time = #{uploadTime},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="state != null and state != ''">
+                state = #{state},
+            </if>
+        </set>
+        where script_id = #{scriptId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from base_script where script_id = #{scriptId}
+    </delete>
+</mapper>

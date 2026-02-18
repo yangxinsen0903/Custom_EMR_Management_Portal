@@ -1,0 +1,16 @@
+replace INTO base_cluster_operation_template_activity (activity_id,template_id,activity_type,activity_cnname,activity_name,sort_no,timeout,createdby,created_time) VALUES
+	 ('cd35e91f-9c00-11ed-922d-6045bdc792d8','34438518-9544-11ed-922d-6045bdc792d8','clusterservice','执行DataNode节点DECOMMISSION','dataNodeDecommionsion',-1,0,'system',NULL),
+	 ('cd35eef5-9c00-11ed-922d-6045bdc792d8','34438518-9544-11ed-922d-6045bdc792d8','clusterservice','查询DataNode节点DECOMMISSION执行状态','queryDataNodeDecommission',0,0,'system',NULL),
+	 ('cd35f066-9c00-11ed-922d-6045bdc792d8','34438518-9544-11ed-922d-6045bdc792d8','clusterservice','执行NodeManger节点DECOMMISSION','nodeManagerDecommionsion',1,0,'system',NULL),
+	 ('cd35f067-9c00-11ed-922d-6045bdc792d8','34438518-9544-11ed-922d-6045bdc792d8','clusterservice','执行HbaseRegionServer节点DECOMMISSION','hbaseRegionServerDecommionsion',3,0,'system',NULL),
+	 ('cd35f152-9c00-11ed-922d-6045bdc792d8','34438518-9544-11ed-922d-6045bdc792d8','clusterservice','查询NodeManger节点DECOMMISSION执行状态','queryNodeManagerDecommission',2,0,'system',NULL),
+	 ('cd35f158-9c00-11ed-922d-6045bdc792d8','34438518-9544-11ed-922d-6045bdc792d8','clusterservice','查询HbaseRegionServer节点DECOMMISSION执行状态','queryHbaseRegionServerDecommission',4,0,'system',NULL),
+	 ('cd35f159-9c00-11ed-922d-6045bdc792d8','34438518-9544-11ed-922d-6045bdc792d8','clusterservice','优雅缩容等待','gracefullWating',5,0,'system',NULL),
+	 ('cd35f233-9c00-11ed-922d-6045bdc792d8','34438518-9544-11ed-922d-6045bdc792d8','clusterservice','执行关闭组件命令','closeComponentByHost',6,0,'system',NULL),
+	 ('cd35f45b-9c00-11ed-922d-6045bdc792d8','34438518-9544-11ed-922d-6045bdc792d8','clusterservice','查询关闭组件命令状态','queryCloseComponentStatus',7,0,'system',NULL),
+	 ('cd35f53f-9c00-11ed-922d-6045bdc792d8','34438518-9544-11ed-922d-6045bdc792d8','clusterservice','ambari-server删除主机','deleteAmbariHosts',8,0,'system',NULL),
+	 ('cd35f54f-9c00-11ed-922d-6045bdc792d8','34438518-9544-11ed-922d-6045bdc792d8','clusterservice','ambari-server删除配置组','deleteAmbariHostGroup',9,0,'system','2023-02-27 12:03:29'),
+	 ('cd35f62b-9c00-11ed-922d-6045bdc792d8','34438518-9544-11ed-922d-6045bdc792d8','clusterservice','检查数据块 hdfs fsck （仅Core节点需要）','checkDataForCore',10,0,'system','2023-02-27 12:03:29'),
+	 ('cd35f6fe-9c00-11ed-922d-6045bdc792d8','34438518-9544-11ed-922d-6045bdc792d8','azureVMService','销毁主机','deleteVmsForScaleIn',11,0,'system','2023-02-27 12:03:29'),
+	 ('cd35f768-9c00-11ed-922d-6045bdc792d8','34438518-9544-11ed-922d-6045bdc792d8','azureVMService','查询销毁进展','queryScaleInVmsDeleteJob',12,0,'system','2023-02-27 12:03:29'),
+	 ('fd35f62b-9c00-11ed-922d-6045bdc792d8','34438518-9544-11ed-922d-6045bdc792d8','clusterservice','清理AmbariHost','clearAmbariHosts',13,0,'system','2023-02-22 15:39:27');

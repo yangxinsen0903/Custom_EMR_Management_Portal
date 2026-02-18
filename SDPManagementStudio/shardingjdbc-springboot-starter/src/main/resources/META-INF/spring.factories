@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.sunbox.shardingjdbcspringbootstarter.configuration.ShardingJDBCAutoConfiguration

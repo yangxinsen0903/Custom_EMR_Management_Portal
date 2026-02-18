@@ -1,0 +1,18 @@
+server:
+  port: 30460
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+logging:
+  config: ${LOGBACK_FILE_PATH:classpath:log/logback-custom.xml}
+
+### resources
+spring:
+  undertow:
+    io-threads: 16
+    worker-threads: 1024
+    buffer-size: 1024
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+

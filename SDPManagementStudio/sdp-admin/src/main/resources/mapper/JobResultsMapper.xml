@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpadmin.mapper.JobResultsMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.JobResults">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="JobID" jdbcType="CHAR" property="jobid" />
+    <result column="CreateTime" jdbcType="TIMESTAMP" property="createtime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.sunbox.domain.JobResults">
+    <result column="AnsibleLog" jdbcType="LONGVARCHAR" property="ansiblelog" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, JobID, CreateTime
+  </sql>
+  <sql id="Blob_Column_List">
+    AnsibleLog
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from jobresults
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByJobId" resultType="com.sunbox.domain.JobResults">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from jobresults
+    where jobID = #{jobId,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from jobresults
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.JobResults">
+    insert into jobresults (ID, JobID, CreateTime, 
+      AnsibleLog)
+    values (#{id,jdbcType=INTEGER}, #{jobid,jdbcType=CHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{ansiblelog,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.JobResults">
+    insert into jobresults
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="jobid != null">
+        JobID,
+      </if>
+      <if test="createtime != null">
+        CreateTime,
+      </if>
+      <if test="ansiblelog != null">
+        AnsibleLog,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="jobid != null">
+        #{jobid,jdbcType=CHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ansiblelog != null">
+        #{ansiblelog,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.JobResults">
+    update jobresults
+    <set>
+      <if test="jobid != null">
+        JobID = #{jobid,jdbcType=CHAR},
+      </if>
+      <if test="createtime != null">
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ansiblelog != null">
+        AnsibleLog = #{ansiblelog,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sunbox.domain.JobResults">
+    update jobresults
+    set JobID = #{jobid,jdbcType=CHAR},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      AnsibleLog = #{ansiblelog,jdbcType=LONGVARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.JobResults">
+    update jobresults
+    set JobID = #{jobid,jdbcType=CHAR},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

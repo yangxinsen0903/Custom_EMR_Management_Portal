@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.SystemEventMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.SystemEvent">
+        <id column="system_event_id" jdbcType="VARCHAR" property="systemEventId"/>
+        <id column="event_trigger_time" jdbcType="TIMESTAMP" property="eventTriggerTime"/>
+        <id column="event_type" jdbcType="VARCHAR" property="eventType"/>
+        <id column="event_desc" jdbcType="VARCHAR" property="eventDesc"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        system_event_id
+        , event_trigger_time, event_type, event_desc
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from system_event
+        where system_event_id = #{systemEventId, jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from system_event
+        order by event_trigger_time desc
+        limit #{limit, jdbcType=INTEGER}, #{size, jdbcType=INTEGER}
+    </select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from system_event
+        where system_event_id = #{systemEventId, jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="insert" parameterType="com.sunbox.domain.InfoClusterVmClearLog">
+        insert into system_event (system_event_id, event_trigger_time, event_type, event_desc)
+        values (#{systemEventId,jdbcType=VARCHAR}, #{eventTriggerTime,jdbcType=TIMESTAMP},
+                #{eventType,jdbcType=VARCHAR},
+                #{eventDesc,jdbcType=VARCHAR})
+    </insert>
+
+</mapper>

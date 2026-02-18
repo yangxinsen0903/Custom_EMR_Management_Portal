@@ -1,0 +1,36 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: rm-task
+  namespace: resource-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rm-task
+  template:
+    metadata:
+      labels:
+        app: rm-task
+    spec:
+      containers:
+        - name: rm-task
+          image: {{ACR}}.azurecr.io/rm-task:{{TAG_ID}}
+          resources:
+            limits:
+              cpu: 2
+              memory: 4096Mi
+            requests:
+              cpu: 2
+              memory: 4096Mi
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8081
+          envFrom:
+            - secretRef:
+                name: rm-all-secret
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler

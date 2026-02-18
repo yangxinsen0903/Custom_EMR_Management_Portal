@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.ConfClusterTagMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.ConfClusterTag">
+    <id column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <id column="tag_group" jdbcType="VARCHAR" property="tagGroup" />
+    <result column="tag_val" jdbcType="VARCHAR" property="tagVal" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    cluster_id, tag_group, tag_val
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.sunbox.domain.ConfClusterTagKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from conf_cluster_tag
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+      and tag_group = #{tagGroup,jdbcType=VARCHAR}
+  </select>
+    <select id="getTagsbyClusterId" resultType="com.sunbox.domain.ConfClusterTag">
+      select
+      <include refid="Base_Column_List" />
+      from conf_cluster_tag
+      where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="com.sunbox.domain.ConfClusterTagKey">
+    delete from conf_cluster_tag
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+      and tag_group = #{tagGroup,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByClusterId" >
+    delete from conf_cluster_tag
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.sunbox.domain.ConfClusterTag">
+    insert into conf_cluster_tag (cluster_id, tag_group, tag_val
+      )
+    values (#{clusterId,jdbcType=VARCHAR}, #{tagGroup,jdbcType=VARCHAR}, #{tagVal,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.ConfClusterTag">
+    insert into conf_cluster_tag
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="tagGroup != null">
+        tag_group,
+      </if>
+      <if test="tagVal != null">
+        tag_val,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="tagGroup != null">
+        #{tagGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="tagVal != null">
+        #{tagVal,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.ConfClusterTag">
+    update conf_cluster_tag
+    <set>
+      <if test="tagVal != null">
+        tag_val = #{tagVal,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+      and tag_group = #{tagGroup,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.ConfClusterTag">
+    update conf_cluster_tag
+    set tag_val = #{tagVal,jdbcType=VARCHAR}
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+      and tag_group = #{tagGroup,jdbcType=VARCHAR}
+  </update>
+</mapper>

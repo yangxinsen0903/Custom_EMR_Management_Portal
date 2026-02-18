@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.ConfClusterTagNeoMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.ConfClusterTag">
+    <!--@mbg.generated-->
+    <!--@Table conf_cluster_tag-->
+    <id column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <id column="tag_group" jdbcType="VARCHAR" property="tagGroup" />
+    <result column="tag_val" jdbcType="VARCHAR" property="tagVal" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    cluster_id, tag_group, tag_val
+  </sql>
+
+  <select id="selectByObject" resultMap="BaseResultMap" parameterType="com.sunbox.domain.ConfClusterTag">
+    select
+    <include refid="Base_Column_List" />
+    from conf_cluster_tag where 1=1
+    <if test="clusterId != null ">
+      and cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </if>
+    <if test="tagGroup != null">
+      and tag_group = #{tagGroup,jdbcType=VARCHAR}
+    </if>
+    <if test="tagVal != null">
+      and tag_val = #{tagVal,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+</mapper>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpadmin.mapper.BaseSceneMapper">
+    <resultMap type="com.sunbox.domain.BaseScene" id="BaseSceneMap">
+        <result property="sceneId" column="scene_id" jdbcType="VARCHAR"/>
+        <result property="clusterReleaseVer" column="cluster_release_ver" jdbcType="VARCHAR"/>
+        <result property="sceneName" column="scene_name" jdbcType="VARCHAR"/>
+        <result property="sceneDesc" column="scene_desc" jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="createdby" column="createdby" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 通过ID查询单条数据 -->
+    <select id="queryById" resultMap="BaseSceneMap">
+        select
+        scene_id,cluster_release_ver,scene_name,scene_desc,created_time,createdby
+        from base_scene
+        where scene_id = #{sceneId}
+    </select>
+
+    <!-- 根据版本和场景查询场景对象 -->
+    <select id="queryByReleaseVerAndSceneName" resultMap="BaseSceneMap">
+        select
+        scene_id,cluster_release_ver,scene_name,scene_desc,created_time,createdby
+        from base_scene
+        where cluster_release_ver = #{releaseVer} and scene_name = #{scene}
+    </select>
+
+
+    <!--分页查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseSceneMap">
+        select
+        scene_id,cluster_release_ver,scene_name,scene_desc,created_time,createdby
+        from base_scene
+        <where>
+            <if test="sceneId != null and sceneId != ''">
+                and scene_id = #{sceneId}
+            </if>
+            <if test="clusterReleaseVer != null and clusterReleaseVer != ''">
+                and cluster_release_ver = #{clusterReleaseVer}
+            </if>
+            <if test="sceneName != null and sceneName != ''">
+                and scene_name = #{sceneName}
+            </if>
+            <if test="sceneDesc != null and sceneDesc != ''">
+                and scene_desc = #{sceneDesc}
+            </if>
+            <if test="createdby != null and createdby != ''">
+                and createdby = #{createdby}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from base_scene
+        <where>
+            <if test="sceneId != null and sceneId != ''">
+                and scene_id = #{sceneId}
+            </if>
+            <if test="clusterReleaseVer != null and clusterReleaseVer != ''">
+                and cluster_release_ver = #{clusterReleaseVer}
+            </if>
+            <if test="sceneName != null and sceneName != ''">
+                and scene_name = #{sceneName}
+            </if>
+            <if test="sceneDesc != null and sceneDesc != ''">
+                and scene_desc = #{sceneDesc}
+            </if>
+            <if test="createdby != null and createdby != ''">
+                and createdby = #{createdby}
+            </if>
+        </where>
+    </select>
+
+    <!--新增数据-->
+    <insert id="insert" keyProperty="scene_id" useGeneratedKeys="true">
+        insert into base_scene(scene_id,cluster_release_ver,scene_name,scene_desc,created_time,createdby)
+        values (#{sceneId},#{clusterReleaseVer},#{sceneName},#{sceneDesc},#{createdTime},#{createdby})
+    </insert>
+
+    <!-- 批量新增或按主键更新数据 -->
+    <insert id="insertOrUpdateBatch" keyProperty="scene_id" useGeneratedKeys="true">
+        insert into base_scene(scene_id,cluster_release_ver,scene_name,scene_desc,created_time,createdby)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.sceneId},#{entity.clusterReleaseVer},#{entity.sceneName},#{entity.sceneDesc},#{entity.createdTime},#{entity.createdby})
+        </foreach>
+        on duplicate key update
+        scene_id=values(scene_id),
+        cluster_release_ver=values(cluster_release_ver),
+        scene_name=values(scene_name),
+        scene_desc=values(scene_desc),
+        created_time=values(created_time),
+        createdby=values(createdby)
+    </insert>
+
+    <!-- 更新数据 -->
+    <update id="update">
+        update base_scene
+        <set>
+            <if test="sceneId != null and sceneId != ''">
+                scene_id = #{sceneId},
+            </if>
+            <if test="clusterReleaseVer != null and clusterReleaseVer != ''">
+                cluster_release_ver = #{clusterReleaseVer},
+            </if>
+            <if test="sceneName != null and sceneName != ''">
+                scene_name = #{sceneName},
+            </if>
+            <if test="sceneDesc != null and sceneDesc != ''">
+                scene_desc = #{sceneDesc},
+            </if>
+            <if test="createdTime != null ">
+                created_time = #{createdTime},
+            </if>
+            <if test="createdby != null and createdby != ''">
+                createdby = #{createdby},
+            </if>
+        </set>
+        where scene_id = #{sceneId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from base_scene where scene_id = #{sceneId}
+    </delete>
+</mapper>

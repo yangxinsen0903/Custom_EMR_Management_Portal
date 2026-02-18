@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.DailyScaleFailReportMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.DailyScaleFailReport">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="report_id" jdbcType="VARCHAR" property="reportId"/>
+        <result column="task_name" jdbcType="INTEGER" property="taskName"/>
+        <result column="purchase_type" jdbcType="INTEGER" property="purchaseType"/>
+        <result column="task_count" jdbcType="INTEGER" property="taskCount"/>
+        <result column="vm_count" jdbcType="DOUBLE" property="vmCount"/>
+        <result column="cpu_count" jdbcType="DOUBLE" property="cpuCount"/>
+        <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="report_date" jdbcType="TIMESTAMP" property="reportDate"/>
+        <result column="region" jdbcType="VARCHAR" property="region"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        report_id,
+        task_name,
+        purchase_type,
+        task_count,
+        vm_count,
+        cpu_count,
+        begin_time,
+        end_time,
+        report_date,
+        region
+    </sql>
+    <select id="selectByReportId" resultType="com.sunbox.domain.DailyScaleFailReport">
+        select
+        <include refid="Base_Column_List"/>
+        from daily_scale_fail_report
+        where report_id = #{reportId} and region=#{region}
+        order by begin_time desc
+    </select>
+    <insert id="insert" parameterType="com.sunbox.domain.DailyScaleFailReport">
+        insert into daily_scale_fail_report (
+        id,
+        report_id,
+        task_name,
+        purchase_type,
+        task_count,
+        vm_count,
+        cpu_count,
+        begin_time,
+        end_time,
+        report_date,
+        region
+        ) values (
+        #{id},
+        #{reportId},
+        #{taskName},
+        #{purchaseType},
+        #{taskCount},
+        #{vmCount},
+        #{cpuCount},
+        #{beginTime},
+        #{endTime},
+        #{reportDate},
+        #{region}
+        )
+    </insert>
+
+
+    <select id="getScaleInFailureResultReport" resultType="java.util.Map">
+        select p.plan_name,
+        case vm.purchase_type
+            when 1 then '按需'
+            when 2 then '竞价'
+        end as purchase_type,
+        count(distinct p.plan_id) as task_count,
+        count(*) as vm_count,
+        sum(vm.vcpus) as cpu_count
+        from (
+            select plan.cluster_id, plan.plan_id, plan_name, scaling_task_id
+            from info_cluster_operation_plan plan join conf_cluster cc on plan.cluster_id = cc.cluster_id
+            where plan.state in (-1, -2)
+            and plan_name in ('弹性缩容', '手动缩容', '竞价逐出')
+            and cc.region = #{region}
+            and plan.end_time between #{beginTime,jdbcType=TIMESTAMP} and  #{endTime,jdbcType=TIMESTAMP}
+        ) p join
+        (
+            select icv.cluster_id, icv.purchase_type, icv.scalein_task_id, ccv.vcpus
+            from info_cluster_vm icv left join conf_cluster_vm ccv on icv.cluster_id = ccv.cluster_id and icv.group_name = ccv.group_name
+            where icv.scalein_task_id is not null and icv.state in (1, -99)
+        ) vm
+        on p.scaling_task_id = vm.scalein_task_id and p.cluster_id = vm.cluster_id
+        group by p.plan_name, vm.purchase_type
+        union all
+        select
+        t.plan_name,
+        case icv.purchase_type
+            when 1 then '按需'
+            when 2 then '竞价'
+        end as purchase_type,
+        count(distinct t.plan_id) as task_count,
+        count(*) as vm_count,
+        sum(icv.vcpus) as cpu_count
+
+        from info_cluster_vm_reject reject join (
+            select plan.cluster_id, plan.op_task_id as plan_id, plan_name, scaling_task_id
+            from info_cluster_operation_plan plan join conf_cluster cc on plan.cluster_id = cc.cluster_id
+            where plan.state in (-1, -2)
+            and plan_name in ('清理异常VM')
+            and cc.region = #{region}
+            and plan.end_time between #{beginTime,jdbcType=TIMESTAMP} and  #{endTime,jdbcType=TIMESTAMP}
+        ) t on reject.plan_id = t.plan_id
+        join (
+            select icv.cluster_id, icv.purchase_type, icv.vm_name, ccv.vcpus
+            from info_cluster_vm icv left join conf_cluster_vm ccv on icv.cluster_id = ccv.cluster_id and icv.group_name = ccv.group_name
+            where icv.state in (1, -99)
+        ) icv  on reject.cluster_id = icv.cluster_id and reject.vm_name = icv.vm_name
+        group by t.plan_name, icv.purchase_type;
+    </select>
+    <select id="countByReportId" resultType="java.lang.Integer">
+        select
+        count(id)
+        from daily_scale_fail_report
+        where report_id = #{reportId} and region = #{region}
+    </select>
+    <select id="selectByTime" resultType="com.sunbox.domain.DailyScaleFailReport">
+        select
+        <include refid="Base_Column_List"/>
+        from daily_scale_fail_report
+        where begin_time <![CDATA[ >= ]]> #{beginTime}
+        and end_time <![CDATA[ <= ]]> #{endTime}
+        <if test="region != null and region !=''">
+            and region = #{region}
+        </if>
+        order by report_id desc
+    </select>
+
+</mapper>

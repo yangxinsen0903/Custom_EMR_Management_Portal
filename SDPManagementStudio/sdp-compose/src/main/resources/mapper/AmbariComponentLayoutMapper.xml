@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.AmbariComponentLayoutMapper">
+    <resultMap type="com.sunbox.domain.ambari.AmbariComponentLayout" id="AmbariComponentLayoutMap">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="serviceCode" column="service_code" jdbcType="VARCHAR"/>
+        <result property="stackCode" column="stack_code" jdbcType="VARCHAR"/>
+        <result property="hostGroup" column="host_group" jdbcType="VARCHAR"/>
+        <result property="componentCode" column="component_code" jdbcType="VARCHAR"/>
+        <result property="isHa" column="is_ha" jdbcType="TINYINT"/>
+        <result property="state" column="state" jdbcType="VARCHAR"/>
+        <result property="createdBy" column="created_by" jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="updatedBy" column="updated_by" jdbcType="VARCHAR"/>
+        <result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 通过ID查询单条数据 -->
+    <select id="queryById" resultMap="AmbariComponentLayoutMap">
+        select
+        id,stack_code, service_code,host_group,component_code,is_ha,state, created_by,created_time,updated_by,updated_time
+        from ambari_component_layout
+        where id = #{id}
+    </select>
+
+    <!--分页查询指定行数据-->
+    <select id="queryAll" resultMap="AmbariComponentLayoutMap">
+        select
+        id,stack_code, service_code,host_group,component_code,is_ha,state, created_by,created_time,updated_by,updated_time
+        from ambari_component_layout
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+
+            <if test="stackCode != null and stackCode != ''">
+                and stack_code = #{stackCode}
+            </if>
+            <if test="serviceCode != null and serviceCode != ''">
+                and service_code = #{serviceCode}
+            </if>
+            <if test="hostGroup != null and hostGroup != ''">
+                and host_group = #{hostGroup}
+            </if>
+            <if test="componentCode != null and componentCode != ''">
+                and component_code = #{componentCode}
+            </if>
+            <if test="isHa != null ">
+                and is_ha = #{isHa}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryByHostGroupAndServiceCode" resultMap="AmbariComponentLayoutMap">
+        select
+        id,stack_code, service_code,host_group,component_code,is_ha,state, created_by,created_time,updated_by,updated_time
+        from ambari_component_layout
+        where stack_code = #{stackCode} and host_group = #{hostGroup}
+          and is_ha = #{isHa} and state = 'VALID' and service_code in
+        <foreach collection="serviceCode" item="code" index="index" open="(" close=")" separator=",">
+            #{code}
+        </foreach>
+    </select>
+
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from ambari_component_layout
+        <where>
+            <if test="id != null ">
+                and id = #{id}
+            </if>
+            <if test="stackCode != null and stackCode != ''">
+                and stack_code = #{stackCode}
+            </if>
+            <if test="serviceCode != null and serviceCode != ''">
+                and service_code = #{serviceCode}
+            </if>
+            <if test="hostGroup != null and hostGroup != ''">
+                and host_group = #{hostGroup}
+            </if>
+            <if test="componentCode != null and componentCode != ''">
+                and component_code = #{componentCode}
+            </if>
+            <if test="isHa != null ">
+                and is_ha = #{isHa}
+            </if>
+            <if test="createdBy != null and createdBy != ''">
+                and created_by = #{createdBy}
+            </if>
+            <if test="createdTime != null ">
+                and created_time = #{createdTime}
+            </if>
+            <if test="updatedBy != null and updatedBy != ''">
+                and updated_by = #{updatedBy}
+            </if>
+            <if test="updatedTime != null ">
+                and updated_time = #{updatedTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增数据-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into ambari_component_layout(id,stack_code, service_code,host_group,component_code,is_ha,state, created_by,created_time,updated_by,updated_time)
+        values (#{id},#{stackCode},#{serviceCode},#{hostGroup},#{componentCode},#{isHa},#{state}, #{createdBy},#{createdTime},#{updatedBy},#{updatedTime})
+    </insert>
+
+    <!-- 批量新增数据 -->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into ambari_component_layout(id,stack_code, service_code,host_group,component_code,is_ha,state, created_by,created_time,updated_by,updated_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id},#{stackCode},#{entity.serviceCode},#{entity.hostGroup},#{entity.componentCode},#{entity.isHa},#{entity.state},
+            #{entity.createdBy},#{entity.createdTime},#{entity.updatedBy},#{entity.updatedTime})
+        </foreach>
+    </insert>
+
+    <!-- 批量新增或按主键更新数据 -->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into ambari_component_layout(id,stack_code,service_code,host_group,component_code,is_ha,state,
+                                            created_by,created_time,updated_by,updated_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id},#{entity.stackCode},#{entity.serviceCode},#{entity.hostGroup},#{entity.componentCode},#{entity.isHa},#{entity.state},
+            #{entity.createdBy},#{entity.createdTime},#{entity.updatedBy},#{entity.updatedTime})
+        </foreach>
+        on duplicate key update
+        id=values(id),
+        service_code=values(service_code),
+        stack_code=values(stack_code),
+        host_group=values(host_group),
+        component_code=values(component_code),
+        is_ha=values(is_ha),
+        state=values(state),
+        created_by=values(created_by),
+        created_time=values(created_time),
+        updated_by=values(updated_by),
+        updated_time=values(updated_time)
+    </insert>
+
+    <!-- 更新数据 -->
+    <update id="update">
+        update ambari_component_layout
+        <set>
+            <if test="id != null ">
+                id = #{id},
+            </if>
+            <if test="stackCode != null and stackCode != ''">
+                stack_code = #{stackCode},
+            </if>
+            <if test="serviceCode != null and serviceCode != ''">
+                service_code = #{serviceCode},
+            </if>
+            <if test="hostGroup != null and hostGroup != ''">
+                host_group = #{hostGroup},
+            </if>
+            <if test="componentCode != null and componentCode != ''">
+                component_code = #{componentCode},
+            </if>
+            <if test="isHa != null ">
+                is_ha = #{isHa},
+            </if>
+            <if test="state != null and state != ''">
+                state = #{state},
+            </if>
+            <if test="createdBy != null and createdBy != ''">
+                created_by = #{createdBy},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime},
+            </if>
+            <if test="updatedBy != null and updatedBy != ''">
+                updated_by = #{updatedBy},
+            </if>
+            <if test="updatedTime != null">
+                updated_time = #{updatedTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from ambari_component_layout where id = #{id}
+    </delete>
+</mapper>

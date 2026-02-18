@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.InfoClusterVmSummaryLogMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoClusterVmSummaryLog">
+    <id column="cid" jdbcType="VARCHAR" property="cid" />
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="group_id" jdbcType="VARCHAR" property="groupId" />
+    <result column="change_reason" jdbcType="VARCHAR" property="changeReason" />
+    <result column="change_count" jdbcType="INTEGER" property="changeCount" />
+    <result column="before_change_count" jdbcType="INTEGER" property="beforeChangeCount" />
+    <result column="after_change_count" jdbcType="INTEGER" property="afterChangeCount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    cid, cluster_id, group_id, change_reason, change_count, before_change_count, after_change_count, 
+    create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from info_cluster_vm_summary_log
+    where cid = #{cid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from info_cluster_vm_summary_log
+    where cid = #{cid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.InfoClusterVmSummaryLog">
+    insert into info_cluster_vm_summary_log (cid, cluster_id, group_id, 
+      change_reason, change_count, before_change_count, 
+      after_change_count, create_time)
+    values (#{cid,jdbcType=VARCHAR}, #{clusterId,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR}, 
+      #{changeReason,jdbcType=VARCHAR}, #{changeCount,jdbcType=INTEGER}, #{beforeChangeCount,jdbcType=INTEGER}, 
+      #{afterChangeCount,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.InfoClusterVmSummaryLog">
+    insert into info_cluster_vm_summary_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cid != null">
+        cid,
+      </if>
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="changeReason != null">
+        change_reason,
+      </if>
+      <if test="changeCount != null">
+        change_count,
+      </if>
+      <if test="beforeChangeCount != null">
+        before_change_count,
+      </if>
+      <if test="afterChangeCount != null">
+        after_change_count,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cid != null">
+        #{cid,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="changeReason != null">
+        #{changeReason,jdbcType=VARCHAR},
+      </if>
+      <if test="changeCount != null">
+        #{changeCount,jdbcType=INTEGER},
+      </if>
+      <if test="beforeChangeCount != null">
+        #{beforeChangeCount,jdbcType=INTEGER},
+      </if>
+      <if test="afterChangeCount != null">
+        #{afterChangeCount,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.InfoClusterVmSummaryLog">
+    update info_cluster_vm_summary_log
+    <set>
+      <if test="clusterId != null">
+        cluster_id = #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="changeReason != null">
+        change_reason = #{changeReason,jdbcType=VARCHAR},
+      </if>
+      <if test="changeCount != null">
+        change_count = #{changeCount,jdbcType=INTEGER},
+      </if>
+      <if test="beforeChangeCount != null">
+        before_change_count = #{beforeChangeCount,jdbcType=INTEGER},
+      </if>
+      <if test="afterChangeCount != null">
+        after_change_count = #{afterChangeCount,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where cid = #{cid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.InfoClusterVmSummaryLog">
+    update info_cluster_vm_summary_log
+    set cluster_id = #{clusterId,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=VARCHAR},
+      change_reason = #{changeReason,jdbcType=VARCHAR},
+      change_count = #{changeCount,jdbcType=INTEGER},
+      before_change_count = #{beforeChangeCount,jdbcType=INTEGER},
+      after_change_count = #{afterChangeCount,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where cid = #{cid,jdbcType=VARCHAR}
+  </update>
+</mapper>

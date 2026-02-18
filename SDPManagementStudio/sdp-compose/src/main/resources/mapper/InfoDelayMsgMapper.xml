@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.InfoDelayMsgMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoDelayMsg">
+    <id column="msg_id" jdbcType="BIGINT" property="msgId" />
+    <result column="delay_second" jdbcType="INTEGER" property="delaySecond" />
+    <result column="client_name" jdbcType="VARCHAR" property="clientName" />
+    <result column="plan_send_time" jdbcType="TIMESTAMP" property="planSendTime" />
+    <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
+    <result column="msg_state" jdbcType="INTEGER" property="msgState" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.sunbox.domain.InfoDelayMsg">
+    <result column="msg_content" jdbcType="LONGVARCHAR" property="msgContent" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    msg_id, delay_second, client_name, plan_send_time, send_time, msg_state, created_time
+  </sql>
+  <sql id="Blob_Column_List">
+    msg_content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from info_delay_msg
+    where msg_id = #{msgId,jdbcType=BIGINT}
+  </select>
+  <select id="selectLost" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from info_delay_msg
+    where msg_state=0 and created_time > adddate(now(),-1)
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from info_delay_msg
+    where msg_id = #{msgId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="msgId" parameterType="com.sunbox.domain.InfoDelayMsg">
+    insert into info_delay_msg (msg_id, delay_second, client_name, 
+      plan_send_time, send_time, msg_state, 
+      created_time, msg_content)
+    values (#{msgId,jdbcType=BIGINT}, #{delaySecond,jdbcType=INTEGER}, #{clientName,jdbcType=VARCHAR}, 
+      #{planSendTime,jdbcType=TIMESTAMP}, #{sendTime,jdbcType=TIMESTAMP}, #{msgState,jdbcType=INTEGER}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{msgContent,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="msgId" parameterType="com.sunbox.domain.InfoDelayMsg">
+    insert into info_delay_msg
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="msgId != null">
+        msg_id,
+      </if>
+      <if test="delaySecond != null">
+        delay_second,
+      </if>
+      <if test="clientName != null">
+        client_name,
+      </if>
+      <if test="planSendTime != null">
+        plan_send_time,
+      </if>
+      <if test="sendTime != null">
+        send_time,
+      </if>
+      <if test="msgState != null">
+        msg_state,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="msgContent != null">
+        msg_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="msgId != null">
+        #{msgId,jdbcType=BIGINT},
+      </if>
+      <if test="delaySecond != null">
+        #{delaySecond,jdbcType=INTEGER},
+      </if>
+      <if test="clientName != null">
+        #{clientName,jdbcType=VARCHAR},
+      </if>
+      <if test="planSendTime != null">
+        #{planSendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendTime != null">
+        #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="msgState != null">
+        #{msgState,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="msgContent != null">
+        #{msgContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.InfoDelayMsg">
+    update info_delay_msg
+    <set>
+      <if test="delaySecond != null">
+        delay_second = #{delaySecond,jdbcType=INTEGER},
+      </if>
+      <if test="clientName != null">
+        client_name = #{clientName,jdbcType=VARCHAR},
+      </if>
+      <if test="planSendTime != null">
+        plan_send_time = #{planSendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendTime != null">
+        send_time = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="msgState != null">
+        msg_state = #{msgState,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="msgContent != null">
+        msg_content = #{msgContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where msg_id = #{msgId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sunbox.domain.InfoDelayMsg">
+    update info_delay_msg
+    set delay_second = #{delaySecond,jdbcType=INTEGER},
+      client_name = #{clientName,jdbcType=VARCHAR},
+      plan_send_time = #{planSendTime,jdbcType=TIMESTAMP},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
+      msg_state = #{msgState,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      msg_content = #{msgContent,jdbcType=LONGVARCHAR}
+    where msg_id = #{msgId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.InfoDelayMsg">
+    update info_delay_msg
+    set delay_second = #{delaySecond,jdbcType=INTEGER},
+      client_name = #{clientName,jdbcType=VARCHAR},
+      plan_send_time = #{planSendTime,jdbcType=TIMESTAMP},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
+      msg_state = #{msgState,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where msg_id = #{msgId,jdbcType=BIGINT}
+  </update>
+</mapper>

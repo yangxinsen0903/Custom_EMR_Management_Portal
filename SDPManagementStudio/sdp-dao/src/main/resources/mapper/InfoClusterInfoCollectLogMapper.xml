@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.InfoClusterInfoCollectLogMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoClusterInfoCollectLog">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="cluster_id" jdbcType="VARCHAR" property="clusterId"/>
+        <result column="cluster_name" jdbcType="VARCHAR" property="clusterName"/>
+        <result column="task_id" jdbcType="VARCHAR" property="taskId"/>
+        <result column="state" jdbcType="VARCHAR" property="state"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="finish_time" jdbcType="TIMESTAMP" property="finishTime"/>
+        <result column="file_path" jdbcType="VARCHAR" property="filePath"/>
+        <result column="host_ips" jdbcType="VARCHAR" property="hostIps"/>
+        <result column="ansible_transaction_id" jdbcType="VARCHAR" property="ansibleTransactionId"/>
+    </resultMap>
+    <insert id="insertSelective" parameterType="com.sunbox.domain.InfoClusterInfoCollectLog"  useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into info_cluster_info_collect_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="clusterId != null">
+                cluster_id,
+            </if>
+            <if test="clusterName != null">
+                cluster_name,
+            </if>
+            <if test="taskId != null">
+                task_id,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="finishTime != null">
+                finish_time,
+            </if>
+            <if test="filePath != null">
+                file_path,
+            </if>
+            <if test="hostIps != null">
+                host_ips,
+            </if>
+            <if test="ansibleTransactionId != null">
+                ansible_transaction_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="clusterId != null">
+                #{clusterId,jdbcType=VARCHAR},
+            </if>
+            <if test="clusterName != null">
+                #{clusterName,jdbcType=VARCHAR},
+            </if>
+            <if test="taskId != null">
+                #{taskId,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="finishTime != null">
+                #{finishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="filePath != null">
+                #{filePath,jdbcType=VARCHAR},
+            </if>
+            <if test="hostIps != null">
+                #{hostIps,jdbcType=VARCHAR},
+            </if>
+            <if test="ansibleTransactionId != null">
+                #{ansibleTransactionId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insert" parameterType="com.sunbox.domain.InfoClusterFullLogWithBLOBs">
+        insert into info_cluster_full_log (log_id, cluster_id, cluster_name,
+                                           activity_log_id, action_name, plan_id,
+                                           request_time, response_time, request_param,
+                                           response_body)
+        values (#{logId,jdbcType=BIGINT}, #{clusterId,jdbcType=VARCHAR}, #{clusterName,jdbcType=VARCHAR},
+                #{activityLogId,jdbcType=VARCHAR}, #{actionName,jdbcType=VARCHAR}, #{planId,jdbcType=VARCHAR},
+                #{requestTime,jdbcType=TIMESTAMP}, #{responseTime,jdbcType=TIMESTAMP}, #{requestParam,jdbcType=LONGVARCHAR},
+                #{responseBody,jdbcType=LONGVARCHAR})
+    </insert>
+    <update id="updateByPrimaryKey">
+        update info_cluster_info_collect_log
+        <set>
+            <if test="clusterId != null">
+                cluster_id = #{clusterId,jdbcType=VARCHAR},
+            </if>
+            <if test="clusterName != null">
+                cluster_name = #{clusterName,jdbcType=VARCHAR},
+            </if>
+            <if test="taskId != null">
+                task_id = #{taskId,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="finishTime != null">
+                finish_time = #{finishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="filePath != null">
+                file_path = #{filePath,jdbcType=VARCHAR},
+            </if>
+
+            <if test="hostIps != null">
+                host_ips = #{hostIps,jdbcType=VARCHAR},
+            </if>
+            <if test="ansibleTransactionId != null">
+                ansible_transaction_id = #{ansibleTransactionId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <sql id="Base_Column_List">
+        select id,cluster_id,cluster_name,task_id,state,create_time,finish_time,file_path,host_ips,ansible_transaction_id from info_cluster_info_collect_log
+    </sql>
+    <sql id="Base_Where">
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="clusterId != null">
+                and cluster_id = #{clusterId}
+            </if>
+            <if test="clusterName != null">
+                and cluster_name like CONCAT('%',#{clusterName},'%')
+            </if>
+            <if test="taskId != null">
+                and task_id = #{taskId}
+            </if>
+            <if test="state != null">
+                and state = #{state}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="finishTime != null">
+                and finish_time = #{finishTime}
+            </if>
+            <if test="filePath != null">
+                and file_path = #{filePath}
+            </if>
+
+            <if test="hostIps != null">
+                and host_ips = #{hostIps}
+            </if>
+            <if test="ansibleTransactionId != null">
+                and ansible_transaction_id = #{ansibleTransactionId}
+            </if>
+        </where>
+    </sql>
+    <select id="selectAll" resultType="com.sunbox.domain.InfoClusterInfoCollectLog" parameterType="com.sunbox.domain.InfoClusterInfoCollectLog">
+        <include refid="Base_Column_List"/>
+        <include refid="Base_Where"/>
+        order by create_time desc
+        <if test="pageIndex != null and pageSize != null">
+            limit #{pageIndex},#{pageSize}
+        </if>
+    </select>
+    <select id="count" resultType="java.lang.Long" parameterType="com.sunbox.domain.InfoClusterInfoCollectLog">
+        select count(*) from info_cluster_info_collect_log
+        <include refid="Base_Where"/>
+
+    </select>
+    <select id = "selectByPrimaryKey" resultType="com.sunbox.domain.InfoClusterInfoCollectLog" parameterType="java.lang.String">
+        <include refid="Base_Column_List"/>
+        where id = #{id}
+    </select>
+</mapper>

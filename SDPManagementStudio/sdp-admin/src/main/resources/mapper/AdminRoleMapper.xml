@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.igsadmin.mapper.AdminRoleDao">
+
+    <insert id="save" parameterType="com.sunbox.sdpadmin.core.model.AdminRole">
+        insert into vm_admin_role (`id`, `alias`, `role`, `createDate`, `status`)
+            values (#{id}, #{alias}, #{role}, #{createDate}, #{status});
+    </insert>
+
+    <update id="update" parameterType="com.sunbox.sdpadmin.core.model.AdminRole">
+        update vm_admin_role
+        set alias = #{alias},
+            role = #{role},
+            status = #{status}
+        where id = #{id}
+    </update>
+
+    <select id="getRoleById" parameterType="java.lang.String" resultType="com.sunbox.sdpadmin.core.model.AdminRole">
+        select id, alias, role, createDate, status from vm_admin_role  where id = #{id}
+    </select>
+
+    <select id="getRoleList" resultType="com.sunbox.sdpadmin.core.model.AdminRole">
+        select id, alias, role from vm_admin_role  where status = 1
+    </select>
+
+    <select id="pageList" parameterType="java.util.Map" resultType="com.sunbox.sdpadmin.core.model.AdminRole">
+        SELECT id, alias, role, createDate, status
+        FROM vm_admin_role AS t
+        <trim prefix="WHERE" prefixOverrides="AND | OR" >
+
+            <if test="role != null and role != ''">
+                and t.role like CONCAT(CONCAT('%', #{role}), '%')
+            </if>
+            <if test="status != null and status != ''">
+                and t.status =#{status}
+            </if>
+        </trim>
+        ORDER BY createDate desc
+        LIMIT #{page}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" parameterType="java.util.HashMap" resultType="int">
+        SELECT count(1)
+        FROM vm_admin_role AS t
+        <trim prefix="WHERE" prefixOverrides="AND | OR" >
+
+            <if test="role != null and role != ''">
+                and t.role like CONCAT(CONCAT('%', #{role}), '%')
+            </if>
+            <if test="status != null and status != ''">
+                and t.status =#{status}
+            </if>
+        </trim>
+    </select>
+
+</mapper>

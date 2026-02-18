@@ -1,0 +1,1 @@
+ALTER TABLE info_cluster_ambari_host_delete MODIFY COLUMN host_name varchar(200) NULL COMMENT '主机名';

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.azure.csu.tiger</groupId>
+	<artifactId>resource-manager</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>resource-manager</name>
+	<description>resource manager for sdp</description>
+
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>rm-base</module>
+		<module>rm-api</module>
+		<module>ansible-api</module>
+		<module>rm-task</module>
+        <module>ansible-agent</module>
+    </modules>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.7.18</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<java.version>17</java.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<spring.boot.version>2.7.18</spring.boot.version>
+		<spring.cloud.version>3.1.2</spring.cloud.version>
+		<rm.base.version>0.0.1-SNAPSHOT</rm.base.version>
+		<mysql.connector.version>8.0.30</mysql.connector.version>
+		<jooq.codegen.version>3.14.16</jooq.codegen.version>
+		<lombok.version>1.18.30</lombok.version>
+		<spring-cloud-azure.version>4.18.0</spring-cloud-azure.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!--	spring dependencies		-->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring.boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter</artifactId>
+				<version>${spring.boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-web</artifactId>
+				<version>${spring.boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-test</artifactId>
+				<version>${spring.boot.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-actuator</artifactId>
+				<version>${spring.boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-jooq</artifactId>
+				<version>${spring.boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-boot-starter</artifactId>
+				<version>3.0.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-bootstrap</artifactId>
+				<version>${spring.cloud.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.azure.spring</groupId>
+				<artifactId>spring-cloud-azure-dependencies</artifactId>
+				<version>${spring-cloud-azure.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>com.azure.csu.tiger</groupId>
+				<artifactId>rm-base</artifactId>
+				<version>${rm.base.version}</version>
+			</dependency>
+
+			<!--	third part or open source dependencies		-->
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql.connector.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jooq</groupId>
+				<artifactId>jooq-codegen</artifactId>
+				<version>${jooq.codegen.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jooq</groupId>
+				<artifactId>jooq-meta</artifactId>
+				<version>${jooq.codegen.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>1.18.30</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.16.1</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>2.11.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>33.2.0-jre</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents.client5</groupId>
+				<artifactId>httpclient5</artifactId>
+				<version>5.3.1</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>

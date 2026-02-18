@@ -1,0 +1,74 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin
+  labels:
+    app: admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin
+  template:
+    metadata:
+      labels:
+        app: admin
+    spec:
+      containers:
+        - name: admin
+          resources:
+            requests:
+              memory: 2Gi
+              cpu: 1
+            limits:
+              memory: 4Gi
+              cpu: 2
+          image: acrsbxdevaks.azurecr.io/admin:2.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 30460
+          env:
+            - name: REGSERVER_URL
+              value: http://igs:igscd@regserver:30000/eureka/
+          lifecycle:
+            preStop:
+              httpGet:
+                path: /maintain/stop
+                port: 30460
+                scheme: HTTP
+          livenessProbe:
+            httpGet:
+              path: /health/status
+              port: 30460
+              scheme: HTTP
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 30460
+              scheme: HTTP
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
+            periodSeconds: 5
+      terminationGracePeriodSeconds: 60
+      imagePullSecrets:
+        - name: acr-secret-pwd
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin
+spec:
+  type: ClusterIP
+  ports:
+    - port: 30460
+      targetPort: 30460
+  selector:
+    app: admin

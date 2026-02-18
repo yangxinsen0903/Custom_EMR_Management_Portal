@@ -1,0 +1,79 @@
+trigger:
+- none
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: Big Data Platform Customization/pipelines
+stages:
+- stage: build
+  jobs:
+  - template: build.yml@templates  # Template reference
+    parameters:
+      repoName: 'Sunbox-SDP-web'
+      branchName: '$(Build.SourceBranchName)'
+      buildSteps:
+      - task: Docker@2
+        displayName: 'sunbox-sdp-web'
+        inputs:
+          containerRegistry: 'acrisddevaks'
+          repository: 'sdp/sdp-web'
+          command: 'buildAndPush'
+          Dockerfile: 'Dockerfile'
+          buildContext: '.'
+          tags: |
+            $(build.buildnumber)
+            latest
+          addPipelineData: false
+
+- stage: sit
+  jobs:
+  - deployment: sit
+    displayName: sit
+    pool:
+      name: SDP-DEV-AGENT-POOL
+    environment: sit
+    variables:
+    - group: DEPLOY-SIT-COMMON
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: build.helm
+          - task: KubectlInstaller@0
+            inputs:
+              kubectlVersion: 'latest'
+            enabled: true
+          - task: HelmInstaller@1
+            inputs:
+              helmVersionToInstall: '3.1.2'         
+          
+          - task: replacetokens@3
+            inputs:
+              rootDirectory: '$(Pipeline.Workspace)/build.helm'
+              targetFiles: '**/*.yaml'
+              encoding: 'auto'
+              writeBOM: true
+              verbosity: 'detailed'
+              actionOnMissing: 'warn'
+              keepToken: false
+              tokenPrefix: '#{'
+              tokenSuffix: '}#'
+
+          - task: HelmDeploy@0
+            displayName: 'sdp-web-$(build.buildnumber)'
+            inputs:
+              connectionType: 'Azure Resource Manager'
+              azureSubscription: 'SDP DEV Subscription'
+              azureResourceGroup: 'isd-dev-aks'
+              kubernetesCluster: 'aks-isd-dev-aks'
+              useClusterAdmin: true
+              namespace: 'sdp-test-sit'
+              command: 'upgrade'
+              chartType: 'FilePath'
+              chartPath: '$(Pipeline.Workspace)/build.helm/sdp-web-$(build.buildnumber).tgz'
+              releaseName: 'sdp-web'
+              valueFile: '$(Pipeline.Workspace)/build.helm/values.yaml'
+              force: true
+              waitForExecution: false

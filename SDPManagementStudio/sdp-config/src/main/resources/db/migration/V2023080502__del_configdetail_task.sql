@@ -1,0 +1,1 @@
+delete from config_core where akey='vm.statement.task.time';

@@ -1,0 +1,6 @@
+server:
+  port: 30463
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+logging:
+  config: ${LOGBACK_FILE_PATH:classpath:log/logback-paas.xml}

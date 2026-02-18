@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpadmin.mapper.InfoClusterOperationPlanMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoClusterOperationPlan">
+        <!--@mbg.generated-->
+        <!--@Table info_cluster_operation_plan-->
+        <id column="plan_id" jdbcType="VARCHAR" property="planId"/>
+        <result column="cluster_id" jdbcType="VARCHAR" property="clusterId"/>
+        <result column="template_id" jdbcType="VARCHAR" property="templateId"/>
+        <result column="operation_type" jdbcType="VARCHAR" property="operationType"/>
+        <result column="beg_time" jdbcType="TIMESTAMP" property="begTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="createdby" jdbcType="VARCHAR" property="createdby"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="scaling_task_id" jdbcType="VARCHAR" property="scalingTaskId"/>
+        <result column="op_task_id" jdbcType="VARCHAR" property="opTaskId"/>
+        <result column="plan_name" jdbcType="VARCHAR" property="planName"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="percent" jdbcType="FLOAT" property="percent"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        plan_id, cluster_id, template_id, operation_type, beg_time, end_time, createdby, created_time,scaling_task_id,
+        op_task_id, plan_name,
+        state,
+        percent
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_operation_plan
+        where plan_id = #{planId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        <!--@mbg.generated-->
+        delete from info_cluster_operation_plan
+        where plan_id = #{planId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.sunbox.domain.InfoClusterOperationPlan">
+        <!--@mbg.generated-->
+        insert into info_cluster_operation_plan (plan_id, cluster_id, template_id,
+        operation_type, createdby, created_time
+        )
+        values (#{planId,jdbcType=VARCHAR}, #{clusterId,jdbcType=VARCHAR}, #{templateId,jdbcType=VARCHAR},
+        #{operationType,jdbcType=VARCHAR}, #{createdby,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.sunbox.domain.InfoClusterOperationPlan">
+        <!--@mbg.generated-->
+        insert into info_cluster_operation_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="planId != null">
+                plan_id,
+            </if>
+            <if test="clusterId != null">
+                cluster_id,
+            </if>
+            <if test="templateId != null">
+                template_id,
+            </if>
+            <if test="operationType != null">
+                operation_type,
+            </if>
+            <if test="begTime != null">
+                beg_time,
+            </if>
+            <if test="endTime != null">
+                end_time,
+            </if>
+            <if test="createdby != null">
+                createdby,
+            </if>
+            <if test="createdTime != null">
+                created_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="planId != null">
+                #{planId,jdbcType=VARCHAR},
+            </if>
+            <if test="clusterId != null">
+                #{clusterId,jdbcType=VARCHAR},
+            </if>
+            <if test="templateId != null">
+                #{templateId,jdbcType=VARCHAR},
+            </if>
+            <if test="operationType != null">
+                #{operationType,jdbcType=VARCHAR},
+            </if>
+            <if test="begTime != null">
+                #{begTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createdby != null">
+                #{createdby,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.InfoClusterOperationPlan">
+        <!--@mbg.generated-->
+        update info_cluster_operation_plan
+        <set>
+            <if test="clusterId != null">
+                cluster_id = #{clusterId,jdbcType=VARCHAR},
+            </if>
+            <if test="templateId != null">
+                template_id = #{templateId,jdbcType=VARCHAR},
+            </if>
+            <if test="operationType != null">
+                operation_type = #{operationType,jdbcType=VARCHAR},
+            </if>
+            <if test="createdby != null">
+                createdby = #{createdby,jdbcType=VARCHAR},
+            </if>
+            <if test="begTime != null">
+                beg_time = #{begTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where plan_id = #{planId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.InfoClusterOperationPlan">
+        <!--@mbg.generated-->
+        update info_cluster_operation_plan
+        set cluster_id = #{clusterId,jdbcType=VARCHAR},
+        template_id = #{templateId,jdbcType=VARCHAR},
+        operation_type = #{operationType,jdbcType=VARCHAR},
+        createdby = #{createdby,jdbcType=VARCHAR},
+        created_time = #{createdTime,jdbcType=TIMESTAMP}
+        where plan_id = #{planId,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectByObject" resultMap="BaseResultMap" parameterType="com.sunbox.domain.InfoClusterOperationPlan">
+        select
+        icop.plan_id, icop.cluster_id, icop.template_id, icop.operation_type, icop.beg_time, icop.end_time,
+        icop.createdby, icop.created_time,icop.scaling_task_id,
+        icop.plan_name,
+        icop.state,
+        icop.percent
+        from info_cluster_operation_plan icop left join conf_cluster cc on icop.cluster_id=cc.cluster_id
+        where 1=1
+        <if test="clusterId!=null and clusterId!=''">
+            and icop.cluster_id = #{clusterId,jdbcType=VARCHAR}
+        </if>
+        <if test="clusterName != null and clusterName != ''">
+            and cc.cluster_name like CONCAT('%',#{clusterName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="operationType !=null and operationType !=''">
+            and icop.operation_type= #{operationType,jdbcType=VARCHAR}
+        </if>
+        <if test="begTime!=null">
+            and icop.created_time <![CDATA[>=]]> #{begTime}
+        </if>
+        <if test="endTime!=null">
+            and icop.created_time <![CDATA[<]]> #{endTime}
+        </if>
+        <if test="planId != null and planId != ''">
+            and icop.plan_id = #{planId,jdbcType=VARCHAR}
+        </if>
+        <if test="scalingTaskId != null and scalingTaskId != ''">
+            and icop.scaling_task_id = #{scalingTaskId,jdbcType=VARCHAR}
+        </if>
+        <if test="planName!=null and planName!=''">
+            and icop.plan_name = #{planName,jdbcType=VARCHAR}
+        </if>
+        <if test="state!=null">
+            and icop.state = #{state,jdbcType=INTEGER}
+        </if>
+        order by icop.created_time desc
+        <if test="pageIndex!=null and pageSize!=null">
+            limit #{pageIndex}, #{pageSize}
+        </if>
+    </select>
+
+    <select id="countByObject" resultType="int" parameterType="com.sunbox.domain.InfoClusterOperationPlan">
+        select count(1)
+        from info_cluster_operation_plan icop left join conf_cluster cc on icop.cluster_id=cc.cluster_id
+        where 1=1
+        <if test="clusterId!=null and clusterId!=''">
+            and icop.cluster_id = #{clusterId,jdbcType=VARCHAR}
+        </if>
+        <if test="clusterName != null and clusterName != ''">
+            and cc.cluster_name like CONCAT('%',#{clusterName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="operationType !=null and operationType !=''">
+            and icop.operation_type= #{operationType,jdbcType=VARCHAR}
+        </if>
+        <if test="begTime!=null">
+            and icop.created_time <![CDATA[>=]]> #{begTime}
+        </if>
+        <if test="endTime!=null">
+            and icop.created_time <![CDATA[<]]> #{endTime}
+        </if>
+        <if test="planId != null and planId != ''">
+            and icop.plan_id = #{planId,jdbcType=VARCHAR}
+        </if>
+        <if test="scalingTaskId != null and scalingTaskId != ''">
+            and icop.scaling_task_id = #{scalingTaskId,jdbcType=VARCHAR}
+        </if>
+        <if test="planName!=null and planName!=''">
+            and icop.plan_name = #{planName,jdbcType=VARCHAR}
+        </if>
+        <if test="state!=null">
+            and icop.state = #{state,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="selectJobList" resultMap="BaseResultMap">
+        select
+        icop.plan_id, icop.cluster_id, icop.template_id, icop.operation_type, icop.beg_time, icop.end_time,
+        icop.createdby, icop.created_time,icop.scaling_task_id, icop.op_task_id,
+        icop.plan_name,
+        icop.state,
+        icop.percent
+        from info_cluster_operation_plan icop left join conf_cluster cc on icop.cluster_id=cc.cluster_id
+        where 1=1
+        <if test="record.clusterId!=null and record.clusterId!=''">
+            and icop.cluster_id = #{record.clusterId,jdbcType=VARCHAR}
+        </if>
+        <if test="record.clusterName != null and record.clusterName != ''">
+            and cc.cluster_name like CONCAT('%',#{record.clusterName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="record.operationType !=null and record.operationType !=''">
+            and icop.operation_type= #{record.operationType,jdbcType=VARCHAR}
+        </if>
+        <if test="record.begTime!=null">
+            and icop.created_time <![CDATA[>=]]> #{record.begTime}
+        </if>
+        <if test="record.endTime!=null">
+            and icop.created_time <![CDATA[<]]> #{record.endTime}
+        </if>
+        <if test="record.planId != null and record.planId != ''">
+            and icop.plan_id = #{record.planId,jdbcType=VARCHAR}
+        </if>
+        <if test="record.scalingTaskId != null and record.scalingTaskId != ''">
+            and icop.scaling_task_id = #{record.scalingTaskId,jdbcType=VARCHAR}
+        </if>
+        <if test="record.planName!=null and record.planName!=''">
+            and icop.plan_name = #{record.planName,jdbcType=VARCHAR}
+        </if>
+        <if test="record.startPercent!=null">
+            and icop.percent &gt;= #{record.startPercent,jdbcType=INTEGER}
+        </if>
+
+        <if test="record.endPercent!=null">
+            and icop.percent &lt;= #{record.endPercent,jdbcType=INTEGER}
+        </if>
+
+        <if test="record.state!=null">
+            and icop.state = #{record.state,jdbcType=INTEGER}
+        </if>
+
+        <if test="jobNames != null and jobNames.size > 0">
+            and icop.plan_name in
+            <foreach collection="jobNames" item="jobName" open="(" separator=", " close=")">
+                #{jobName}
+            </foreach>
+        </if>
+
+        order by icop.created_time desc
+        <if test="record.pageIndex!=null and record.pageSize!=null">
+            limit #{record.pageIndex}, #{record.pageSize}
+        </if>
+
+    </select>
+
+    <select id="countJobList" resultType="int" >
+        select count(1)
+        from info_cluster_operation_plan icop left join conf_cluster cc on icop.cluster_id=cc.cluster_id
+        where 1=1
+        <if test="record.clusterId!=null and record.clusterId!=''">
+            and icop.cluster_id = #{record.clusterId,jdbcType=VARCHAR}
+        </if>
+        <if test="record.clusterName != null and record.clusterName != ''">
+            and cc.cluster_name like CONCAT('%',#{record.clusterName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="record.operationType !=null and record.operationType !=''">
+            and icop.operation_type= #{record.operationType,jdbcType=VARCHAR}
+        </if>
+        <if test="record.begTime!=null">
+            and icop.created_time <![CDATA[>=]]> #{record.begTime}
+        </if>
+        <if test="record.endTime!=null">
+            and icop.created_time <![CDATA[<]]> #{record.endTime}
+        </if>
+        <if test="record.planId != null and record.planId != ''">
+            and icop.plan_id = #{record.planId,jdbcType=VARCHAR}
+        </if>
+        <if test="record.scalingTaskId != null and record.scalingTaskId != ''">
+            and icop.scaling_task_id = #{record.scalingTaskId,jdbcType=VARCHAR}
+        </if>
+        <if test="record.planName!=null and record.planName!=''">
+            and icop.plan_name = #{record.planName,jdbcType=VARCHAR}
+        </if>
+        <if test="record.state!=null">
+            and icop.state = #{record.state,jdbcType=INTEGER}
+        </if>
+        <if test="record.startPercent!=null">
+            and icop.percent &gt;= #{record.startPercent,jdbcType=INTEGER}
+        </if>
+
+        <if test="record.endPercent!=null">
+            and icop.percent &lt;= #{record.endPercent,jdbcType=INTEGER}
+        </if>
+        <if test="jobNames != null and jobNames.size > 0">
+            and icop.plan_name in
+            <foreach collection="jobNames" item="jobName" open="(" separator=", " close=")">
+                #{jobName}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="selectJoinCCAndActivityLog"
+            resultType="com.sunbox.sdpadmin.model.admin.response.SelectJoinCCAndActivityLogResult" parameterType="map">
+        select
+        planId, clusterId, clusterName, operationType, scalingTaskId, icop_cc.begTime as begTime, icop_cc.endTime as
+        endTime, icopal.state as state, createdTime
+        from
+        (select icop.plan_id as planId, icop.cluster_id as clusterId, cc.cluster_name as clusterName,
+        icop.operation_type as operationType,
+        icop.scaling_task_id as scalingTaskId, icop.beg_time as begTime, icop.end_time as endTime, icop.created_time as
+        createdTime
+        from info_cluster_operation_plan icop left join conf_cluster cc on icop.cluster_id = cc.cluster_id
+        where 1=1
+        <if test="clusterId!=null and clusterId!=''">
+            and icop.cluster_id = #{clusterId,jdbcType=VARCHAR}
+        </if>
+        <if test="clusterName != null and clusterName != ''">
+            and cc.cluster_name like CONCAT('%',#{clusterName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="operationType !=null and operationType !=''">
+            and icop.operation_type= #{operationType,jdbcType=VARCHAR}
+        </if>
+        <if test="begTime!=null">
+            and icop.created_time <![CDATA[>=]]> #{begTime}
+        </if>
+        <if test="endTime!=null">
+            and icop.created_time <![CDATA[<]]> #{endTime}
+        </if>
+        <if test="planId != null and planId != ''">
+            and icop.plan_id = #{planId,jdbcType=VARCHAR}
+        </if>
+        <if test="scalingTaskId != null and scalingTaskId != ''">
+            and icop.scaling_task_id = #{scalingTaskId,jdbcType=VARCHAR}
+        </if>
+        order by icop.created_time desc
+        <if test="pageIndex!=null and pageSize!=null">
+            limit #{pageIndex}, #{pageSize}
+        </if>
+        ) icop_cc
+        left join info_cluster_operation_plan_activity_log icopal on icop_cc.planId = icopal.plan_id
+        order by icopal.sort_no;
+    </select>
+    <select id="selectAllWithOutPlanName" resultType="com.sunbox.domain.InfoClusterOperationPlan">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_operation_plan
+        where plan_name is null or plan_name = ''
+    </select>
+    <select id="selectType" resultType="com.sunbox.domain.InfoClusterOperationPlan">
+        select
+        <include refid="Base_Column_List"/>
+        from info_cluster_operation_plan
+        where  cluster_id in
+        <foreach collection="clusterIdList"  item="clusterId" separator="," open="(" close=")">
+            #{clusterId,jdbcType=VARCHAR}
+        </foreach>
+        <if test="operationType!=null">
+            and operation_type = #{operationType,jdbcType=VARCHAR}
+        </if>
+
+    </select>
+</mapper>

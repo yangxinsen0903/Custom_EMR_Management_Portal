@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <springProperty scope="context" name="appname" source="spring.application.name"></springProperty>
+    <springProperty scope="context" default="./logs" name="logrootdir" source="logconfig.root"></springProperty>
+    <springProperty scope="context" default="info" name="loglevel" source="logconfig.level"></springProperty>
+    <springProperty scope="context" default="7" name="days" source="logconfig.days"></springProperty>
+    <contextName>${appname}</contextName>
+    <property name="logRoot" value="${logrootdir:-./logs}"/>
+    <property name="logpath" value="%d{yyyyMMdd}"></property>
+
+
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{50} %caller{0} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logRoot}/${appname}-log.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logRoot}/${appname}-${logpath}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <root level="${loglevel}">
+        <appender-ref ref="console"/>
+        <appender-ref ref="file"/>
+    </root>
+
+    <logger name="${appname}"/>
+
+</configuration>

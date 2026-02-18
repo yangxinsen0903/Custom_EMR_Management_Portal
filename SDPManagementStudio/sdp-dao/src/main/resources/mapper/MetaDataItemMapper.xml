@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.MetaDataItemMapper">
+
+    <resultMap type="com.sunbox.domain.MetaDataItem" id="MetaDataItemMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="region" column="region" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+        <result property="version" column="version" jdbcType="VARCHAR"/>
+        <result property="data" column="data" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="lastModifiedTime" column="last_modified_time" jdbcType="TIMESTAMP"/>
+        <result property="createUserId" column="create_user_id" jdbcType="VARCHAR"/>
+        <result property="lastModifiedId" column="last_modified_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="MetaDataItemMap">
+        select
+            id, region, type, version, data, remark, create_time, last_modified_time, create_user_id, last_modified_id
+        from meta_data_item
+        where id = #{id}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from meta_data_item
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="region != null and region != ''">
+                and region = #{region}
+            </if>
+            <if test="type != null and type != ''">
+                and type = #{type}
+            </if>
+            <if test="version != null and version != ''">
+                and version = #{version}
+            </if>
+            <if test="data != null and data != ''">
+                and data = #{data}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="lastModifiedTime != null">
+                and last_modified_time = #{lastModifiedTime}
+            </if>
+            <if test="createUserId != null">
+                and create_user_id = #{createUserId}
+            </if>
+            <if test="lastModifiedId != null">
+                and last_modified_id = #{lastModifiedId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into meta_data_item( region, type, version, data, remark, create_user_id, last_modified_id,create_time,last_modified_time)
+        values (#{region},#{type},#{version},#{data},#{remark},#{createUserId},#{lastModifiedId},#{createTime},#{lastModifiedTime})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update meta_data_item
+        <set>
+            <if test="region != null and region != ''">
+                region = #{region},
+            </if>
+            <if test="type != null and type != ''">
+                type = #{type},
+            </if>
+            <if test="version != null and version != ''">
+                version = #{version},
+            </if>
+            <if test="data != null and data != ''">
+                data = #{data},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="lastModifiedTime != null">
+                last_modified_time = #{lastModifiedTime},
+            </if>
+            <if test="createUserId != null">
+                create_user_id = #{createUserId},
+            </if>
+            <if test="lastModifiedId != null">
+                last_modified_id = #{lastModifiedId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from meta_data_item where id = #{id}
+    </delete>
+
+
+    <select id="selectMetaDataList" parameterType="com.sunbox.domain.MetaDataItem" resultMap="MetaDataItemMap">
+        select
+        id, region, type, version, data, remark, create_time, last_modified_time, create_user_id, last_modified_id
+        from meta_data_item
+        <where>
+            <if test="type != null and type != ''">
+                AND type = #{type}
+            </if>
+            <if test="region != null and region != ''">
+                AND region = #{region}
+            </if>
+            <if test="version != null and version != ''">
+                AND version = #{version}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectMetaData" parameterType="com.sunbox.domain.MetaDataItem" resultType="string">
+        select
+        data
+        from meta_data_item
+        <where>
+            <if test="type != null and type != ''">
+                AND type = #{type}
+            </if>
+            <if test="region != null and region != ''">
+                AND region = #{region}
+            </if>
+            <if test="version != null and version != ''">
+                AND version = #{version}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>
+

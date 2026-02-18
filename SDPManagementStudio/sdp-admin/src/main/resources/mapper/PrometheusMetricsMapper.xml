@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpadmin.mapper.PrometheusMetricsMapper">
+    <select id="statisticsSpotBuyFailureRate" parameterType="map" resultType="java.util.Map">
+        select cluster_id, cluster_name, group_name, sku, errcode,
+            count(*) as total_count,
+            count(if(state = 2, 1, null)) as success_count,
+            count(if(state &lt;> 2, 1, null)) as fail_count,
+            case cluster_state
+                when -1 then 'deleting'
+                when -2 then 'deleted'
+                when 2 then 'running'
+                when -9 then 'failed'
+                when 1 then 'creating'
+            end as state
+        from (
+            SELECT cc.cluster_name , cc.state as cluster_state, plan.cluster_id, plan.beg_time ,
+                plan.end_time , plan.scaling_task_id , plan.percent , plan.state,
+                task.group_id , vm.group_name ,vm.sku,
+                if(plan.percent &lt; 14, 1, if(plan.state &lt;> 2, 99, null)) errcode
+            FROM info_cluster_operation_plan plan
+                join info_spot_group_scale_task task on plan.scaling_task_id = task.task_id
+                join conf_cluster_vm vm on vm.group_id = task.group_id  and vm.cluster_id = plan.cluster_id
+                join conf_cluster cc on plan .cluster_id = cc.cluster_id
+            where plan_name = '竞价买入' and cc.state = 2
+        ) t
+        group by cluster_id, cluster_name, group_name, sku, errcode, cluster_state
+    </select>
+
+    <select id="statisticsSpotEvictRate" parameterType="map" resultType="java.util.Map">
+        select cluster.cluster_id, cluster.cluster_name as cluster_name, icv.group_name ,
+               icv.sku_name sku_name,
+               'buy' as stat_type,
+               count(*) as buy_count,
+               null as reason_code,
+               0 as delete_count,
+               case cluster.state
+                   when -1 then 'deleting'
+                   when -2 then 'deleted'
+                   when 2 then 'running'
+                   when -9 then 'failed'
+                   when 1 then 'creating'
+                   end as state
+        from info_cluster_vm icv left join conf_cluster cluster on icv.cluster_id = cluster.cluster_id
+        where icv.vm_role = 'task' and icv.purchase_type = 2 and icv.state = 1 and cluster.state = 2
+        group by cluster.cluster_id, cluster.cluster_name, icv.group_name, icv.sku_name, cluster.state
+        union all
+        select cc.cluster_id, cc.cluster_name as cluster_name, icv.group_name,
+               icv.sku_name as sku_name,
+               'delete' as stat_type,
+               0 as buy_count,
+               if (reason like '%逐出事件%', 'event', if(reason like '%探活失败%', 'probe', 'other')) as reason_code,
+               count(distinct item.cluster_id, item.vm_name) as delete_count,
+               case cc.state
+                   when -1 then 'deleting'
+                   when -2 then 'deleted'
+                   when 2 then 'running'
+                   when -9 then 'failed'
+                   when 1 then 'creating'
+                   end as state
+        from info_spot_group_scale_task_item item
+                 left join info_cluster_vm icv on item.cluster_id  = icv.cluster_id  and item.vm_name = icv.vm_name
+                 left join conf_cluster cc on item.cluster_id = cc.cluster_id
+        where reason not like '%状态已为unknown%' and cc.state = 2
+        group by cc.cluster_id, cc.cluster_name , icv.group_name , icv.sku_name, reason_code, cc.state
+    </select>
+
+    <select id="statisticsAverageBuyTime" parameterType="map" resultType="java.util.Map">
+        select cluster_id , cluster_name, group_name, sku_name, count(*) as total, sum(time_second) as time_second, 'running' as state
+        from (
+                 select distinct icv.scaleout_task_id, icv.cluster_id, cc.cluster_name,
+                                 icv.group_name , icv.sku_name , TIMESTAMPDIFF(second, create_begtime , create_endtime) as time_second
+                 from info_cluster_vm icv join conf_cluster cc on icv.cluster_id = cc.cluster_id
+                 where purchase_type =2 and cc.state = 2 and scaleout_task_id is not null
+             ) t
+        group by cluster_id, cluster_name, group_name, sku_name;
+    </select>
+
+    <select id="statisticsClusterResource" parameterType="map" resultType="java.util.Map">
+        select icv.cluster_id , cc.cluster_name , icv.group_name, icv.sku_name, if(icv.purchase_type=1,'ondemand', 'spot') as purchase_type ,
+               count(1) as vm_count, sum(ccv.vcpus ) as cpu_count
+        from info_cluster_vm icv left join conf_cluster cc on icv.cluster_id = cc.cluster_id
+                                 left join conf_cluster_vm ccv on icv.group_id = ccv.group_id
+        where icv.state = 1 and cc.state = 2 and (icv.maintenance_mode is null or icv.maintenance_mode = 0)
+        group by icv.cluster_id , cc.cluster_name, icv.group_name , icv.sku_name, icv.purchase_type ;
+    </select>
+
+    <select id="getScaleInFailureResultReport" resultType="java.util.Map">
+        select p.plan_name,
+        case vm.purchase_type
+        when 1 then '按需'
+        when 2 then '竞价'
+        end as purchase_type,
+        count(distinct p.plan_id) as task_count,
+        count(*) as vm_count,
+        sum(vm.vcpus) as cpu_count
+        from (
+        select plan.cluster_id, plan.plan_id, plan_name, scaling_task_id
+        from info_cluster_operation_plan plan
+        where plan.state in (-1, -2)
+        and plan_name in ('弹性缩容', '手动缩容', '竞价逐出')
+        and plan.end_time between #{beginTime,jdbcType=TIMESTAMP} and  #{endTime,jdbcType=TIMESTAMP}
+        ) p join
+        (
+        select icv.cluster_id, icv.purchase_type, icv.scalein_task_id, ccv.vcpus
+        from info_cluster_vm icv left join conf_cluster_vm ccv on icv.cluster_id = ccv.cluster_id and icv.group_name = ccv.group_name
+        where icv.scalein_task_id is not null and icv.state in (1, -99)
+        ) vm
+
+        on p.scaling_task_id = vm.scalein_task_id and p.cluster_id = vm.cluster_id
+        group by p.plan_name, vm.purchase_type
+        union all
+        select
+        t.plan_name,
+        case icv.purchase_type
+        when 1 then '按需'
+        when 2 then '竞价'
+        end as purchase_type,
+        count(distinct t.plan_id) as task_count,
+        count(*) as vm_count,
+        sum(icv.vcpus) as cpu_count
+
+        from info_cluster_vm_reject reject join (
+        select plan.cluster_id, plan.op_task_id as plan_id, plan_name, scaling_task_id
+        from info_cluster_operation_plan plan
+        where plan.state in (-1, -2)
+        and plan_name in ('清理异常VM')
+        and plan.end_time between #{beginTime,jdbcType=TIMESTAMP} and  #{endTime,jdbcType=TIMESTAMP}
+        ) t on reject.plan_id = t.plan_id
+        join (
+        select icv.cluster_id, icv.purchase_type, icv.vm_name, ccv.vcpus
+        from info_cluster_vm icv left join conf_cluster_vm ccv on icv.cluster_id = ccv.cluster_id and icv.group_name = ccv.group_name
+        where icv.state in (1, -99)
+        ) icv  on reject.cluster_id = icv.cluster_id and reject.vm_name = icv.vm_name
+        group by t.plan_name, icv.purchase_type;
+    </select>
+
+
+</mapper>

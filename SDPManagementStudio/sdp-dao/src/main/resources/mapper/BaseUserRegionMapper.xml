@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.BaseUserRegionMapper">
+
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.BaseUserRegion">
+        <id column="user_id" jdbcType="VARCHAR" property="userId" />
+        <result column="region" jdbcType="VARCHAR" property="region" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_id, region
+    </sql>
+
+    <insert id="insert" parameterType="com.sunbox.domain.BaseUserRegion">
+        insert into base_user_region (user_id, region )
+        values (#{userId,jdbcType=VARCHAR}, #{region,jdbcType=VARCHAR} )
+    </insert>
+
+    <insert id="batchInsertRegion">
+        insert into base_user_region(user_id,region)
+        values
+        <foreach collection="userRegionList" item="user" separator=",">
+            (#{user.userId},#{user.region})
+        </foreach>
+    </insert>
+
+    <delete id="deleteUserRegion" parameterType="java.lang.String">
+        delete from base_user_region
+        where user_id = #{userId,jdbcType=VARCHAR}
+
+    </delete>
+
+    <select id="selectRegionByUserIds" resultType="java.util.Map">
+        select
+        userregion.id id,
+        userregion.user_id userId,
+        userregion.region regionId,
+        region.id rId,
+        region.region region,
+        region.version version,
+        region.data data,
+        region.remark remark,
+        region.type type,
+        region.create_time createTime,
+        region.last_modified_time  lastModifiedTime
+        from base_user_region userregion
+        left join meta_data_item region on userregion.region=region.region and region.type='SupportedRegionList'
+        where
+        userregion.user_id IN
+        <foreach collection="userIdList" open="(" separator="," close=")" item="item" index="index">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectRegionSimpleByUserIds" resultType="java.util.Map">
+        select
+        userregion.user_id userId,
+        region.id rId,
+        region.region region,
+        region.type type,
+        from base_user_region userregion
+        left join meta_data_item region on userregion.region=region.id
+        where
+        userregion.user_id IN
+        <foreach collection="userIdList" open="(" separator="," close=")" item="item" index="index">
+            #{item}
+        </foreach>
+    </select>
+    <select id="listUserRegion" resultType="java.lang.String">
+        select
+        distinct region
+        from base_user_region
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

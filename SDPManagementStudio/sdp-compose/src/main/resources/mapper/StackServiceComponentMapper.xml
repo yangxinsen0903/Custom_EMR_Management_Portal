@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.StackServiceComponentMapper">
+    <resultMap type="com.sunbox.domain.ambari.StackServiceComponent" id="StackServiceComponentMap">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="serviceId" column="service_id" jdbcType="BIGINT"/>
+        <result property="code" column="code" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="defaultPath" column="default_path" jdbcType="VARCHAR"/>
+        <result property="mappingCode" column="mapping_code" jdbcType="VARCHAR"/>
+        <result property="createdBy" column="created_by" jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="updatedBy" column="updated_by" jdbcType="VARCHAR"/>
+        <result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 通过ID查询单条数据 -->
+    <select id="queryById" resultMap="StackServiceComponentMap">
+        select
+        id,service_id,code,name,default_path,mapping_code,created_by,created_time,updated_by,updated_time
+        from stack_service_component
+        where id = #{id}
+    </select>
+
+    <!--分页查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="StackServiceComponentMap">
+        select
+        id,service_id,code,name,default_path,mapping_code,created_by,created_time,updated_by,updated_time
+        from stack_service_component
+        <where>
+            <if test="stackServiceComponent.id != null ">
+                and id = #{stackServiceComponent.id}
+            </if>
+            <if test="stackServiceComponent.serviceId != null ">
+                and service_id = #{stackServiceComponent.serviceId}
+            </if>
+            <if test="stackServiceComponent.code != null and stackServiceComponent.code != ''">
+                and code = #{stackServiceComponent.code}
+            </if>
+            <if test="stackServiceComponent.name != null and stackServiceComponent.name != ''">
+                and name = #{stackServiceComponent.name}
+            </if>
+            <if test="stackServiceComponent.defaultPath != null and stackServiceComponent.defaultPath != ''">
+                and default_path = #{stackServiceComponent.defaultPath}
+            </if>
+            <if test="stackServiceComponent.mappingCode != null and stackServiceComponent.mappingCode != ''">
+                and mapping_code = #{stackServiceComponent.mappingCode}
+            </if>
+            <if test="stackServiceComponent.createdBy != null and stackServiceComponent.createdBy != ''">
+                and created_by = #{stackServiceComponent.createdBy}
+            </if>
+            <if test="stackServiceComponent.createdTime != null ">
+                and created_time = #{stackServiceComponent.createdTime}
+            </if>
+            <if test="stackServiceComponent.updatedBy != null and stackServiceComponent.updatedBy != ''">
+                and updated_by = #{stackServiceComponent.updatedBy}
+            </if>
+            <if test="stackServiceComponent.updatedTime != null ">
+                and updated_time = #{stackServiceComponent.updatedTime}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from stack_service_component
+        <where>
+            <if test="id != null ">
+                and id = #{id}
+            </if>
+            <if test="serviceId != null ">
+                and service_id = #{serviceId}
+            </if>
+            <if test="code != null and code != ''">
+                and code = #{code}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="defaultPath != null and defaultPath != ''">
+                and default_path = #{defaultPath}
+            </if>
+            <if test="mappingCode != null and mappingCode != ''">
+                and mapping_code = #{mappingCode}
+            </if>
+            <if test="createdBy != null and createdBy != ''">
+                and created_by = #{createdBy}
+            </if>
+            <if test="createdTime != null ">
+                and created_time = #{createdTime}
+            </if>
+            <if test="updatedBy != null and updatedBy != ''">
+                and updated_by = #{updatedBy}
+            </if>
+            <if test="updatedTime != null ">
+                and updated_time = #{updatedTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增数据-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into stack_service_component(id,service_id,code,name,default_path,mapping_code,created_by,created_time,updated_by,updated_time)
+        values (#{id},#{serviceId},#{code},#{name},#{defaultPath},#{mappingCode},#{createdBy},#{createdTime},#{updatedBy},#{updatedTime})
+    </insert>
+
+    <!-- 批量新增数据 -->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into stack_service_component(id,service_id,code,name,default_path,mapping_code,created_by,created_time,updated_by,updated_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id},#{entity.serviceId},#{entity.code},#{entity.name},#{entity.defaultPath},#{entity.mappingCode},#{entity.createdBy},#{entity.createdTime},#{entity.updatedBy},#{entity.updatedTime})
+        </foreach>
+    </insert>
+
+    <!-- 批量新增或按主键更新数据 -->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into stack_service_component(id,service_id,code,name,default_path,mapping_code,created_by,created_time,updated_by,updated_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id},#{entity.serviceId},#{entity.code},#{entity.name},#{entity.defaultPath},#{entity.mappingCode},#{entity.createdBy},#{entity.createdTime},#{entity.updatedBy},#{entity.updatedTime})
+        </foreach>
+        on duplicate key update
+        id=values(id),
+        service_id=values(service_id),
+        code=values(code),
+        name=values(name),
+        default_path=values(default_path),
+        mapping_code=values(mapping_code),
+        created_by=values(created_by),
+        created_time=values(created_time),
+        updated_by=values(updated_by),
+        updated_time=values(updated_time)
+    </insert>
+
+    <!-- 更新数据 -->
+    <update id="update">
+        update stack_service_component
+        <set>
+            <if test="id != null ">
+                id = #{id},
+            </if>
+            <if test="serviceId != null ">
+                service_id = #{serviceId},
+            </if>
+            <if test="code != null and code != ''">
+                code = #{code},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="defaultPath != null and defaultPath != ''">
+                default_path = #{defaultPath},
+            </if>
+            <if test="mappingCode != null and mappingCode != ''">
+                mapping_code = #{mappingCode},
+            </if>
+            <if test="createdBy != null and createdBy != ''">
+                created_by = #{createdBy},
+            </if>
+            <if test="createdTime != null ">
+                created_time = #{createdTime},
+            </if>
+            <if test="updatedBy != null and updatedBy != ''">
+                updated_by = #{updatedBy},
+            </if>
+            <if test="updatedTime != null ">
+                updated_time = #{updatedTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from stack_service_component where id = #{id}
+    </delete>
+</mapper>

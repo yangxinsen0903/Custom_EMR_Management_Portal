@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.InfoThirdApiFailedLogMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoThirdApiFailedLog">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="api_name" jdbcType="VARCHAR" property="apiName" />
+    <result column="api_url" jdbcType="VARCHAR" property="apiUrl" />
+    <result column="failed_type" jdbcType="INTEGER" property="failedType" />
+    <result column="time_out" jdbcType="INTEGER" property="timeOut" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.sunbox.domain.InfoThirdApiFailedLogWithBLOBs">
+    <result column="api_key_param" jdbcType="LONGVARCHAR" property="apiKeyParam" />
+    <result column="exception_info" jdbcType="LONGVARCHAR" property="exceptionInfo" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, api_name, api_url, failed_type, time_out, created_time
+  </sql>
+  <sql id="Blob_Column_List">
+    api_key_param, exception_info
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from info_third_api_failed_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="getListByParam" resultType="com.sunbox.domain.InfoThirdApiFailedLog">
+    select
+    <include refid="Base_Column_List" />
+    from info_third_api_failed_log
+    where 1=1
+    <if test="apiName != null">
+      and api_name = #{apiName,jdbcType=VARCHAR}
+    </if>
+    <if test="failedType != null">
+      and failed_type = #{failedType,jdbcType=INTEGER}
+    </if>
+    <if test="begTime !=null">
+      and created_time > #{begTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="endTime !=null">
+      and created_time &lt; #{endTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="apiKeyParam !=null">
+      and api_key_param = #{apiKeyParam,jdbcType=LONGVARCHAR}
+    </if>
+    <if test="region !=null and region != ''">
+      and region = #{region}
+    </if>
+    order by created_time desc
+    <if test="pageIndex !=null and pageSize != null">
+      limit #{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </if>
+
+  </select>
+  <select id="getCountByParam" resultType="java.lang.Integer">
+    select
+    count(*)
+    from info_third_api_failed_log
+    where 1=1
+    <if test="apiName != null">
+      and api_name = #{apiName,jdbcType=VARCHAR}
+    </if>
+    <if test="failedType != null">
+      and failed_type = #{failedType,jdbcType=INTEGER}
+    </if>
+    <if test="begTime !=null">
+      and created_time > #{begTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="endTime !=null">
+      and created_time &lt; #{endTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="apiKeyParam !=null">
+      and api_key_param = #{apiKeyParam,jdbcType=LONGVARCHAR}
+    </if>
+    <if test="region !=null and region != ''">
+      and region = #{region}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from info_third_api_failed_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.InfoThirdApiFailedLogWithBLOBs">
+    insert into info_third_api_failed_log (id, api_name, api_url, 
+      failed_type, time_out, created_time, 
+      api_key_param, exception_info)
+    values (#{id,jdbcType=BIGINT}, #{apiName,jdbcType=VARCHAR}, #{apiUrl,jdbcType=VARCHAR}, 
+      #{failedType,jdbcType=INTEGER}, #{timeOut,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{apiKeyParam,jdbcType=LONGVARCHAR}, #{exceptionInfo,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.InfoThirdApiFailedLogWithBLOBs">
+    insert into info_third_api_failed_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="apiName != null">
+        api_name,
+      </if>
+      <if test="apiUrl != null">
+        api_url,
+      </if>
+      <if test="failedType != null">
+        failed_type,
+      </if>
+      <if test="timeOut != null">
+        time_out,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="apiKeyParam != null">
+        api_key_param,
+      </if>
+      <if test="exceptionInfo != null">
+        exception_info,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="apiName != null">
+        #{apiName,jdbcType=VARCHAR},
+      </if>
+      <if test="apiUrl != null">
+        #{apiUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="failedType != null">
+        #{failedType,jdbcType=INTEGER},
+      </if>
+      <if test="timeOut != null">
+        #{timeOut,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="apiKeyParam != null">
+        #{apiKeyParam,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="exceptionInfo != null">
+        #{exceptionInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.InfoThirdApiFailedLogWithBLOBs">
+    update info_third_api_failed_log
+    <set>
+      <if test="apiName != null">
+        api_name = #{apiName,jdbcType=VARCHAR},
+      </if>
+      <if test="apiUrl != null">
+        api_url = #{apiUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="failedType != null">
+        failed_type = #{failedType,jdbcType=INTEGER},
+      </if>
+      <if test="timeOut != null">
+        time_out = #{timeOut,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="apiKeyParam != null">
+        api_key_param = #{apiKeyParam,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="exceptionInfo != null">
+        exception_info = #{exceptionInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sunbox.domain.InfoThirdApiFailedLogWithBLOBs">
+    update info_third_api_failed_log
+    set api_name = #{apiName,jdbcType=VARCHAR},
+      api_url = #{apiUrl,jdbcType=VARCHAR},
+      failed_type = #{failedType,jdbcType=INTEGER},
+      time_out = #{timeOut,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      api_key_param = #{apiKeyParam,jdbcType=LONGVARCHAR},
+      exception_info = #{exceptionInfo,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.InfoThirdApiFailedLog">
+    update info_third_api_failed_log
+    set api_name = #{apiName,jdbcType=VARCHAR},
+      api_url = #{apiUrl,jdbcType=VARCHAR},
+      failed_type = #{failedType,jdbcType=INTEGER},
+      time_out = #{timeOut,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

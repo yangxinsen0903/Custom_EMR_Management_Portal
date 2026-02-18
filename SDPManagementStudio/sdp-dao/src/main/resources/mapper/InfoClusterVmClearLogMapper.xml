@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.InfoClusterVmClearLogMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoClusterVmClearLog">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="plan_id" jdbcType="VARCHAR" property="planId" />
+    <result column="vm_name" jdbcType="VARCHAR" property="vmName" />
+    <result column="vm_role" jdbcType="VARCHAR" property="vmRole"/>
+    <result column="job_id" jdbcType="VARCHAR" property="jobId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, cluster_id, plan_id, vm_name, vm_role,job_id, status, created_time, modified_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from info_cluster_vm_clear_log
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByPlanId" resultType="com.sunbox.domain.InfoClusterVmClearLog">
+    select
+    <include refid="Base_Column_List" />
+    from info_cluster_vm_clear_log
+    where plan_id = #{planId,jdbcType=VARCHAR}
+  </select>
+  <select id="queryNeedClearVmLog" resultType="com.sunbox.domain.InfoClusterVmClearLog">
+    select cl.* from info_cluster_vm_clear_log cl
+    inner join info_cluster_operation_plan icop  on cl.plan_id = icop.plan_id and icop.state in (-1,-2)
+    inner join info_cluster_vm icv on cl.cluster_id = icv.cluster_id and cl.vm_name=icv.vm_name and icv.state &lt;&gt; -1
+    where cl.status IN(0,-1) and cl.vm_role='task'
+  </select>
+  <select id="queryDeletingVMTask" resultType="com.sunbox.domain.InfoClusterVmClearLog">
+    select * from info_cluster_vm_clear_log
+    where status = 1 and job_id is not null
+  </select>
+    <select id="queryExistClearLogs" resultType="com.sunbox.domain.InfoClusterVmClearLog">
+      select * from info_cluster_vm_clear_log
+      where cluster_id=#{clusterId,jdbcType=VARCHAR} and vm_name in
+      <foreach collection="vmNames"  item="vmName" separator="," open="(" close=")">
+       #{vmName,jdbcType=VARCHAR}
+      </foreach>
+    </select>
+    <select id="selectInfoClusterVmsByPlanId" resultType="com.sunbox.domain.InfoClusterVm">
+      select icv.* from info_cluster_vm_clear_log log
+      inner join info_cluster_vm icv on log.cluster_id=icv.cluster_id and log.vm_name=icv.vm_name
+      where log.plan_id = #{planId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from info_cluster_vm_clear_log
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.InfoClusterVmClearLog">
+    insert into info_cluster_vm_clear_log (ID, cluster_id, plan_id, 
+      vm_name,vm_role, job_id, status,
+      created_time, modified_time)
+    values (#{id,jdbcType=BIGINT}, #{clusterId,jdbcType=VARCHAR}, #{planId,jdbcType=VARCHAR}, 
+      #{vmName,jdbcType=VARCHAR},#{vmRole,jdbcType=VARCHAR}, #{jobId,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.InfoClusterVmClearLog">
+    insert into info_cluster_vm_clear_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="planId != null">
+        plan_id,
+      </if>
+      <if test="vmName != null">
+        vm_name,
+      </if>
+      <if test="vmRole != null">
+        vm_role,
+      </if>
+      <if test="jobId != null">
+        job_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="planId != null">
+        #{planId,jdbcType=VARCHAR},
+      </if>
+      <if test="vmName != null">
+        #{vmName,jdbcType=VARCHAR},
+      </if>
+      <if test="vmRole != null">
+        #{vmRole,jdbcType=VARCHAR},
+      </if>
+      <if test="jobId != null">
+        #{jobId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertBatchVMClearLog" parameterType="List">
+    insert into info_cluster_vm_clear_log (cluster_id, plan_id, vm_name,vm_role, status, created_time,job_id,modified_time)
+    values
+    <foreach collection="logs"  item="log" separator=",">
+      (#{log.clusterId,jdbcType=VARCHAR}, #{log.planId,jdbcType=VARCHAR}, #{log.vmName,jdbcType=VARCHAR},
+      #{log.vmRole,jdbcType=VARCHAR},
+      #{log.status,jdbcType=INTEGER}, #{log.createdTime,jdbcType=TIMESTAMP},#{log.jobId,jdbcType=VARCHAR},
+       #{log.modifiedTime,jdbcType=TIMESTAMP}
+      )
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.InfoClusterVmClearLog">
+    update info_cluster_vm_clear_log
+    <set>
+      <if test="clusterId != null">
+        cluster_id = #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="planId != null">
+        plan_id = #{planId,jdbcType=VARCHAR},
+      </if>
+      <if test="vmName != null">
+        vm_name = #{vmName,jdbcType=VARCHAR},
+      </if>
+      <if test="vmRole != null">
+        vm_role = #{vmRole,jdbcType=VARCHAR},
+      </if>
+      <if test="jobId != null">
+        job_id = #{jobId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.InfoClusterVmClearLog">
+    update info_cluster_vm_clear_log
+    set cluster_id = #{clusterId,jdbcType=VARCHAR},
+      plan_id = #{planId,jdbcType=VARCHAR},
+      vm_name = #{vmName,jdbcType=VARCHAR},
+      vm_role = #{vmRole,jdbcType=VARCHAR},
+      job_id = #{jobId,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

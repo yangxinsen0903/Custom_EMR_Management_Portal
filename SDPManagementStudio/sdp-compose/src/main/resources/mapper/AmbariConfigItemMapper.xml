@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.AmbariConfigItemMapper">
+    <resultMap type="com.sunbox.domain.ambari.AmbariConfigItem" id="AmbariConfigItemMap">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="stackCode" column="stack_code" jdbcType="VARCHAR"/>
+        <result property="serviceCode" column="service_code" jdbcType="VARCHAR"/>
+        <result property="componentCode" column="component_code" jdbcType="VARCHAR"/>
+        <result property="configTypeCode" column="config_type_code" jdbcType="VARCHAR"/>
+        <result property="key" column="key" jdbcType="VARCHAR"/>
+        <result property="value" column="value" jdbcType="CLOB"/>
+        <result property="isContentProp" column="is_content_prop" jdbcType="TINYINT"/>
+        <result property="isDynamic" column="is_dynamic" jdbcType="TINYINT"/>
+        <result property="dynamicType" column="dynamic_type" jdbcType="VARCHAR"/>
+        <result property="itemType" column="item_type" jdbcType="VARCHAR"/>
+        <result property="state" column="state" jdbcType="VARCHAR"/>
+        <result property="createdBy" column="created_by" jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="updatedBy" column="updated_by" jdbcType="VARCHAR"/>
+        <result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 通过ID查询单条数据 -->
+    <select id="queryById" resultMap="AmbariConfigItemMap">
+        select id,stack_code,service_code,component_code,config_type_code,`key`,`value`,is_content_prop,is_dynamic,dynamic_type, `item_type`,
+        state,created_by,created_time,updated_by,updated_time
+        from ambari_config_item
+        where id = #{id}
+    </select>
+
+    <select id="queryByServiceId" resultMap="AmbariConfigItemMap" >
+        select id,stack_code,service_code,component_code,config_type_code,`key`,`value`,is_content_prop,is_dynamic,dynamic_type, `item_type`,
+        state,created_by,created_time,updated_by,updated_time
+        from ambari_config_item
+        where service_id in #{serviceIds}
+    </select>
+
+    <select id="queryByStackCodeAndServices" resultMap="AmbariConfigItemMap" >
+        select id,stack_code,service_code,component_code,config_type_code,`key`,`value`,is_content_prop,is_dynamic,dynamic_type,item_type,
+        state,created_by,created_time,updated_by,updated_time
+        from ambari_config_item
+        where stack_code = #{stackCode} and state = 'VALID' and item_type = #{itemType} and service_code in
+        <foreach collection="services" item="service" index="index" open="(" close=")" separator=",">
+            #{service}
+        </foreach>
+    </select>
+
+    <select id="queryHostGroupConfigByItemType" resultMap="AmbariConfigItemMap" >
+        select id,stack_code,service_code,component_code,config_type_code,`key`,`value`,is_content_prop,is_dynamic,dynamic_type,item_type,
+        state,created_by,created_time,updated_by,updated_time
+        from ambari_config_item
+        where item_type = #{itemType} and state = 'VALID' and value like '%HOSTGROUP::%'
+    </select>
+
+    <select id="queryByDynamicTypeAndItemType" resultMap="AmbariConfigItemMap" >
+        select id,stack_code,service_code,component_code,config_type_code,`key`,`value`,is_content_prop,is_dynamic,dynamic_type,item_type,
+        state,created_by,created_time,updated_by,updated_time
+        from ambari_config_item
+        where stack_code = #{stackVersion} and dynamic_type=#{dynamicType} and item_type = #{itemType} and state = 'VALID'
+    </select>
+
+    <!--分页查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="AmbariConfigItemMap">
+        select id,stack_code,service_code,component_code,config_type_code,`key`,`value`,is_content_prop,is_dynamic,dynamic_type, `item_type`,
+        state,created_by,created_time,updated_by,updated_time
+        from ambari_config_item
+        <where>
+            <if test="ambariConfigItem.id != null">
+                and id = #{ambariConfigItem.id}
+            </if>
+            <if test="ambariConfigItem.stackCode != null and ambariConfigItem.stackCode != ''">
+                and stack_code = #{ambariConfigItem.stackCode}
+            </if>
+            <if test="ambariConfigItem.serviceCode != null and ambariConfigItem.serviceCode != ''">
+                and service_code = #{ambariConfigItem.serviceCode}
+            </if>
+            <if test="ambariConfigItem.componentCode != null and ambariConfigItem.componentCode != ''">
+                and component_code = #{ambariConfigItem.componentCode}
+            </if>
+            <if test="ambariConfigItem.configTypeCode != null and ambariConfigItem.configTypeCode != ''">
+                and config_type_code = #{ambariConfigItem.configTypeCode}
+            </if>
+            <if test="ambariConfigItem.key != null and ambariConfigItem.key != ''">
+                and `key` = #{ambariConfigItem.key}
+            </if>
+            <if test="ambariConfigItem.value != null and ambariConfigItem.value != ''">
+                and `value` = #{ambariConfigItem.value}
+            </if>
+            <if test="ambariConfigItem.isContentProp != null ">
+                and is_content_prop = #{ambariConfigItem.isContentProp}
+            </if>
+            <if test="ambariConfigItem.isDynamic != null ">
+                and is_dynamic = #{ambariConfigItem.isDynamic}
+            </if>
+            <if test="ambariConfigItem.dynamicType != null and ambariConfigItem.dynamicType != ''">
+                and dynamic_type = #{ambariConfigItem.dynamicType}
+            </if>
+            <if test="ambariConfigItem.itemType != null and ambariConfigItem.itemType != ''">
+                and item_type = #{ambariConfigItem.itemType}
+            </if>
+            <if test="ambariConfigItem.state != null and ambariConfigItem.state != ''">
+                and state = #{ambariConfigItem.state}
+            </if>
+            <if test="ambariConfigItem.createdBy != null and ambariConfigItem.createdBy != ''">
+                and created_by = #{ambariConfigItem.createdBy}
+            </if>
+            <if test="ambariConfigItem.createdTime != null ">
+                and created_time = #{ambariConfigItem.createdTime}
+            </if>
+            <if test="ambariConfigItem.updatedBy != null and ambariConfigItem.updatedBy != ''">
+                and updated_by = #{ambariConfigItem.updatedBy}
+            </if>
+            <if test="ambariConfigItem.updatedTime != null ">
+                and updated_time = #{ambariConfigItem.updatedTime}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from ambari_config_item
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="stackCode != null and stackCode != ''">
+                and stack_code = #{stackCode}
+            </if>
+            <if test="serviceCode != null and serviceCode != ''">
+                and service_code = #{serviceCode}
+            </if>
+            <if test="componentCode != null and componentCode != ''">
+                and component_code = #{componentCode}
+            </if>
+            <if test="configTypeCode != null and configTypeCode != ''">
+                and config_type_code = #{configTypeCode}
+            </if>
+            <if test="key != null and key != ''">
+                and key = #{key}
+            </if>
+            <if test="value != null and value != ''">
+                and value = #{value}
+            </if>
+            <if test="isContentProp != null ">
+                and is_content_prop = #{isContentProp}
+            </if>
+            <if test="isDynamic != null ">
+                and is_dynamic = #{isDynamic}
+            </if>
+            <if test="dynamicType != null and dynamicType != ''">
+                and dynamic_type = #{dynamicType}
+            </if>
+            <if test="item_type != null and item_type != ''">
+                and item_type = #{itemType}
+            </if>
+            <if test="state != null and state != ''">
+                and state = #{state}
+            </if>
+            <if test="createdBy != null and createdBy != ''">
+                and created_by = #{createdBy}
+            </if>
+            <if test="createdTime != null ">
+                and created_time = #{createdTime}
+            </if>
+            <if test="updatedBy != null and updatedBy != ''">
+                and updated_by = #{updatedBy}
+            </if>
+            <if test="updatedTime != null">
+                and updated_time = #{updatedTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增数据-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into ambari_config_item(id,stack_code,service_code,component_code,config_type_code,`key`,`value`,is_content_prop,is_dynamic,dynamic_type,item_type,state,created_by,created_time,updated_by,updated_time)
+        values (#{id},#{stackCode},#{serviceCode},#{componentCode},#{configTypeCode},#{key},#{value},#{isContentProp},#{isDynamic},#{dynamicType},#{itemType},#{state},#{createdBy},#{createdTime},#{updatedBy},#{updatedTime})
+    </insert>
+
+    <!-- 批量新增数据 -->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into ambari_config_item(id,stack_code,service_code,component_code,config_type_code,key,value,is_content_prop,is_dynamic,dynamic_type,item_type,state,created_by,created_time,updated_by,updated_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id},#{entity.stackCode},#{entity.serviceCode},#{entity.componentCode},#{entity.configTypeCode},#{entity.key},#{entity.value},#{entity.isContentProp},#{entity.isDynamic},#{entity.dynamicType},#{entity.itemType},#{entity.state},#{entity.createdBy},#{entity.createdTime},#{entity.updatedBy},#{entity.updatedTime})
+        </foreach>
+    </insert>
+
+    <!-- 批量新增或按主键更新数据 -->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into ambari_config_item(id,stack_code,service_code,component_code,config_type_code,key,value,is_content_prop,is_dynamic,dynamic_type,item_type,state,created_by,created_time,updated_by,updated_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id},#{entity.stackCode},#{entity.serviceCode},#{entity.componentCode},#{entity.configTypeCode},#{entity.key},#{entity.value},#{entity.isContentProp},#{entity.isDynamic},#{entity.dynamicType},#{entity.itemType},#{entity.state},#{entity.createdBy},#{entity.createdTime},#{entity.updatedBy},#{entity.updatedTime})
+        </foreach>
+        on duplicate key update
+        id=values(id),
+        stack_code=values(stack_code),
+        service_code=values(service_code),
+        component_code=values(component_code),
+        config_type_code=values(config_type_code),
+        key=values(key),
+        value=values(value),
+        is_content_prop=values(is_content_prop),
+        is_dynamic=values(is_dynamic),
+        dynamic_type=values(dynamic_type),
+        item_type=values(item_type),
+        state=values(state),
+        created_by=values(created_by),
+        created_time=values(created_time),
+        updated_by=values(updated_by),
+        updated_time=values(updated_time)
+    </insert>
+
+    <!-- 更新数据 -->
+    <update id="update">
+        update ambari_config_item
+        <set>
+            <if test="id != null and id != ''">
+                id = #{id},
+            </if>
+            <if test="stackCode != null and stackCode != ''">
+                stack_code = #{stackCode},
+            </if>
+            <if test="serviceCode != null and serviceCode != ''">
+                service_code = #{serviceCode},
+            </if>
+            <if test="componentCode != null and componentCode != ''">
+                component_code = #{componentCode},
+            </if>
+            <if test="configTypeCode != null and configTypeCode != ''">
+                config_type_code = #{configTypeCode},
+            </if>
+            <if test="key != null and key != ''">
+                key = #{key},
+            </if>
+            <if test="value != null and value != ''">
+                value = #{value},
+            </if>
+            <if test="isContentProp != null and isContentProp != ''">
+                is_content_prop = #{isContentProp},
+            </if>
+            <if test="isDynamic != null and isDynamic != ''">
+                is_dynamic = #{isDynamic},
+            </if>
+            <if test="dynamicType != null and dynamicType != ''">
+                dynamic_type = #{dynamicType},
+            </if>
+            <if test="item_type != null and item_type != ''">
+                type = #{itemType},
+            </if>
+            <if test="state != null and state != ''">
+                state = #{state},
+            </if>
+            <if test="createdBy != null and createdBy != ''">
+                created_by = #{createdBy},
+            </if>
+            <if test="createdTime != null and createdTime != ''">
+                created_time = #{createdTime},
+            </if>
+            <if test="updatedBy != null and updatedBy != ''">
+                updated_by = #{updatedBy},
+            </if>
+            <if test="updatedTime != null and updatedTime != ''">
+                updated_time = #{updatedTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from ambari_config_item where id = #{id}
+    </delete>
+</mapper>

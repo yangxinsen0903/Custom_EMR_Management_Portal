@@ -1,0 +1,116 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+  },
+  "variables": {
+  },
+  "resources": [
+    {
+      "type": "Microsoft.AzureFleet/fleets",
+      "apiVersion": "2024-05-01-Preview",
+      "name": "[toLower(variables('fleetName'))]",
+      "location": "[variables('location')]",
+      "zones": "[variables('zones')]",
+      "tags": "[variables('tags')]",
+      "identity": {
+        "type": "UserAssigned",
+        "userAssignedIdentities": "[variables('userAssignedIdentities')]"
+      },
+      "properties": {
+        "vmSizesProfile": [],
+        "spotPriorityProfile": {
+          "capacity": "[variables('spotCapacity')]",
+          "allocationStrategy": "[variables('spotAllocationStrategy')]",
+          "evictionPolicy": "[variables('spotEvictionPolicy')]",
+          "maintain": "[variables('spotMaintain')]",
+          "maxPricePerVM": "0.05"
+        },
+        "regularPriorityProfile": {
+          "capacity": "[variables('regularCapacity')]",
+          "allocationStrategy": "[variables('regularAllocationStrategy')]"
+        },
+        "computeProfile": {
+          "computeApiVersion": "2023-09-01",
+          "baseVirtualMachineProfile": {
+            "storageProfile": {
+              "osDisk": {
+                "osType": "Linux",
+                "createOption": "fromImage",
+                "deleteOption": "Delete",
+                "caching": "ReadWrite",
+                "diskSizeGB": "[variables('osDiskSizeGB')]",
+                "managedDisk": {
+                  "storageAccountType": "[variables('osDiskSku')]"
+                }
+              },
+              "dataDisks": [],
+              "imageReference": "[variables('imageReference')]"
+            },
+            "osProfile": {
+              "computerNamePrefix": "[variables('fleetName')]",
+              "adminUsername": "[variables('adminUsername')]",
+              "linuxConfiguration": {
+                "disablePasswordAuthentication": true,
+                "ssh": {
+                  "publicKeys": [
+                    {
+                      "path": "[variables('keyPath')]",
+                      "keyData": "[variables('keyData')]"
+                    }
+                  ]
+                }
+              }
+            },
+            "networkProfile": {
+              "networkApiVersion": "2022-07-01",
+              "networkInterfaceConfigurations": [
+                {
+                  "name": "[variables('vnName')]",
+                  "properties": {
+                    "primary": true,
+                    "enableAcceleratedNetworking": true,
+                    "deleteOption": "Delete",
+                    "ipConfigurations": [
+                      {
+                        "name": "[variables('vnName')]",
+                        "properties": {
+                          "subnet": {
+                            "id": "[variables('subNetName')]"
+                          },
+                          "primary": true
+                        }
+                      }
+                    ],
+                    "networkSecurityGroup": {
+                      "id": "[variables('nsgName')]"
+                    }
+                  }
+                }
+              ]
+            },
+            "extensionProfile": {
+              "extensions": [
+                {
+                  "name": "CustomScript",
+                  "properties": {
+                    "publisher": "Microsoft.Azure.Extensions",
+                    "type": "CustomScript",
+                    "typeHandlerVersion": "2.1",
+                    "autoUpgradeMinorVersion": true,
+                    "settings": {
+                      "fileUris": [
+                        "[variables('scriptUrl')]"
+                      ],
+                      "commandToExecute": "[variables('commandToExecute')]"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

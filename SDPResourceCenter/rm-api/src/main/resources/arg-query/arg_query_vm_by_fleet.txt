@@ -1,0 +1,29 @@
+resources
+    | where type =~ "microsoft.azurefleet/fleets"
+    | where name in~ (%s)
+    | project fleetId = id, fleetName = name, joinFleetId=tolower(id)
+    | join kind=inner (
+        resources
+        | where type =~ "microsoft.compute/virtualmachinescalesets"
+        | extend fleetId = tostring(properties.azureFleetProfile.id)
+        | project fleetId, vmssId = id, vmssName = name, joinFleetId=tolower(fleetId), joinVmssId = tolower(id)
+    ) on joinFleetId
+    | join kind=inner (
+        resources
+        | where type =~ 'microsoft.compute/virtualmachines'
+        | where tags.SYS_CREATE_BATCH =~ "%s"
+        | extend vmssId = tostring(properties.virtualMachineScaleSet.id)
+        | extend networkInterfaces = properties.networkProfile.networkInterfaces
+        | mv-expand networkInterfaces
+        | extend nicId = tostring(networkInterfaces.id)
+        | project vmResourceId = id, vmId = tostring(properties.vmId), vmssId, vmName = name, vmTags = tags, nicId, joinVmssId = tolower(vmssId), joinNicId = tolower(nicId), computerName = tostring(properties.osProfile.computerName), vmZones = zones, vmPriority = tostring(properties.priority), vmTimeCreated = tostring(properties.timeCreated), vmState = tostring(properties.provisioningState), vmSize = properties.hardwareProfile.vmSize
+    ) on joinVmssId
+    | join kind=inner (
+        resources
+        | where type =~ 'microsoft.network/networkinterfaces'
+        | extend ipConfigs = properties.ipConfigurations
+        | mv-expand ipConfigs
+        | project nicId = id, privateIpAddress = ipConfigs.properties.privateIPAddress, joinNicId = tolower(id)
+    ) on joinNicId
+    | project fleetId, vmssId, vmResourceId, vmId, fleetName, vmssName, vmName, computerName, privateIpAddress, vmTags, vmZones, vmPriority, vmTimeCreated, vmState, vmSize
+    | order by vmName

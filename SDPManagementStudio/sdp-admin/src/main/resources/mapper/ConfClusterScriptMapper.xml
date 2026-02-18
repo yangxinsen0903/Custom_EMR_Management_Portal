@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpadmin.mapper.ConfClusterScriptMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.ConfClusterScript">
+    <!--@mbg.generated-->
+    <!--@Table conf_cluster_script-->
+    <result column="conf_script_id" jdbcType="VARCHAR" property="confScriptId" />
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="script_name" jdbcType="VARCHAR" property="scriptName" />
+    <result column="run_timing" jdbcType="VARCHAR" property="runTiming" />
+    <result column="script_path" jdbcType="VARCHAR" property="scriptPath" />
+    <result column="script_param" jdbcType="VARCHAR" property="scriptParam" />
+    <result column="sort_no" jdbcType="INTEGER" property="sortNo" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+  </resultMap>
+
+  <resultMap id="UserScriptJob" type="com.sunbox.domain.ConfClusterScriptJob">
+    <result column="conf_script_id" jdbcType="VARCHAR" property="confScriptId" />
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="script_name" jdbcType="VARCHAR" property="scriptName" />
+    <result column="run_timing" jdbcType="VARCHAR" property="runTiming" />
+    <result column="script_path" jdbcType="VARCHAR" property="scriptPath" />
+    <result column="script_param" jdbcType="VARCHAR" property="scriptParam" />
+    <result column="sort_no" jdbcType="INTEGER" property="sortNo" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+
+    <result column="job_status" jdbcType="INTEGER" property="jobStatus" />
+    <result column="beg_time" jdbcType="TIMESTAMP" property="begTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    conf_script_id, cluster_id, script_name, run_timing, script_path, script_param, sort_no, createdby,
+    created_time
+  </sql>
+
+  <select id="selectByClusterId" resultMap="BaseResultMap">
+    select
+        <include refid="Base_Column_List"></include>
+        from conf_cluster_script
+    where cluster_id = #{clusterId, jdbcType=VARCHAR}
+  </select>
+
+  <select id="queryScriptJob" resultMap="UserScriptJob">
+    select script.conf_script_id as conf_script_id , script.cluster_id as cluster_id ,
+        script.script_name as script_name , script.run_timing as run_timing ,
+        script.script_path as script_path , script.script_param as script_param ,
+        script.sort_no as sort_no , script.createdby as createdby ,
+        script.created_time as created_time ,job.job_status as job_status,
+        job.beg_time as beg_time , job.end_time as end_time
+    from conf_cluster_script script left join info_cluster_playbook_job job
+       on script.conf_script_id = job.conf_script_id
+    <where>
+      script.run_timing = 'ontime'
+
+      <if test="script.clusterId != null and script.clusterId != ''">
+        and script.cluster_id = #{script.clusterId}
+      </if>
+
+      <if test="script.confScriptId != null and script.confScriptId != ''">
+        and script.conf_script_id = #{script.confScriptId}
+      </if>
+
+      <if test="script.scriptName != null and script.scriptName != ''">
+        and script.script_name like CONCAT(CONCAT('%', #{script.scriptName}), '%')
+      </if>
+      <if test="script.begTime != null ">
+        and script.created_time &gt;= #{script.begTime}
+      </if>
+      <if test="script.endTime != null ">
+        and script.created_time &lt;= #{script.endTime}
+      </if>
+    </where>
+    order by job.beg_time desc
+    limit #{pageable.offset}, #{pageable.pageSize}
+  </select>
+
+  <!--统计总行数-->
+  <select id="count" resultType="java.lang.Long">
+    select count(1)
+    from conf_cluster_script script left join info_cluster_playbook_job job
+    on script.conf_script_id = job.conf_script_id
+    <where>
+      script.run_timing = 'ontime'
+
+      <if test="clusterId != null and clusterId != ''">
+        and script.cluster_id = #{clusterId}
+      </if>
+
+      <if test="confScriptId != null and confScriptId != ''">
+        and script.conf_script_id = #{confScriptId}
+      </if>
+
+      <if test="scriptName != null and scriptName != ''">
+        and script.script_name like CONCAT(CONCAT('%', #{scriptName}), '%')
+      </if>
+      <if test="begTime != null ">
+        and script.created_time &gt;= #{begTime}
+      </if>
+      <if test="endTime != null ">
+        and script.created_time &lt;= #{endTime}
+      </if>
+    </where>
+  </select>
+    <select id="selectByClusterIdForCp" resultType="com.sunbox.domain.ConfClusterScript">
+      select
+      <include refid="Base_Column_List"></include>
+      from conf_cluster_script
+      where cluster_id = #{clusterId, jdbcType=VARCHAR}
+        and run_timing in ('aftervminit','afterstart','beforestart')
+    </select>
+
+    <insert id="insert" parameterType="com.sunbox.domain.ConfClusterScript">
+    <!--@mbg.generated-->
+    insert into conf_cluster_script (conf_script_id, cluster_id, script_name,
+      run_timing, script_path, script_param,
+      createdby, created_time)
+    values (#{confScriptId,jdbcType=VARCHAR}, #{clusterId,jdbcType=INTEGER}, #{scriptName,jdbcType=VARCHAR}, 
+      #{runTiming,jdbcType=VARCHAR}, #{scriptPath,jdbcType=TIMESTAMP}, #{scriptParam,jdbcType=VARCHAR}, 
+      #{createdby,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.ConfClusterScript">
+    <!--@mbg.generated-->
+    insert into conf_cluster_script
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="confScriptId != null">
+        conf_script_id,
+      </if>
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="scriptName != null">
+        script_name,
+      </if>
+      <if test="runTiming != null">
+        run_timing,
+      </if>
+      <if test="scriptPath != null">
+        script_path,
+      </if>
+      <if test="scriptParam != null">
+        script_param,
+      </if>
+      <if test="sortNo != null">
+        sort_no,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="confScriptId != null">
+        #{confScriptId,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=INTEGER},
+      </if>
+      <if test="scriptName != null">
+        #{scriptName,jdbcType=VARCHAR},
+      </if>
+      <if test="runTiming != null">
+        #{runTiming,jdbcType=VARCHAR},
+      </if>
+      <if test="scriptPath != null">
+        #{scriptPath,jdbcType=TIMESTAMP},
+      </if>
+      <if test="scriptParam != null">
+        #{scriptParam,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNo != null">
+        #{sortNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

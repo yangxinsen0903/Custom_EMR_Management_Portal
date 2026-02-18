@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.InfoClusterVmDeleteMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoClusterVmDelete">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="vm_name" jdbcType="VARCHAR" property="vmName" />
+    <result column="vm_role" jdbcType="VARCHAR" property="vmRole" />
+    <result column="region" jdbcType="VARCHAR" property="region" />
+    <result column="priority" jdbcType="INTEGER" property="priority" />
+    <result column="purchase_type" jdbcType="VARCHAR" property="purchaseType" />
+    <result column="plan_id" jdbcType="VARCHAR" property="planId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="job_id" jdbcType="VARCHAR" property="jobId" />
+    <result column="beg_send_request_time" jdbcType="TIMESTAMP" property="begSendRequestTime" />
+    <result column="get_delete_jobId_time" jdbcType="TIMESTAMP" property="getDeleteJobidTime" />
+    <result column="retry_count" jdbcType="INTEGER" property="retryCount" />
+    <result column="release_freeze_time" jdbcType="TIMESTAMP" property="releaseFreezeTime" />
+    <result column="freeze_count" jdbcType="INTEGER" property="freezeCount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, cluster_id, vm_name, vm_role, region, priority, purchase_type, plan_id, status, job_id,
+    beg_send_request_time, get_delete_jobId_time, retry_count, release_freeze_time, freeze_count, 
+    created_time, modified_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from info_cluster_vm_delete
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="getByClusterIdAndVmName" resultType="com.sunbox.domain.InfoClusterVmDelete">
+    select
+    <include refid="Base_Column_List" />
+    from info_cluster_vm_delete
+    where cluster_id = #{clusterId,jdbcType=VARCHAR} and vm_name = #{vmName,jdbcType=VARCHAR}
+  </select>
+  <select id="getNeedDeleteVMDeletes" resultType="com.sunbox.domain.InfoClusterVmDelete">
+    select
+    <include refid="Base_Column_List" />
+    from info_cluster_vm_delete
+    where status = 0 order by priority desc,created_time asc limit #{limitCount,jdbcType=INTEGER}
+  </select>
+  <select id="getDeletingVMs" resultType="com.sunbox.domain.InfoClusterVmDelete">
+    select
+    <include refid="Base_Column_List" />
+    from info_cluster_vm_delete
+    where status =2 order by get_delete_jobId_time asc
+  </select>
+  <select id="getSendRequestTimeOutVms" resultType="com.sunbox.domain.InfoClusterVmDelete">
+    select
+    <include refid="Base_Column_List" />
+    from info_cluster_vm_delete
+    where status =1  and beg_send_request_time &lt; #{date,jdbcType=TIMESTAMP}
+  </select>
+  <select id="getDeletingTimeOutVms" resultType="com.sunbox.domain.InfoClusterVmDelete">
+    select
+    <include refid="Base_Column_List" />
+    from info_cluster_vm_delete
+    where status =2  and get_delete_jobId_time &lt; #{date,jdbcType=TIMESTAMP}
+  </select>
+  <select id="getNeedReleaseFreeze" resultType="com.sunbox.domain.InfoClusterVmDelete">
+    select
+    <include refid="Base_Column_List" />
+    from info_cluster_vm_delete
+    where status = -1 and release_freeze_time &lt; #{date,jdbcType=TIMESTAMP}
+  </select>
+  <select id="queryByTime" resultType="com.sunbox.domain.InfoClusterVmDeleteDetail">
+    select jf.*,
+    cc.cluster_name,
+    op.plan_name,
+    vm.host_name,cc.region
+    from info_cluster_vm_delete as jf
+    left join info_cluster_vm as vm on vm.vm_name = jf.vm_name and vm.cluster_id =jf.cluster_id
+    left join conf_cluster as cc on cc.cluster_id = jf.cluster_id
+    left join info_cluster_operation_plan as op on op.plan_id = jf.plan_id
+    where jf.created_time <![CDATA[ >= ]]> #{beginDate}
+    and jf.created_time <![CDATA[ <= ]]> #{endDate}
+    <if test="planName != null">
+      and op.plan_name = #{planName}
+    </if>
+    <if test="planId != null">
+      and jf.plan_id = #{planId}
+    </if>
+    <if test="clusterId != null">
+      and jf.cluster_id = #{clusterId}
+    </if>
+    <if test="clusterName != null">
+      and cc.cluster_name like CONCAT(CONCAT('%', #{clusterName}), '%')
+    </if>
+    <if test="hostName != null">
+      and jf.vm_name like CONCAT(CONCAT('%', #{hostName}), '%')
+    </if>
+    <if test="status != null">
+      and jf.status = #{status}
+    </if>
+    <if test="region != null and region !=''">
+      and cc.region = #{region}
+    </if>
+    order by jf.created_time desc
+    limit #{pageStart},#{pageLimit}
+  </select>
+  <select id="countByTime" resultType="java.lang.Long">
+    select
+    count(jf.id)
+    from info_cluster_vm_delete as jf
+    left join info_cluster_vm as vm on vm.vm_name = jf.vm_name and vm.cluster_id =jf.cluster_id
+    left join conf_cluster as cc on cc.cluster_id = jf.cluster_id
+    left join info_cluster_operation_plan as op on op.plan_id = jf.plan_id
+    where jf.created_time <![CDATA[ >= ]]> #{beginDate}
+    and jf.created_time <![CDATA[ <= ]]> #{endDate}
+    <if test="planName != null">
+      and op.plan_name = #{planName}
+    </if>
+    <if test="planId != null">
+      and jf.plan_id = #{planId}
+    </if>
+    <if test="clusterId != null">
+      and jf.cluster_id = #{clusterId}
+    </if>
+    <if test="clusterName != null">
+      and cc.cluster_name like CONCAT(CONCAT('%', #{clusterName}), '%')
+    </if>
+    <if test="hostName != null">
+      and jf.vm_name like CONCAT(CONCAT('%', #{hostName}), '%')
+    </if>
+    <if test="status != null">
+      and jf.status = #{status}
+    </if>
+    <if test="region != null and region !=''">
+      and cc.region = #{region}
+    </if>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from info_cluster_vm_delete
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.InfoClusterVmDelete">
+    insert into info_cluster_vm_delete (id, cluster_id, vm_name, 
+      vm_role, priority, purchase_type, 
+      plan_id, status, job_id, 
+      beg_send_request_time, get_delete_jobId_time, 
+      retry_count, release_freeze_time, freeze_count, 
+      created_time, modified_time, region)
+    values (#{id,jdbcType=BIGINT}, #{clusterId,jdbcType=VARCHAR}, #{vmName,jdbcType=VARCHAR}, 
+      #{vmRole,jdbcType=VARCHAR}, #{priority,jdbcType=INTEGER}, #{purchaseType,jdbcType=VARCHAR}, 
+      #{planId,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{jobId,jdbcType=VARCHAR}, 
+      #{begSendRequestTime,jdbcType=TIMESTAMP}, #{getDeleteJobidTime,jdbcType=TIMESTAMP}, 
+      #{retryCount,jdbcType=INTEGER}, #{releaseFreezeTime,jdbcType=TIMESTAMP}, #{freezeCount,jdbcType=INTEGER}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, #{region,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.InfoClusterVmDelete">
+    insert into info_cluster_vm_delete
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="vmName != null">
+        vm_name,
+      </if>
+      <if test="vmRole != null">
+        vm_role,
+      </if>
+      <if test="priority != null">
+        priority,
+      </if>
+      <if test="purchaseType != null">
+        purchase_type,
+      </if>
+      <if test="planId != null">
+        plan_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="jobId != null">
+        job_id,
+      </if>
+      <if test="begSendRequestTime != null">
+        beg_send_request_time,
+      </if>
+      <if test="getDeleteJobidTime != null">
+        get_delete_jobId_time,
+      </if>
+      <if test="retryCount != null">
+        retry_count,
+      </if>
+      <if test="releaseFreezeTime != null">
+        release_freeze_time,
+      </if>
+      <if test="freezeCount != null">
+        freeze_count,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="region != null">
+        region,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="vmName != null">
+        #{vmName,jdbcType=VARCHAR},
+      </if>
+      <if test="vmRole != null">
+        #{vmRole,jdbcType=VARCHAR},
+      </if>
+      <if test="priority != null">
+        #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="purchaseType != null">
+        #{purchaseType,jdbcType=VARCHAR},
+      </if>
+      <if test="planId != null">
+        #{planId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="jobId != null">
+        #{jobId,jdbcType=VARCHAR},
+      </if>
+      <if test="begSendRequestTime != null">
+        #{begSendRequestTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="getDeleteJobidTime != null">
+        #{getDeleteJobidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="retryCount != null">
+        #{retryCount,jdbcType=INTEGER},
+      </if>
+      <if test="releaseFreezeTime != null">
+        #{releaseFreezeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="freezeCount != null">
+        #{freezeCount,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="region != null">
+        #{region},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.InfoClusterVmDelete">
+    update info_cluster_vm_delete
+    <set>
+      <if test="clusterId != null">
+        cluster_id = #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="vmName != null">
+        vm_name = #{vmName,jdbcType=VARCHAR},
+      </if>
+      <if test="vmRole != null">
+        vm_role = #{vmRole,jdbcType=VARCHAR},
+      </if>
+      <if test="priority != null">
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="purchaseType != null">
+        purchase_type = #{purchaseType,jdbcType=VARCHAR},
+      </if>
+      <if test="planId != null">
+        plan_id = #{planId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="jobId != null">
+        job_id = #{jobId,jdbcType=VARCHAR},
+      </if>
+      <if test="begSendRequestTime != null">
+        beg_send_request_time = #{begSendRequestTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="getDeleteJobidTime != null">
+        get_delete_jobId_time = #{getDeleteJobidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="retryCount != null">
+        retry_count = #{retryCount,jdbcType=INTEGER},
+      </if>
+      <if test="releaseFreezeTime != null">
+        release_freeze_time = #{releaseFreezeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="freezeCount != null">
+        freeze_count = #{freezeCount,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="region != null">
+        region = #{region,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.InfoClusterVmDelete">
+    update info_cluster_vm_delete
+    set cluster_id = #{clusterId,jdbcType=VARCHAR},
+      vm_name = #{vmName,jdbcType=VARCHAR},
+      vm_role = #{vmRole,jdbcType=VARCHAR},
+      priority = #{priority,jdbcType=INTEGER},
+      purchase_type = #{purchaseType,jdbcType=VARCHAR},
+      plan_id = #{planId,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      job_id = #{jobId,jdbcType=VARCHAR},
+      beg_send_request_time = #{begSendRequestTime,jdbcType=TIMESTAMP},
+      get_delete_jobId_time = #{getDeleteJobidTime,jdbcType=TIMESTAMP},
+      retry_count = #{retryCount,jdbcType=INTEGER},
+      release_freeze_time = #{releaseFreezeTime,jdbcType=TIMESTAMP},
+      freeze_count = #{freezeCount,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+        region = #{region,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="vmCleanSummary" resultType="map" parameterType="java.lang.String">
+    select
+      case status
+        when -1 then 'frozen'
+        when 0 then 'waitDelete'
+        when 1 then 'deleteRequest'
+        when 2 then 'deleting'
+        when 3 then 'deleted'
+        end status,
+      count(*) as vm_count
+    from info_cluster_vm_delete
+    <where>
+      <if test="region != null and region != ''">
+        region = #{region}
+      </if>
+    </where>
+    group by status;
+  </select>
+</mapper>

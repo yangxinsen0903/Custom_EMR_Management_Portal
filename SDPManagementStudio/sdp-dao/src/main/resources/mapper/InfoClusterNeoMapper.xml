@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.InfoClusterNeoMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoCluster">
+        <id column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+        <result column="ambari_username" jdbcType="VARCHAR" property="ambariUsername" />
+        <result column="ambari_password" jdbcType="VARCHAR" property="ambariPassword" />
+        <result column="ambari_host" jdbcType="VARCHAR" property="ambariHost" />
+        <result column="master_ips" jdbcType="VARCHAR" property="masterIps" />
+        <result column="ambari_count" jdbcType="INTEGER" property="ambariCount" />
+        <result column="master_vms_count" jdbcType="INTEGER" property="masterVmsCount" />
+        <result column="core_vms_count" jdbcType="INTEGER" property="coreVmsCount" />
+        <result column="task_vms_count" jdbcType="INTEGER" property="taskVmsCount" />
+        <result column="apps_count" jdbcType="INTEGER" property="appsCount" />
+        <result column="cluster_create_begtime" jdbcType="TIMESTAMP" property="clusterCreateBegtime" />
+        <result column="cluster_create_endtime" jdbcType="TIMESTAMP" property="clusterCreateEndtime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        cluster_id, ambari_username, ambari_password, ambari_host, master_ips, ambari_count, master_vms_count, core_vms_count,
+        task_vms_count, apps_count, cluster_create_begtime, cluster_create_endtime
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List" />
+        from info_cluster
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

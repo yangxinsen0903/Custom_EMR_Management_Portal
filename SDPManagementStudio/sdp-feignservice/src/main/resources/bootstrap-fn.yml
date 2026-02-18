@@ -1,0 +1,36 @@
+feign:
+  okhttp:
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 10000
+        readTimeout: 300000
+      SDP-COMPOSE:
+        connectTimeout: 5000
+        readTimeout: 300000
+      IGS-TASK:
+        connectTimeout: 5000
+        readTimeout: 1800000
+      IGS-DMP:
+        connectTimeout: 5000
+        readTimeout: 1800000
+      IGS-ASSIST:
+        connectTimeout: 5000
+        readTimeout: 1800000
+      IGS-DMPCK:
+        connectTimeout: 5000
+        readTimeout: 1800000
+ribbon:
+  eager-load:
+    clients: SDP-COMPOSE,SDP-ADMIN
+    enabled: true
+  ReadTimeout: 120000
+  ConnectTimeout: 100000
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpadmin.mapper.BaseSceneAppsMapper">
+    <resultMap type="com.sunbox.domain.BaseSceneApps" id="BaseSceneAppsMap">
+        <result property="sceneId" column="scene_id" jdbcType="VARCHAR"/>
+        <result property="appName" column="app_name" jdbcType="VARCHAR"/>
+        <result property="appVersion" column="app_version" jdbcType="VARCHAR"/>
+        <result property="required" column="required" jdbcType="INTEGER"/>
+        <result property="sortNo" column="sort_no" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 通过ID查询单条数据 -->
+    <select id="queryBySceneId" resultMap="BaseSceneAppsMap">
+        select
+        scene_id,app_name,app_version,required,sort_no
+        from base_scene_apps
+        where scene_id = #{sceneId} order by sort_no asc
+    </select>
+
+    <!--分页查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseSceneAppsMap">
+        select
+        scene_id,app_name,app_version,required,sort_no
+        from base_scene_apps
+        <where>
+            <if test="sceneId != null and sceneId != ''">
+                and scene_id = #{sceneId}
+            </if>
+            <if test="appName != null and appName != ''">
+                and app_name = #{appName}
+            </if>
+            <if test="appVersion != null and appVersion != ''">
+                and app_version = #{appVersion}
+            </if>
+            <if test="required != null ">
+                and required = #{required}
+            </if>
+            <if test="sortNo != null ">
+                and sort_no = #{sortNo}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from base_scene_apps
+        <where>
+            <if test="sceneId != null and sceneId != ''">
+                and scene_id = #{sceneId}
+            </if>
+            <if test="appName != null and appName != ''">
+                and app_name = #{appName}
+            </if>
+            <if test="appVersion != null and appVersion != ''">
+                and app_version = #{appVersion}
+            </if>
+            <if test="required != null ">
+                and required = #{required}
+            </if>
+            <if test="sortNo != null ">
+                and sort_no = #{sortNo}
+            </if>
+        </where>
+    </select>
+
+    <!--新增数据-->
+    <insert id="insert" keyProperty="app_name" useGeneratedKeys="true">
+        insert into base_scene_apps(scene_id,app_name,app_version,required,sort_no)
+        values (#{sceneId},#{appName},#{appVersion},#{required},#{sortNo})
+    </insert>
+
+    <!-- 批量新增或按主键更新数据 -->
+    <insert id="insertOrUpdateBatch" keyProperty="app_name" useGeneratedKeys="true">
+        insert into base_scene_apps(scene_id,app_name,app_version,required,sort_no)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.sceneId},#{entity.appName},#{entity.appVersion},#{entity.required},#{entity.sortNo})
+        </foreach>
+        on duplicate key update
+        scene_id=values(scene_id),
+        app_name=values(app_name),
+        app_version=values(app_version),
+        required=values(required),
+        sort_no=values(sort_no)
+    </insert>
+
+    <!-- 更新数据 -->
+    <update id="update">
+        update base_scene_apps
+        <set>
+            <if test="sceneId != null and sceneId != ''">
+                scene_id = #{sceneId},
+            </if>
+            <if test="appName != null and appName != ''">
+                app_name = #{appName},
+            </if>
+            <if test="appVersion != null and appVersion != ''">
+                app_version = #{appVersion},
+            </if>
+            <if test="required != null ">
+                required = #{required},
+            </if>
+            <if test="sortNo != null ">
+                sort_no = #{sortNo},
+            </if>
+        </set>
+        where app_name = #{appName}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from base_scene_apps where app_name = #{appName}
+    </delete>
+</mapper>

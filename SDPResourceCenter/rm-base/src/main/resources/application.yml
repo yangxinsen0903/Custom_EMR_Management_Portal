@@ -1,0 +1,20 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info,health,prometheus
+swagger:
+  enabled: true
+logging:
+  config: classpath:log/logback-custom.xml
+#  level:
+#    root: debug
+

@@ -1,0 +1,55 @@
+regserver:
+  url: ${REGSERVER_URL:http://igs:igscd@127.0.0.1:30000/eureka/}
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${regserver.url}
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true
+spring:
+  cloud:
+    config:
+      profile: test
+      label: master
+      username: igs
+      password: igsconfig123
+      discovery:
+        enabled: true
+        service-id: sdp-config
+  profiles:
+    active: test
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialization-mode: always
+    initial-size: 5
+    max-active: 200
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: config,stat,wall
+    min-idle: 5
+    max-wait: 6000
+    connectionProperties: config.decrypt=true;config.decrypt.key=${spring.datasource.publicKey}
+    config:
+      enabled: true
+
+server:
+  tomcat:
+    max-connections: 800
+    max-threads: 800
+    min-spare-threads: 100
+    accept-count: 100
+management:
+  endpoints:
+    web:
+      exposure:
+        include: bus-refresh
+  server:
+      address: 127.0.0.1

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpscale.mapper.InfoClusterVmMapper">
+    <resultMap type="com.sunbox.domain.InfoClusterVm" id="InfoClusterVmMap">
+        <result property="clusterId" column="cluster_id" jdbcType="VARCHAR"/>
+        <result property="vmName" column="vm_name" jdbcType="VARCHAR"/>
+        <result property="vmConfId" column="vm_conf_id" jdbcType="VARCHAR"/>
+        <result property="hostName" column="host_name" jdbcType="VARCHAR"/>
+        <result property="internalip" column="internalIp" jdbcType="VARCHAR"/>
+        <result property="defaultUsername" column="default_username" jdbcType="VARCHAR"/>
+        <result property="vmRole" column="vm_role" jdbcType="VARCHAR"/>
+        <result property="groupName" column="group_name" jdbcType="VARCHAR"/>
+        <result property="skuName" column="sku_name" jdbcType="VARCHAR"/>
+        <result property="purchaseType" column="purchase_type" jdbcType="VARCHAR"/>
+        <result property="scaleinTaskId" column="scalein_task_id" jdbcType="VARCHAR"/>
+        <result property="scaleoutTaskId" column="scaleout_task_id" jdbcType="VARCHAR"/>
+        <result property="imageid" column="imageid" jdbcType="VARCHAR"/>
+        <result property="state" column="state" jdbcType="INTEGER"/>
+        <result property="createTranscationId" column="create_transcation_id" jdbcType="VARCHAR"/>
+        <result property="createJobId" column="create_job_id" jdbcType="VARCHAR"/>
+        <result property="createBegtime" column="create_begtime" jdbcType="TIMESTAMP"/>
+        <result property="createEndtime" column="create_endtime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        cluster_id, vm_name, vm_conf_id, host_name, internalIp, default_username, vm_role,group_name,sku_name,
+        purchase_type, imageid,state, create_transcation_id, create_job_id, create_begtime,
+        create_endtime,scalein_task_id,
+        scaleout_task_id
+    </sql>
+    <!-- 通过ID查询单条数据 -->
+    <select id="queryByClusterId" resultMap="InfoClusterVmMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from info_cluster_vm
+        where cluster_id = #{clusterId} and state = 1
+    </select>
+    <select id="queryByClusterIdAndVmRole" resultType="com.sunbox.domain.InfoClusterVm">
+        select
+        <include refid="Base_Column_List"></include>
+        from info_cluster_vm
+        where cluster_id = #{clusterId} and vm_role =#{vmRole} and state =1
+    </select>
+</mapper>

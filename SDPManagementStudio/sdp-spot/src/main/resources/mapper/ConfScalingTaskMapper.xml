@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpspot.mapper.ConfScalingTaskMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.ConfScalingTask">
+        <id column="task_id" jdbcType="VARCHAR" property="taskId"/>
+        <result column="cluster_id" jdbcType="VARCHAR" property="clusterId"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="scaling_type" jdbcType="INTEGER" property="scalingType"/>
+        <result column="vm_role" jdbcType="VARCHAR" property="vmRole"/>
+        <result column="es_rule_id" jdbcType="VARCHAR" property="esRuleId"/>
+        <result column="es_rule_name" jdbcType="VARCHAR" property="esRuleName"/>
+        <result column="before_scaling_count" jdbcType="INTEGER" property="beforeScalingCount"/>
+        <result column="after_scaling_count" jdbcType="INTEGER" property="afterScalingCount"/>
+        <result column="scaling_count" jdbcType="INTEGER" property="scalingCount"/>
+        <result column="is_graceful_scalein" jdbcType="INTEGER" property="isGracefulScalein"/>
+        <result column="scalein_waitingtime" jdbcType="INTEGER" property="scaleinWaitingtime"/>
+        <result column="default_username" jdbcType="VARCHAR" property="defaultUsername"/>
+        <result column="operatiion_type" jdbcType="INTEGER" property="operatiionType"/>
+        <result column="enable_beforestart_script" jdbcType="VARCHAR" property="enableBeforestartScript"/>
+        <result column="enable_afterstart_script" jdbcType="VARCHAR" property="enableAfterstartScript"/>
+        <result column="beg_time" jdbcType="TIMESTAMP" property="begTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="in_queue" jdbcType="INTEGER" property="inQueue"/>
+        <result column="delete_group" jdbcType="INTEGER" property="deleteGroup"/>
+        <result column="scaleout_task_id" jdbcType="VARCHAR" property="scaleoutTaskId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        task_id, cluster_id, group_name, scaling_type, vm_role, es_rule_id, es_rule_name,
+        before_scaling_count, after_scaling_count, scaling_count, is_graceful_scalein, scalein_waitingtime,
+        operatiion_type, beg_time, end_time,
+        state,default_username,enable_beforestart_script,enable_afterstart_script,in_queue,create_time,delete_group,scaleout_task_id
+    </sql>
+    <select id="findByClusterIdAndGroupNameAndOperationType" resultType="com.sunbox.domain.ConfScalingTask">
+        select
+        <include refid="Base_Column_List"/>
+        from conf_scaling_task
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and group_name = #{groupName,jdbcType=VARCHAR}
+        and scaling_type = #{scalingType,jdbcType=INTEGER}
+        and operatiion_type&lt;#{operationType,jdbcType=INTEGER}
+        order by create_time desc
+        limit 1
+    </select>
+    <select id="countByClusterIdAndClusterNameAndStateAndScaleInNotSpot" resultType="int">
+        select count(1) from conf_scaling_task
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and group_name = #{groupName,jdbcType=VARCHAR}
+        and scaling_type = 2
+        and operatiion_type <![CDATA[ <> ]]> 7
+        and (state = #{state0,jdbcType=INTEGER} or state = #{state1,jdbcType=INTEGER})
+    </select>
+    <select id="countByClusterIdAndClusterNameAndState" resultType="int">
+        select count(1) from conf_scaling_task
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and group_name = #{groupName,jdbcType=VARCHAR}
+        and (state = #{state0,jdbcType=INTEGER} or state = #{state1,jdbcType=INTEGER})
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from conf_scaling_task
+        where task_id = #{taskId,jdbcType=VARCHAR}
+        and cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </select>
+    <select id="findLastTaskOrderByDesc" resultType="com.sunbox.domain.ConfScalingTask">
+        select
+        <include refid="Base_Column_List"/>
+        from conf_scaling_task
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and vm_role = #{vmRole,jdbcType=VARCHAR}
+        and group_name = #{groupName,jdbcType=VARCHAR}
+        and state in
+        <foreach collection="states" item="state" index="index" open="(" close=")" separator=",">
+            #{state}
+        </foreach>
+        order by end_time desc
+        limit 1
+    </select>
+    <select id="findLast3TaskOrderByDesc" resultType="com.sunbox.domain.ConfScalingTask">
+        select
+        <include refid="Base_Column_List"/>
+        from conf_scaling_task
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and vm_role = #{vmRole,jdbcType=VARCHAR}
+        and group_name = #{groupName,jdbcType=VARCHAR}
+        and scaling_type = #{scalingType,jdbcType=INTEGER}
+        order by end_time desc
+        limit 3
+    </select>
+</mapper>

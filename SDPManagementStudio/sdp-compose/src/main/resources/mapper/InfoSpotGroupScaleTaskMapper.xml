@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.InfoSpotGroupScaleTaskMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoSpotGroupScaleTask">
+    <id column="task_id" jdbcType="VARCHAR" property="taskId" />
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="group_id" jdbcType="VARCHAR" property="groupId" />
+    <result column="vm_role" jdbcType="VARCHAR" property="vmRole" />
+    <result column="scale_method" jdbcType="INTEGER" property="scaleMethod" />
+    <result column="scale_count" jdbcType="INTEGER" property="scaleCount" />
+    <result column="actual_count" jdbcType="INTEGER" property="actualCount" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifiedby" jdbcType="VARCHAR" property="modifiedby" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="beg_time" jdbcType="TIMESTAMP" property="begTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    task_id, cluster_id, group_id, vm_role, scale_method, scale_count, actual_count, state, createdby,
+    created_time, modifiedby, modified_time, beg_time, end_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from info_spot_group_scale_task
+    where task_id = #{taskId,jdbcType=VARCHAR}
+  </select>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.InfoSpotGroupScaleTask">
+    update info_spot_group_scale_task
+    set cluster_id = #{clusterId,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=VARCHAR},
+      vm_role = #{vmRole,jdbcType=VARCHAR},
+      scale_method = #{scaleMethod,jdbcType=INTEGER},
+      scale_count = #{scaleCount,jdbcType=INTEGER},
+      actual_count = #{actualCount,jdbcType=INTEGER},
+      state = #{state,jdbcType=INTEGER},
+      createdby = #{createdby,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifiedby = #{modifiedby,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      beg_time = #{begTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP}
+    where task_id = #{taskId,jdbcType=VARCHAR}
+  </update>
+</mapper>

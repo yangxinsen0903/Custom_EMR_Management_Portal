@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.VmEventMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.VmEvent" >
+        <result column="id" property="id" />
+        <result column="cluster_id" property="clusterId" />
+        <result column="cluster_name" property="clusterName" />
+        <result column="group_name" property="groupName" />
+        <result column="vm_name" property="vmName" />
+        <result column="host_name" property="hostName" />
+        <result column="vm_id" property="vmId" />
+        <result column="purchase_type" property="purchaseType" />
+        <result column="event_type" property="eventType" />
+        <result column="trigger_time" property="triggerTime" />
+        <result column="remark" property="remark" />
+        <result column="state" property="state" />
+        <result column="finish_time" property="finishTime" />
+        <result column="region" property="region" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+                cluster_id,
+                cluster_name,
+                group_name,
+                vm_name,
+                host_name,
+                vm_id,
+                purchase_type,
+                event_type,
+                trigger_time,
+                remark,
+                state,
+                finish_time
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.sunbox.domain.VmEvent">
+        INSERT INTO vm_events
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                id,
+            </if>
+            <if test="null != clusterId and '' != clusterId">
+                cluster_id,
+            </if>
+            <if test="null != clusterName and '' != clusterName">
+                cluster_name,
+            </if>
+            <if test="null != groupName and '' != groupName">
+                group_name,
+            </if>
+            <if test="null != vmName and '' != vmName">
+                vm_name,
+            </if>
+            <if test="null != hostName and '' != hostName">
+                host_name,
+            </if>
+            <if test="null != vmId and '' != vmId">
+                vm_id,
+            </if>
+            <if test="null != purchaseType and '' != purchaseType">
+                purchase_type,
+            </if>
+            <if test="null != eventType and '' != eventType">
+                event_type,
+            </if>
+            <if test="null != triggerTime ">
+                trigger_time,
+            </if>
+            <if test="null != remark ">
+                remark,
+            </if>
+            <if test="null != state and '' != state">
+                state,
+            </if>
+            <if test="null != finishTime ">
+                finish_time
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                #{id},
+            </if>
+            <if test="null != clusterId and '' != clusterId">
+                #{clusterId},
+            </if>
+            <if test="null != clusterName and '' != clusterName">
+                #{clusterName},
+            </if>
+            <if test="null != groupName and '' != groupName">
+                #{groupName},
+            </if>
+            <if test="null != vmName and '' != vmName">
+                #{vmName},
+            </if>
+            <if test="null != hostName and '' != hostName">
+                #{hostName},
+            </if>
+            <if test="null != vmId and '' != vmId">
+                #{vmId},
+            </if>
+            <if test="null != purchaseType and '' != purchaseType">
+                #{purchaseType},
+            </if>
+            <if test="null != eventType and '' != eventType">
+                #{eventType},
+            </if>
+            <if test="null != triggerTime ">
+                #{triggerTime},
+            </if>
+            <if test="null != remark ">
+                #{remark},
+            </if>
+            <if test="null != state and '' != state">
+                #{state},
+            </if>
+            <if test="null != finishTime ">
+                #{finishTime}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.sunbox.domain.VmEvent">
+        UPDATE vm_events
+        <set>
+            <if test="null != clusterId and '' != clusterId">cluster_id = #{clusterId},</if>
+            <if test="null != clusterName and '' != clusterName">cluster_name = #{clusterName},</if>
+            <if test="null != groupName and '' != groupName">group_name = #{groupName},</if>
+            <if test="null != vmName and '' != vmName">vm_name = #{vmName},</if>
+            <if test="null != hostName and '' != hostName">host_name = #{hostName},</if>
+            <if test="null != vmId and '' != vmId">vm_id = #{vmId},</if>
+            <if test="null != purchaseType and '' != purchaseType">purchase_type = #{purchaseType},</if>
+            <if test="null != eventType and '' != eventType">event_type = #{eventType},</if>
+            <if test="null != triggerTime ">trigger_time = #{triggerTime},</if>
+            <if test="null != remark ">remark = #{remark},</if>
+            <if test="null != state and '' != state">state = #{state},</if>
+            <if test="null != finishTime ">finish_time = #{finishTime}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM vm_events
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectPageList" resultMap="BaseResultMap">
+        select ve.*, cc.region
+            from vm_events ve
+            left join conf_cluster cc on ve.cluster_id = cc.cluster_id
+        <where>
+            <if test="null != param.region and '' != param.region">
+                And cc.region = #{param.region}
+            </if>
+            <if test="null != param.clusterId and '' != param.clusterId">
+                And ve.cluster_id = #{param.clusterId}
+            </if>
+            <if test="null != param.clusterName and '' != param.clusterName">
+                And ve.cluster_name like CONCAT(CONCAT('%', #{param.clusterName}), '%')
+            </if>
+            <if test="null != param.vmName and '' != param.vmName">
+                And ve.vm_name like CONCAT(CONCAT('%', #{param.vmName}), '%')
+            </if>
+
+            <if test="param.states!=null and param.states.size>0">
+                And ve.state in
+                <foreach collection="param.states" item="state" index="index" open="(" close=")" separator=",">
+                    #{state}
+                </foreach>
+            </if>
+
+            <if test="null != param.purchaseType and '' != param.purchaseType">
+                And ve.purchase_type = #{param.purchaseType}
+            </if>
+            <if test="null != param.eventType and '' != param.eventType">
+                And ve.event_type = #{param.eventType}
+            </if>
+            <if test="null != param.beginTime ">
+                And ve.trigger_time >= #{param.beginTime}
+            </if>
+            <if test="null != param.endTime">
+                And  ve.trigger_time &lt;= #{param.endTime}
+            </if>
+        </where>
+        <choose>
+            <when test="param.sortType == 'desc'">
+                order by ve.id desc
+            </when>
+            <when test="param.sortType == 'asc'">
+                order by ve.id asc
+            </when>
+        </choose>
+        LIMIT #{param.offset}, #{param.pageSize}
+    </select>
+
+    <select id="selectPageListCount" resultType="java.lang.Integer">
+        select count(1)
+        from vm_events ve
+        left join conf_cluster cc on ve.cluster_id = cc.cluster_id
+        <where>
+            <if test="null != param.region and '' != param.region">
+                And cc.region = #{param.region}
+            </if>
+            <if test="null != param.clusterId and '' != param.clusterId">
+                And ve.cluster_id = #{param.clusterId}
+            </if>
+            <if test="null != param.clusterName and '' != param.clusterName">
+                And ve.cluster_name like CONCAT(CONCAT('%', #{param.clusterName}), '%')
+            </if>
+            <if test="null != param.vmName and '' != param.vmName">
+                And ve.vm_name like CONCAT(CONCAT('%', #{param.vmName}), '%')
+            </if>
+
+            <if test="param.states!=null and param.states.size>0">
+                And ve.state in
+                <foreach collection="param.states" item="state" index="index" open="(" close=")" separator=",">
+                    #{state}
+                </foreach>
+            </if>
+
+            <if test="null != param.purchaseType and '' != param.purchaseType">
+                And ve.purchase_type = #{param.purchaseType}
+            </if>
+            <if test="null != param.eventType and '' != param.eventType">
+                And ve.event_type = #{param.eventType}
+            </if>
+            <if test="null != param.beginTime ">
+                And ve.trigger_time >= #{param.beginTime}
+            </if>
+            <if test="null != param.endTime">
+                And  ve.trigger_time &lt;= #{param.endTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByVmNameAndEventType" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM vm_events
+        <where>
+            vm_name = #{vmName} and event_type = #{eventType}
+        </where>
+        order by id asc
+    </select>
+</mapper>

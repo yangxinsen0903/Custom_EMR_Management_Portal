@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.AzureVmtraceInfoMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.azure.AzureVmtraceInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="vm_name" jdbcType="VARCHAR" property="vmName" />
+    <result column="host_name" jdbcType="VARCHAR" property="hostName" />
+    <result column="unique_id" jdbcType="VARCHAR" property="uniqueId" />
+    <result column="private_ip" jdbcType="VARCHAR" property="privateIp" />
+    <result column="zone" jdbcType="VARCHAR" property="zone" />
+    <result column="priority" jdbcType="VARCHAR" property="priority" />
+    <result column="vm_size" jdbcType="VARCHAR" property="vmSize" />
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="cluster_name" jdbcType="VARCHAR" property="clusterName" />
+    <result column="vm_role" jdbcType="VARCHAR" property="vmRole" />
+    <result column="group_id" jdbcType="VARCHAR" property="groupId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="vm_created_time" jdbcType="TIMESTAMP" property="vmCreatedTime" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifiedby" jdbcType="VARCHAR" property="modifiedby" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="invoke_count" jdbcType="INTEGER" property="invokeCount" />
+    <result column="vms_del_response" jdbcType="VARCHAR" property="vmsDelResponse" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, vm_name, host_name, unique_id, private_ip, `zone`, priority, vm_size, cluster_id, 
+    cluster_name, vm_role, group_id, group_name, vm_created_time, createdby, created_time, 
+    modifiedby, modified_time,invoke_count,vms_del_response
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from azure_cleaned_vms_record
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByPage" resultType="com.sunbox.domain.azure.AzureVmtraceInfo">
+    select
+    <include refid="Base_Column_List"/>
+    from azure_cleaned_vms_record
+    where 1=1
+    <if test="clusterId != null  and clusterId != '' ">
+      AND cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </if>
+    <if test="clusterName != null and clusterName != '' ">
+      AND cluster_name like CONCAT(CONCAT('%', #{clusterName}), '%')
+    </if>
+    <if test="vmName != null  and vmName != '' ">
+      AND vm_name like CONCAT(CONCAT('%', #{vmName}), '%')
+    </if>
+    ORDER BY created_time DESC
+    limit #{pageIndex},#{pageSize}
+  </select>
+  <select id="selectTotal" resultType="java.lang.Integer">
+    select
+    count(1)
+    from azure_cleaned_vms_record
+    where 1=1
+    <if test="clusterId != null  and clusterId != '' ">
+      AND cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </if>
+    <if test="clusterName != null and clusterName != '' ">
+      AND cluster_name like CONCAT(CONCAT('%', #{clusterName}), '%')
+    </if>
+    <if test="vmName != null  and vmName != '' ">
+      AND vm_name like CONCAT(CONCAT('%', #{vmName}), '%')
+    </if>
+  </select>
+  <select id="selectByVMName" resultType="com.sunbox.domain.azure.AzureVmtraceInfo">
+    select
+    <include refid="Base_Column_List" />
+    from azure_cleaned_vms_record
+    where vm_name = #{vmName,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from azure_cleaned_vms_record
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.sunbox.domain.azure.AzureVmtraceInfo" useGeneratedKeys="true">
+    insert into azure_cleaned_vms_record (vm_name, host_name, unique_id,
+      private_ip, `zone`, priority,
+      vm_size, cluster_id, cluster_name,
+      vm_role, group_id, group_name,
+      vm_created_time, createdby, created_time,
+      modifiedby, modified_time, invoke_count,
+      vms_del_response)
+    values (#{vmName,jdbcType=VARCHAR}, #{hostName,jdbcType=VARCHAR}, #{uniqueId,jdbcType=VARCHAR},
+      #{privateIp,jdbcType=VARCHAR}, #{zone,jdbcType=VARCHAR}, #{priority,jdbcType=VARCHAR},
+      #{vmSize,jdbcType=VARCHAR}, #{clusterId,jdbcType=VARCHAR}, #{clusterName,jdbcType=VARCHAR},
+      #{vmRole,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR},
+      #{vmCreatedTime,jdbcType=TIMESTAMP}, #{createdby,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP},
+      #{modifiedby,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{invokeCount,jdbcType=INTEGER},
+      #{vmsDelResponse,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.sunbox.domain.azure.AzureVmtraceInfo" useGeneratedKeys="true">
+    insert into azure_cleaned_vms_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="vmName != null">
+        vm_name,
+      </if>
+      <if test="hostName != null">
+        host_name,
+      </if>
+      <if test="uniqueId != null">
+        unique_id,
+      </if>
+      <if test="privateIp != null">
+        private_ip,
+      </if>
+      <if test="zone != null">
+        `zone`,
+      </if>
+      <if test="priority != null">
+        priority,
+      </if>
+      <if test="vmSize != null">
+        vm_size,
+      </if>
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="clusterName != null">
+        cluster_name,
+      </if>
+      <if test="vmRole != null">
+        vm_role,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="groupName != null">
+        group_name,
+      </if>
+      <if test="vmCreatedTime != null">
+        vm_created_time,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifiedby != null">
+        modifiedby,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="invokeCount != null">
+        invoke_count,
+      </if>
+      <if test="vmsDelResponse != null">
+        vms_del_response,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="vmName != null">
+        #{vmName,jdbcType=VARCHAR},
+      </if>
+      <if test="hostName != null">
+        #{hostName,jdbcType=VARCHAR},
+      </if>
+      <if test="uniqueId != null">
+        #{uniqueId,jdbcType=VARCHAR},
+      </if>
+      <if test="privateIp != null">
+        #{privateIp,jdbcType=VARCHAR},
+      </if>
+      <if test="zone != null">
+        #{zone,jdbcType=VARCHAR},
+      </if>
+      <if test="priority != null">
+        #{priority,jdbcType=VARCHAR},
+      </if>
+      <if test="vmSize != null">
+        #{vmSize,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterName != null">
+        #{clusterName,jdbcType=VARCHAR},
+      </if>
+      <if test="vmRole != null">
+        #{vmRole,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupName != null">
+        #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="vmCreatedTime != null">
+        #{vmCreatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedby != null">
+        #{modifiedby,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="invokeCount != null">
+        #{invokeCount,jdbcType=INTEGER},
+      </if>
+      <if test="vmsDelResponse != null">
+        #{vmsDelResponse,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.azure.AzureVmtraceInfo">
+    update azure_cleaned_vms_record
+    <set>
+      <if test="vmName != null">
+        vm_name = #{vmName,jdbcType=VARCHAR},
+      </if>
+      <if test="hostName != null">
+        host_name = #{hostName,jdbcType=VARCHAR},
+      </if>
+      <if test="uniqueId != null">
+        unique_id = #{uniqueId,jdbcType=VARCHAR},
+      </if>
+      <if test="privateIp != null">
+        private_ip = #{privateIp,jdbcType=VARCHAR},
+      </if>
+      <if test="zone != null">
+        `zone` = #{zone,jdbcType=VARCHAR},
+      </if>
+      <if test="priority != null">
+        priority = #{priority,jdbcType=VARCHAR},
+      </if>
+      <if test="vmSize != null">
+        vm_size = #{vmSize,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterId != null">
+        cluster_id = #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterName != null">
+        cluster_name = #{clusterName,jdbcType=VARCHAR},
+      </if>
+      <if test="vmRole != null">
+        vm_role = #{vmRole,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupName != null">
+        group_name = #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="vmCreatedTime != null">
+        vm_created_time = #{vmCreatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedby != null">
+        modifiedby = #{modifiedby,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="invokeCount != null">
+        invoke_count = #{invokeCount,jdbcType=INTEGER},
+      </if>
+      <if test="vmsDelResponse != null">
+        vms_del_response = #{vmsDelResponse,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.azure.AzureVmtraceInfo">
+    update azure_cleaned_vms_record
+    set vm_name = #{vmName,jdbcType=VARCHAR},
+        host_name = #{hostName,jdbcType=VARCHAR},
+        unique_id = #{uniqueId,jdbcType=VARCHAR},
+        private_ip = #{privateIp,jdbcType=VARCHAR},
+        `zone` = #{zone,jdbcType=VARCHAR},
+        priority = #{priority,jdbcType=VARCHAR},
+        vm_size = #{vmSize,jdbcType=VARCHAR},
+        cluster_id = #{clusterId,jdbcType=VARCHAR},
+        cluster_name = #{clusterName,jdbcType=VARCHAR},
+        vm_role = #{vmRole,jdbcType=VARCHAR},
+        group_id = #{groupId,jdbcType=VARCHAR},
+        group_name = #{groupName,jdbcType=VARCHAR},
+        vm_created_time = #{vmCreatedTime,jdbcType=TIMESTAMP},
+        createdby = #{createdby,jdbcType=VARCHAR},
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+        modifiedby = #{modifiedby,jdbcType=VARCHAR},
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+        invoke_count = #{invokeCount,jdbcType=INTEGER},
+        vms_del_response = #{vmsDelResponse,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateVmsDelResponseByClusterName">
+    update azure_cleaned_vms_record
+    set  vms_del_response = #{vmsDelResponse,jdbcType=VARCHAR}
+    where cluster_name = #{clusterName,jdbcType=VARCHAR}
+  </update>
+</mapper>

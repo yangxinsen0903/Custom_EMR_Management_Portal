@@ -1,0 +1,96 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: sdp-gw
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true
+
+---
+spring:
+  profiles: [dev,jdbc]
+  cloud:
+    config:
+      profile: test
+      label: master
+      username: igs
+      password: igsconfig123
+      discovery:
+        enabled: true
+        service-id: sdp-config
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://igs:igscd@127.0.0.1:30000/eureka/
+---
+spring:
+  profiles: test
+  cloud:
+    config:
+      profile: test
+      label: master
+      username: igs
+      password: igsconfig123
+      discovery:
+        enabled: true
+        service-id: sdp-config
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://igs:igscd@10.248.252.9:30000/eureka/
+---
+spring:
+  profiles: product
+  cloud:
+    config:
+      profile: product
+      label: master
+      username: igs
+      password: igsconfig123
+      discovery:
+        enabled: true
+        service-id: sdp-config
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://igs:igscd@10.248.252.150:30000/eureka/
+---
+spring:
+  profiles: [devjn,jdbc]
+  cloud:
+    config:
+      profile: test
+      label: master
+      username: igs
+      password: igsconfig123
+      discovery:
+        enabled: true
+        service-id: sdp-config
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://igs:igscd@192.168.2.66:30000/eureka/
+---
+spring:
+  profiles:
+    active: pre
+  cloud:
+    config:
+      profile: product
+      label: master
+      username: igs
+      password: igsconfig123
+      discovery:
+        enabled: true
+        service-id: sdp-config
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://igs:igscd@127.0.0.1:30000/eureka/

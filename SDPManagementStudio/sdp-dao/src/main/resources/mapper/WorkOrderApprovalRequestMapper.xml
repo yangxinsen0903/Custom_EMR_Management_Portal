@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.WorkOrderApprovalRequestMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.cluster.WorkOrderApprovalRequest">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="ticket_id" jdbcType="VARCHAR" property="ticketId" />
+    <result column="request_type" jdbcType="VARCHAR" property="requestType" />
+    <result column="approval_state" jdbcType="VARCHAR" property="approvalState" />
+    <result column="approval_result" jdbcType="VARCHAR" property="approvalResult" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifiedby" jdbcType="VARCHAR" property="modifiedby" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, cluster_id, ticket_id, request_type, approval_state, approval_result, createdby,
+    created_time, modifiedby, modified_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from work_order_approval_request
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByClusterIds" resultType="com.sunbox.domain.cluster.WorkOrderApprovalRequest">
+    select
+    <include refid="Base_Column_List" />
+    from work_order_approval_request
+    where  cluster_id in
+    <foreach collection="clusterIds"  item="clusterId" separator="," open="(" close=")">
+      #{clusterId,jdbcType=VARCHAR}
+    </foreach>
+  </select>
+  <select id="selectByTicketIds" resultType="com.sunbox.domain.cluster.WorkOrderApprovalRequest">
+    select
+    <include refid="Base_Column_List" />
+    from work_order_approval_request
+    where  ticket_id in
+    <foreach collection="ticketIds"  item="ticketId" separator="," open="(" close=")">
+      #{ticketId,jdbcType=VARCHAR}
+    </foreach>
+  </select>
+  <select id="selectTotal" resultType="java.lang.Integer">
+    select
+      count(1)
+    from work_order_approval_request
+ <where>
+   1=1
+   <if test="clusterId != null and clusterId != '' ">
+     and cluster_id LIKE CONCAT('%',#{clusterId},'%')
+   </if>
+
+   <if test="requestType != null and  requestType != '' ">
+     and request_type = #{requestType,jdbcType=VARCHAR}
+   </if>
+   <if test="approvalState != null and  approvalState != '' ">
+     and approval_state = #{approvalState,jdbcType=VARCHAR}
+   </if>
+ </where>
+  </select>
+  <select id="selectByPage" resultType="com.sunbox.domain.cluster.WorkOrderApprovalRequest">
+    select
+    <include refid="Base_Column_List" />
+    from work_order_approval_request
+     <where>
+       1=1
+       <if test="clusterId != null and clusterId != '' ">
+         and cluster_id LIKE CONCAT('%',#{clusterId},'%')
+       </if>
+
+       <if test="requestType != null and  requestType != '' ">
+         and request_type = #{requestType,jdbcType=VARCHAR}
+       </if>
+       <if test="approvalState != null and  approvalState != '' ">
+         and approval_state = #{approvalState,jdbcType=VARCHAR}
+       </if>
+       ORDER BY created_time DESC
+       LIMIT #{pageIndex}, #{pageSize}
+     </where>
+
+  </select>
+  <select id="selectTotalByList" resultType="java.lang.Integer">
+    select
+    count(1)
+    from work_order_approval_request
+    <where>
+      1=1
+      <if test="clusterIdList!=null and clusterIdList.size()>0">
+        and cluster_id in
+        <foreach collection="clusterIdList" index="index" open="(" close=")" separator="," item="item">
+          #{item}
+        </foreach>
+      </if>
+      <if test="request.requestType != null and  request.requestType != '' ">
+        and request_type = #{request.requestType,jdbcType=VARCHAR}
+      </if>
+      <if test="request.approvalState != null and  request.approvalState != '' ">
+        and approval_state = #{request.approvalState,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="selectByPageList" resultType="com.sunbox.domain.cluster.WorkOrderApprovalRequest">
+    select
+    <include refid="Base_Column_List" />
+    from work_order_approval_request
+    <where>
+      1=1
+      <if test="clusterIdList!=null and clusterIdList.size()>0">
+        and cluster_id in
+        <foreach collection="clusterIdList" index="index" open="(" close=")" separator="," item="item">
+          #{item}
+        </foreach>
+      </if>
+      <if test="request.requestType != null and  request.requestType != '' ">
+        and request_type = #{request.requestType,jdbcType=VARCHAR}
+      </if>
+      <if test="request.approvalState != null and  request.approvalState != '' ">
+        and approval_state = #{request.approvalState,jdbcType=VARCHAR}
+      </if>
+      ORDER BY created_time DESC
+      LIMIT #{request.pageIndex}, #{request.pageSize}
+    </where>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from work_order_approval_request
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.sunbox.domain.cluster.WorkOrderApprovalRequest" useGeneratedKeys="true">
+    insert into work_order_approval_request (cluster_id, ticket_id, request_type,
+                                             approval_state, approval_result, createdby,
+                                             created_time, modifiedby, modified_time
+    )
+    values (#{clusterId,jdbcType=VARCHAR}, #{ticketId,jdbcType=VARCHAR}, #{requestType,jdbcType=VARCHAR},
+            #{approvalState,jdbcType=VARCHAR}, #{approvalResult,jdbcType=VARCHAR}, #{createdby,jdbcType=VARCHAR},
+            #{createdTime,jdbcType=TIMESTAMP}, #{modifiedby,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+           )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.sunbox.domain.cluster.WorkOrderApprovalRequest" useGeneratedKeys="true">
+    insert into work_order_approval_request
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="ticketId != null">
+        ticket_id,
+      </if>
+      <if test="requestType != null">
+        request_type,
+      </if>
+      <if test="approvalState != null">
+        approval_state,
+      </if>
+      <if test="approvalResult != null">
+        approval_result,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifiedby != null">
+        modifiedby,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketId != null">
+        #{ticketId,jdbcType=VARCHAR},
+      </if>
+      <if test="requestType != null">
+        #{requestType,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalState != null">
+        #{approvalState,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalResult != null">
+        #{approvalResult,jdbcType=VARCHAR},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedby != null">
+        #{modifiedby,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.cluster.WorkOrderApprovalRequest">
+    update work_order_approval_request
+    <set>
+      <if test="clusterId != null">
+        cluster_id = #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketId != null">
+        ticket_id = #{ticketId,jdbcType=VARCHAR},
+      </if>
+      <if test="requestType != null">
+        request_type = #{requestType,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalState != null">
+        approval_state = #{approvalState,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalResult != null">
+        approval_result = #{approvalResult,jdbcType=VARCHAR},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedby != null">
+        modifiedby = #{modifiedby,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.cluster.WorkOrderApprovalRequest">
+    update work_order_approval_request
+    set cluster_id = #{clusterId,jdbcType=VARCHAR},
+        ticket_id = #{ticketId,jdbcType=VARCHAR},
+        request_type = #{requestType,jdbcType=VARCHAR},
+        approval_state = #{approvalState,jdbcType=VARCHAR},
+        approval_result = #{approvalResult,jdbcType=VARCHAR},
+        createdby = #{createdby,jdbcType=VARCHAR},
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+        modifiedby = #{modifiedby,jdbcType=VARCHAR},
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <springProperty scope="context" name="appname" source="spring.application.name"></springProperty>
+    <property name="logrootdir" value="/lingtian/logs/app"></property>
+    <springProperty scope="context" defaultValue="info" name="loglevel" source="logconfig.level"></springProperty>
+    <springProperty scope="context" defaultValue="7" name="days" source="logconfig.days"></springProperty>
+    <contextName>${appname}</contextName>
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName [${appname},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{clusterId},%X{X-Span-Export:-}] [%thread] %-5level %logger{50}:%L %caller{0} - %msg%n"></property>
+
+    <!--<property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [${appname}] [%tid] [%thread] %-5level %logger{50}:%L %caller{0} - %msg%n"></property>-->
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <appender name="debugFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${logrootdir}/DEBUG.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>30MB</maxFileSize>
+            <maxHistory>${days}</maxHistory>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>debug</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <pattern>
+                    <pattern>
+                        {
+                        "appName": "${appname}",
+                        "level": "%level",
+                        "message": "%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{clusterId},[%thread],%logger{50}:%L,%caller{0},%message",
+                        "timestamp": "%date{\"yyyy-MM-dd'T'HH:mm:ss,SSSZ\"}"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+    <appender name="infoFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${logrootdir}/INFO.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>30MB</maxFileSize>
+            <maxHistory>${days}</maxHistory>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>info</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <pattern>
+                    <pattern>
+                        {
+                        "appName": "${appname}",
+                        "level": "%level",
+                        "message": "%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{clusterId},[%thread],%logger{50}:%L,%caller{0},%message",
+                        "timestamp": "%date{\"yyyy-MM-dd'T'HH:mm:ss,SSSZ\"}"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+    <appender name="warnFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${logrootdir}/WARN.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>30MB</maxFileSize>
+            <maxHistory>${days}</maxHistory>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>warn</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <pattern>
+                    <pattern>
+                        {
+                        "appName": "${appname}",
+                        "level": "%level",
+                        "message": "%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{clusterId},[%thread],%logger{50}:%L,%caller{0},%message",
+                        "timestamp": "%date{\"yyyy-MM-dd'T'HH:mm:ss,SSSZ\"}"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+    <appender name="errorFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${logrootdir}/ERROR.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>30MB</maxFileSize>
+            <maxHistory>${days}</maxHistory>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>error</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <pattern>
+                    <pattern>
+                        {
+                        "appName": "${appname}",
+                        "level": "%level",
+                        "message": "%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{clusterId},[%thread],%logger{50}:%L,%caller{0},%message",
+                        "timestamp": "%date{\"yyyy-MM-dd'T'HH:mm:ss,SSSZ\"}"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+
+    <root level="${loglevel}">
+        <appender-ref ref="console"/>
+        <appender-ref ref="debugFile"/>
+        <appender-ref ref="infoFile"/>
+        <appender-ref ref="warnFile"/>
+        <appender-ref ref="errorFile"/>
+    </root>
+
+    <logger name="${appname}"/>
+
+</configuration>

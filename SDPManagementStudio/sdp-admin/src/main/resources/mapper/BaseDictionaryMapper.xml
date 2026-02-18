@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpadmin.mapper.BaseDictionaryMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.BaseDictionary">
+    <!--@mbg.generated-->
+    <!--@Table base_dictionary-->
+    <id column="dict_id" jdbcType="INTEGER" property="dictId" />
+    <result column="pdict_id" jdbcType="VARCHAR" property="pdictId" />
+    <result column="dict_name" jdbcType="VARCHAR" property="dictName" />
+    <result column="dict_value" jdbcType="VARCHAR" property="dictValue" />
+    <result column="alias_name" jdbcType="VARCHAR" property="aliasName" />
+    <result column="is_delete" jdbcType="VARCHAR" property="isDelete" />
+    <result column="sortno" jdbcType="VARCHAR" property="sortno" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifiedby" jdbcType="VARCHAR" property="modifiedby" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    dict_id, pdict_id, dict_name, dict_value, alias_name, is_delete, sortno, createdby, 
+    created_time, modifiedby, modified_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from base_dictionary
+    where dict_id = #{dictId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from base_dictionary
+    where dict_id = #{dictId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="dict_id" keyProperty="dictId" parameterType="com.sunbox.domain.BaseDictionary" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into base_dictionary (pdict_id, dict_name, dict_value, 
+      alias_name, is_delete, sortno, 
+      createdby, created_time, modifiedby, 
+      modified_time)
+    values (#{pdictId,jdbcType=VARCHAR}, #{dictName,jdbcType=VARCHAR}, #{dictValue,jdbcType=VARCHAR}, 
+      #{aliasName,jdbcType=VARCHAR}, #{isDelete,jdbcType=VARCHAR}, #{sortno,jdbcType=VARCHAR}, 
+      #{createdby,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifiedby,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="dict_id" keyProperty="dictId" parameterType="com.sunbox.domain.BaseDictionary" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into base_dictionary
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pdictId != null">
+        pdict_id,
+      </if>
+      <if test="dictName != null">
+        dict_name,
+      </if>
+      <if test="dictValue != null">
+        dict_value,
+      </if>
+      <if test="aliasName != null">
+        alias_name,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="sortno != null">
+        sortno,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifiedby != null">
+        modifiedby,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pdictId != null">
+        #{pdictId,jdbcType=VARCHAR},
+      </if>
+      <if test="dictName != null">
+        #{dictName,jdbcType=VARCHAR},
+      </if>
+      <if test="dictValue != null">
+        #{dictValue,jdbcType=VARCHAR},
+      </if>
+      <if test="aliasName != null">
+        #{aliasName,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="sortno != null">
+        #{sortno,jdbcType=VARCHAR},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedby != null">
+        #{modifiedby,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.BaseDictionary">
+    <!--@mbg.generated-->
+    update base_dictionary
+    <set>
+      <if test="pdictId != null">
+        pdict_id = #{pdictId,jdbcType=VARCHAR},
+      </if>
+      <if test="dictName != null">
+        dict_name = #{dictName,jdbcType=VARCHAR},
+      </if>
+      <if test="dictValue != null">
+        dict_value = #{dictValue,jdbcType=VARCHAR},
+      </if>
+      <if test="aliasName != null">
+        alias_name = #{aliasName,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="sortno != null">
+        sortno = #{sortno,jdbcType=VARCHAR},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedby != null">
+        modifiedby = #{modifiedby,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where dict_id = #{dictId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.BaseDictionary">
+    <!--@mbg.generated-->
+    update base_dictionary
+    set pdict_id = #{pdictId,jdbcType=VARCHAR},
+      dict_name = #{dictName,jdbcType=VARCHAR},
+      dict_value = #{dictValue,jdbcType=VARCHAR},
+      alias_name = #{aliasName,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=VARCHAR},
+      sortno = #{sortno,jdbcType=VARCHAR},
+      createdby = #{createdby,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifiedby = #{modifiedby,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where dict_id = #{dictId,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectBaseDictionary" resultMap="BaseResultMap" parameterType="com.sunbox.domain.BaseDictionary">
+    select <include refid="Base_Column_List" /> from base_dictionary
+    where 1=1 and pdict_id = (select dict_id from base_dictionary where alias_name=#{aliasName,jdbcType=VARCHAR})
+      and is_delete=0 order by sortno asc
+  </select>
+</mapper>

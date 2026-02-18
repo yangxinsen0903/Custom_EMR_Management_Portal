@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.BizConfigMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.BizConfig">
+        <id column="id" property="id" />
+        <result column="category" property="category" />
+        <result column="name" property="name" />
+        <result column="cfg_key" property="cfgKey" />
+        <result column="cfg_value" property="cfgValue" />
+        <result column="remark" property="remark" />
+        <result column="sort_no" property="sortNo" />
+        <result column="state" property="state" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        category,
+        name,
+        cfg_key,
+        cfg_value,
+        remark,
+        sort_no,
+        state,
+        create_time,
+        update_time
+    </sql>
+
+    <insert id="insert" parameterType="com.sunbox.domain.BizConfig">
+        INSERT INTO biz_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                id,
+            </if>
+            <if test="null != category and '' != category">
+                category,
+            </if>
+            <if test="null != name and '' != name">
+                name,
+            </if>
+            <if test="null != cfgKey and '' != cfgKey">
+                cfg_key,
+            </if>
+            <if test="null != cfgValue and '' != cfgValue">
+                cfg_value,
+            </if>
+            <if test="null != remark and '' != remark">
+                remark,
+            </if>
+            <if test="null != sortNo ">
+                sort_no,
+            </if>
+            <if test="null != state and '' != state">
+                state,
+            </if>
+            <if test="null != createTime ">
+                create_time,
+            </if>
+            <if test="null != updateTime ">
+                update_time
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                #{id},
+            </if>
+            <if test="null != category and '' != category">
+                #{category},
+            </if>
+            <if test="null != name and '' != name">
+                #{name},
+            </if>
+            <if test="null != cfgKey and '' != cfgKey">
+                #{cfgKey},
+            </if>
+            <if test="null != cfgValue and '' != cfgValue">
+                #{cfgValue},
+            </if>
+            <if test="null != remark and '' != remark">
+                #{remark},
+            </if>
+            <if test="null != sortNo ">
+                #{sortNo},
+            </if>
+            <if test="null != state and '' != state">
+                #{state},
+            </if>
+            <if test="null != createTime ">
+                #{createTime},
+            </if>
+            <if test="null != updateTime ">
+                #{updateTime}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.BizConfig">
+        UPDATE biz_config
+        <set>
+            <if test="null != category and '' != category">category = #{category},</if>
+            <if test="null != name and '' != name">name = #{name},</if>
+            <if test="null != cfgKey and '' != cfgKey">cfg_key = #{cfgKey},</if>
+            <if test="null != cfgValue and '' != cfgValue">cfg_value = #{cfgValue},</if>
+            <if test="null != remark and '' != remark">remark = #{remark},</if>
+            <if test="null != sortNo ">sort_no = #{sortNo},</if>
+            <if test="null != state and '' != state">state = #{state},</if>
+            update_time = now()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_config
+        where state &lt;> 'DELETED'
+    </select>
+
+    <select id="selectByCategoryAndKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_config
+        <where>
+            state &lt;> 'DELETED'
+            <if test="category != null">
+                And category = #{category}
+            </if>
+            <if test="cfgKey != null">
+                And cfg_key = #{cfgKey}
+            </if>
+
+        </where>
+    </select>
+    <select id="selectByCfgKey" resultType="com.sunbox.domain.BizConfig">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_config
+        where 1=1
+        <if test="cfgKeys!=null and cfgKeys.size>0 ">
+            and cfg_key in
+            <foreach collection="cfgKeys" open="(" close=")" separator="," item="item">
+                #{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        and state &lt;> 'DELETED'
+    </select>
+
+    <update id="deleteById" >
+        update biz_config
+        set state = 'DELETED'
+        where id = #{id}
+    </update>
+    <update id="updateConfByCfgkey" parameterType="com.sunbox.domain.BizConfig">
+            UPDATE biz_config
+            <set>
+                <if test="null != category and '' != category">category = #{category},</if>
+                <if test="null != name and '' != name">name = #{name},</if>
+                <if test="null != cfgValue and '' != cfgValue">cfg_value = #{cfgValue},</if>
+                <if test="null != remark and '' != remark">remark = #{remark},</if>
+                <if test="null != sortNo ">sort_no = #{sortNo},</if>
+                <if test="null != state and '' != state">state = #{state},</if>
+                update_time = now()
+            </set>
+            WHERE cfg_key = #{cfgKey}
+    </update>
+</mapper>

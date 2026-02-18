@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.ConfHostGroupVmSkuMapper">
+    <resultMap type="com.sunbox.domain.ConfHostGroupVmSku" id="ConfHostGroupVmSkuMap">
+        <result property="vmSkuId" column="vm_sku_id" jdbcType="VARCHAR"/>
+        <result property="clusterId" column="cluster_id" jdbcType="VARCHAR"/>
+        <result property="groupId" column="group_id" jdbcType="VARCHAR"/>
+        <result property="vmConfId" column="vm_conf_id" jdbcType="VARCHAR"/>
+        <result property="groupName" column="group_name" jdbcType="VARCHAR"/>
+        <result property="vmRole" column="vm_role" jdbcType="VARCHAR"/>
+        <result property="sku" column="sku" jdbcType="VARCHAR"/>
+        <result property="cpuType" column="cpu_type" jdbcType="VARCHAR"/>
+        <result property="vcpus" column="vcpus" jdbcType="VARCHAR"/>
+        <result property="memory" column="memory" jdbcType="VARCHAR"/>
+        <result property="purchaseType" column="purchase_type" jdbcType="INTEGER"/>
+        <result property="createdby" column="createdby" jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="modifiedby" column="modifiedby" jdbcType="VARCHAR"/>
+        <result property="modifiedTime" column="modified_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="ConfHostGroupVmSkuMap">
+        select vm_sku_id,
+               cluster_id,
+               group_id,
+               vm_conf_id,
+               group_name,
+               vm_role,
+               sku,
+               cpu_type,
+               vcpus,
+               memory,
+               purchase_type,
+               createdby,
+               created_time,
+               modifiedby,
+               modified_time
+        from conf_host_group_vm_sku
+        where vm_sku_id = #{vmSkuId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="ConfHostGroupVmSkuMap">
+        select
+        vm_sku_id, cluster_id, group_id, vm_conf_id, group_name, vm_role, sku, cpu_type, vcpus, memory, purchase_type,
+        createdby, created_time, modifiedby, modified_time
+        from conf_host_group_vm_sku
+        <where>
+            <if test="entity.vmSkuId != null and entity.vmSkuId != ''">
+                and vm_sku_id = #{entity.vmSkuId}
+            </if>
+            <if test="entity.clusterId != null and entity.clusterId != ''">
+                and cluster_id = #{entity.clusterId}
+            </if>
+            <if test="entity.groupId != null and entity.groupId != ''">
+                and group_id = #{entity.groupId}
+            </if>
+            <if test="entity.vmConfId != null and entity.vmConfId != ''">
+                and vm_conf_id = #{entity.vmConfId}
+            </if>
+            <if test="entity.groupName != null and entity.groupName != ''">
+                and group_name = #{entity.groupName}
+            </if>
+            <if test="entity.vmRole != null and entity.vmRole != ''">
+                and vm_role = #{vmRole}
+            </if>
+            <if test="entity.sku != null and entity.sku != ''">
+                and sku = #{entity.sku}
+            </if>
+            <if test="entity.cpuType != null and entity.cpuType != ''">
+                and cpu_type = #{entity.cpuType}
+            </if>
+            <if test="entity.vcpus != null and entity.vcpus != ''">
+                and vcpus = #{entity.vcpus}
+            </if>
+            <if test="entity.memory != null and entity.memory != ''">
+                and memory = #{entity.memory}
+            </if>
+            <if test="entity.purchaseType != null">
+                and purchase_type = #{entity.purchaseType}
+            </if>
+        </where>
+        limit #{pageIndex}, #{pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from conf_host_group_vm_sku
+        <where>
+            <if test="entity.vmSkuId != null and entity.vmSkuId != ''">
+                and vm_sku_id = #{entity.vmSkuId}
+            </if>
+            <if test="entity.clusterId != null and entity.clusterId != ''">
+                and cluster_id = #{entity.clusterId}
+            </if>
+            <if test="entity.groupId != null and entity.groupId != ''">
+                and group_id = #{entity.groupId}
+            </if>
+            <if test="entity.vmConfId != null and entity.vmConfId != ''">
+                and vm_conf_id = #{entity.vmConfId}
+            </if>
+            <if test="entity.groupName != null and entity.groupName != ''">
+                and group_name = #{entity.groupName}
+            </if>
+            <if test="entity.vmRole != null and entity.vmRole != ''">
+                and vm_role = #{vmRole}
+            </if>
+            <if test="entity.sku != null and entity.sku != ''">
+                and sku = #{entity.sku}
+            </if>
+            <if test="entity.cpuType != null and entity.cpuType != ''">
+                and cpu_type = #{entity.cpuType}
+            </if>
+            <if test="entity.vcpus != null and entity.vcpus != ''">
+                and vcpus = #{entity.vcpus}
+            </if>
+            <if test="entity.memory != null and entity.memory != ''">
+                and memory = #{entity.memory}
+            </if>
+            <if test="entity.purchaseType != null">
+                and purchase_type = #{entity.purchaseType}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="vmSkuId" useGeneratedKeys="true">
+        insert into conf_host_group_vm_sku(vm_sku_id,cluster_id, group_id, vm_conf_id, group_name, vm_role, sku, cpu_type, vcpus,
+                                           memory, purchase_type, createdby, created_time, modifiedby, modified_time)
+        values (#{vmSkuId},#{clusterId}, #{groupId}, #{vmConfId}, #{groupName}, #{vmRole}, #{sku}, #{cpuType}, #{vcpus}, #{memory},
+                #{purchaseType}, #{createdby}, #{createdTime}, #{modifiedby}, #{modifiedTime})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update conf_host_group_vm_sku
+        <set>
+            <if test="clusterId != null and clusterId != ''">
+                cluster_id = #{clusterId},
+            </if>
+            <if test="groupId != null and groupId != ''">
+                group_id = #{groupId},
+            </if>
+            <if test="vmConfId != null and vmConfId != ''">
+                vm_conf_id = #{vmConfId},
+            </if>
+            <if test="groupName != null and groupName != ''">
+                group_name = #{groupName},
+            </if>
+            <if test="vmRole != null and vmRole != ''">
+                vm_role = #{vmRole},
+            </if>
+            <if test="sku != null and sku != ''">
+                sku = #{sku},
+            </if>
+            <if test="cpuType != null and cpuType != ''">
+                cpu_type = #{cpuType},
+            </if>
+            <if test="vcpus != null and vcpus != ''">
+                vcpus = #{vcpus},
+            </if>
+            <if test="memory != null and memory != ''">
+                memory = #{memory},
+            </if>
+            <if test="purchaseType != null">
+                purchase_type = #{purchaseType},
+            </if>
+            <if test="createdby != null and createdby != ''">
+                createdby = #{createdby},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime},
+            </if>
+            <if test="modifiedby != null and modifiedby != ''">
+                modifiedby = #{modifiedby},
+            </if>
+            <if test="modifiedTime != null">
+                modified_time = #{modifiedTime},
+            </if>
+        </set>
+        where vm_sku_id = #{vmSkuId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from conf_host_group_vm_sku
+        where vm_sku_id = #{vmSkuId}
+    </delete>
+
+    <select id="selectByClusterIdAndGroupId"  resultMap="ConfHostGroupVmSkuMap">
+        select *
+        from conf_host_group_vm_sku
+        where cluster_id = #{clusterId}
+          and group_id = #{groupId}
+    </select>
+
+    <select id="selectByClusterIdAndGroupName"  resultMap="ConfHostGroupVmSkuMap">
+        select *
+        from conf_host_group_vm_sku
+        where cluster_id = #{clusterId}
+          and group_name = #{groupName}
+    </select>
+
+    <select id="selectByClusterId"  resultMap="ConfHostGroupVmSkuMap">
+        select *
+        from conf_host_group_vm_sku
+        where cluster_id = #{clusterId}
+    </select>
+    <select id="selectByVmConfIdAndSku" resultMap="ConfHostGroupVmSkuMap">
+        select *
+        from conf_host_group_vm_sku
+        where vm_conf_id = #{vmConfId}
+        and sku = #{sku}
+    </select>
+
+    <select id="selectByVmConfId" resultMap="ConfHostGroupVmSkuMap">
+        select *
+        from conf_host_group_vm_sku
+        where vm_conf_id = #{vmConfId}
+    </select>
+    <select id="selectOldOneByClusterIdAndvmRole" resultMap="ConfHostGroupVmSkuMap">
+        select *
+        from conf_host_group_vm_sku
+        where cluster_id = #{clusterId}
+          and vm_role = #{vmRole}
+        order by created_time limit 1
+    </select>
+
+    <select id="selectOneByClusterIdAndSku" resultMap="ConfHostGroupVmSkuMap">
+        select * from conf_host_group_vm_sku
+        where cluster_id = #{clusterId}
+        and sku = #{sku}
+        limit 1
+    </select>
+</mapper>
+

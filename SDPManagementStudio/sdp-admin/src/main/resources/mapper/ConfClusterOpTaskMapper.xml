@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpadmin.mapper.ConfClusterOpTaskMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.ConfClusterOpTask">
+    <id column="task_id" jdbcType="VARCHAR" property="taskId" />
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="service_name" jdbcType="VARCHAR" property="serviceName" />
+    <result column="opreation_type" jdbcType="VARCHAR" property="opreationType" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="param_info" jdbcType="VARCHAR" property="paramInfo" />
+    <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    task_id
+    , cluster_id, service_name, opreation_type, state, param_info, begin_time,
+    end_time, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from conf_cluster_op_task
+    where task_id = #{taskId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByTaskIdAndClusterId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from conf_cluster_op_task
+    where task_id = #{taskId,jdbcType=VARCHAR}
+    and cluster_id = #{clusterId,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete
+    from conf_cluster_op_task
+    where task_id = #{taskId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.ConfClusterOpTask">
+    insert into conf_cluster_op_task (task_id, cluster_id, service_name,
+                                      opreation_type, state, param_info,
+                                      begin_time, end_time, create_time)
+    values (#{taskId,jdbcType=VARCHAR}, #{clusterId,jdbcType=VARCHAR}, #{serviceName,jdbcType=VARCHAR}, 
+      #{opreationType,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{paramInfo,jdbcType=VARCHAR}, 
+      #{beginTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.ConfClusterOpTask">
+    insert into conf_cluster_op_task
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="taskId != null">
+        task_id,
+      </if>
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="serviceName != null">
+        service_name,
+      </if>
+      <if test="opreationType != null">
+        opreation_type,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="paramInfo != null">
+        param_info,
+      </if>
+      <if test="beginTime != null">
+        begin_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="taskId != null">
+        #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceName != null">
+        #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="opreationType != null">
+        #{opreationType,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="paramInfo != null">
+        #{paramInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="beginTime != null">
+        #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.ConfClusterOpTask">
+    update conf_cluster_op_task
+    <set>
+      <if test="clusterId != null">
+        cluster_id = #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceName != null">
+        service_name = #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="opreationType != null">
+        opreation_type = #{opreationType,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="paramInfo != null">
+        param_info = #{paramInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="beginTime != null">
+        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where task_id = #{taskId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.ConfClusterOpTask">
+    update conf_cluster_op_task
+    set cluster_id = #{clusterId,jdbcType=VARCHAR},
+      service_name = #{serviceName,jdbcType=VARCHAR},
+      opreation_type = #{opreationType,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      param_info = #{paramInfo,jdbcType=VARCHAR},
+      begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where task_id = #{taskId,jdbcType=VARCHAR}
+  </update>
+</mapper>

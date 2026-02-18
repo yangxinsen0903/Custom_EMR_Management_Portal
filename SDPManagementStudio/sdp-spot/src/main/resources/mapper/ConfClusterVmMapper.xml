@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpspot.mapper.ConfClusterVmMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.ConfClusterVm">
+    <!--@mbg.generated-->
+    <!--@Table conf_cluster_vm-->
+    <id column="vm_conf_id" jdbcType="VARCHAR" property="vmConfId"/>
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId"/>
+    <result column="vm_role" jdbcType="VARCHAR" property="vmRole"/>
+    <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+    <result column="group_id" jdbcType="VARCHAR" property="groupId"/>
+    <result column="elastic_rule_id" jdbcType="VARCHAR" property="elasticRuleId"/>
+    <result column="sku" jdbcType="VARCHAR" property="sku"/>
+    <result column="os_imageid" jdbcType="VARCHAR" property="osImageid"/>
+    <result column="os_image_type" jdbcType="VARCHAR" property="osImageType"/>
+    <result column="os_version" jdbcType="VARCHAR" property="osVersion"/>
+    <result column="os_volume_size" jdbcType="INTEGER" property="osVolumeSize"/>
+    <result column="os_volume_type" jdbcType="VARCHAR" property="osVolumeType"/>
+    <result column="vcpus" jdbcType="VARCHAR" property="vcpus"/>
+    <result column="memory" jdbcType="VARCHAR" property="memory"/>
+    <result column="count" jdbcType="INTEGER" property="count"/>
+    <result column="purchase_type" jdbcType="INTEGER" property="purchaseType"/>
+    <result column="init_script_path" jdbcType="VARCHAR" property="initScriptPath"/>
+    <result column="img_id" jdbcType="VARCHAR" property="imgId"/>
+    <result column="state" jdbcType="INTEGER" property="state"/>
+    <result column="createdby" jdbcType="VARCHAR" property="createdby"/>
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+    <result column="modifiedby" jdbcType="VARCHAR" property="modifiedby"/>
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+    <result column="price_strategy" jdbcType="INTEGER" property="priceStrategy"/>
+    <result column="max_price" jdbcType="DECIMAL" property="maxPrice"/>
+    <result column="purchase_priority" jdbcType="INTEGER" property="purchasePriority"/>
+    <result column="group_id" jdbcType="VARCHAR" property="groupId"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    vm_conf_id, cluster_id, vm_role, group_name,group_id,elastic_rule_id,sku, os_imageid, os_image_type, os_version,
+    os_volume_size,
+    os_volume_type, vcpus, memory, `count`, purchase_type, init_script_path, `state`,
+    createdby, created_time, modifiedby, modified_time,img_id,group_name,group_id,price_strategy,max_price,purchase_priority
+  </sql>
+  <select id="listByClusterId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from conf_cluster_vm
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+      and group_id = #{groupId,jdbcType=VARCHAR}
+      and purchase_type = #{purchaseType,jdbcType=INTEGER}
+  </select>
+  <select id="listByPurchaseType"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from conf_cluster_vm
+    where purchase_type = #{purchaseType,jdbcType=INTEGER}
+        and state =#{state,jdbcType=INTEGER}
+  </select>
+  <select id="countByPurchaseType" resultType="int">
+    select
+    count(purchase_type)
+    from conf_cluster_vm
+    where purchase_type = #{purchaseType,jdbcType=INTEGER}
+    and state =#{state,jdbcType=INTEGER}
+  </select>
+  <select id="findByClusterIdAndGroupId" resultType="com.sunbox.domain.ConfClusterVm">
+    select
+    <include refid="Base_Column_List" />
+    from conf_cluster_vm
+    where cluster_id = #{clusterId,jdbcType=INTEGER}
+    and group_id =#{groupId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByClusterIdAndVmConfId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from conf_cluster_vm
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    and vm_conf_id = #{vmConfId,jdbcType=VARCHAR}
+  </select>
+</mapper>

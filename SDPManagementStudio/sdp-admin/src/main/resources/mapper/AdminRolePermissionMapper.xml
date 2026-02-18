@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.igsadmin.mapper.AdminRolePermissionDao">
+    <insert id="saveAll" parameterType="java.util.Map">
+        insert into vm_admin_role_permission (`rid`, `pid`)
+        values
+        <foreach collection="list" item="rolePermissions" separator=",">
+            (#{rolePermissions.rid}, #{rolePermissions.pid})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByRoleId" parameterType="java.lang.String">
+        delete from vm_admin_role_permission where rid = #{roleId};
+    </delete>
+
+    <select id="getRolePermissionByRoleId" parameterType="java.lang.String" resultType="com.sunbox.sdpadmin.core.model.AdminRolePermission">
+        select `rid`, `pid` from vm_admin_role_permission where rid = #{roleid}
+    </select>
+</mapper>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.InfoClusterFullLogMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoClusterFullLog">
+    <id column="log_id" jdbcType="BIGINT" property="logId" />
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="cluster_name" jdbcType="VARCHAR" property="clusterName" />
+    <result column="activity_log_id" jdbcType="VARCHAR" property="activityLogId" />
+    <result column="action_name" jdbcType="VARCHAR" property="actionName" />
+    <result column="plan_id" jdbcType="VARCHAR" property="planId" />
+    <result column="request_time" jdbcType="TIMESTAMP" property="requestTime" />
+    <result column="response_time" jdbcType="TIMESTAMP" property="responseTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.sunbox.domain.InfoClusterFullLogWithBLOBs">
+    <result column="request_param" jdbcType="LONGVARCHAR" property="requestParam" />
+    <result column="response_body" jdbcType="LONGVARCHAR" property="responseBody" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    log_id, cluster_id, cluster_name, activity_log_id, action_name, plan_id, request_time, 
+    response_time
+  </sql>
+  <sql id="Blob_Column_List">
+    request_param, response_body
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from info_cluster_full_log
+    where log_id = #{logId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from info_cluster_full_log
+    where log_id = #{logId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.InfoClusterFullLogWithBLOBs">
+    insert into info_cluster_full_log (log_id, cluster_id, cluster_name, 
+      activity_log_id, action_name, plan_id, 
+      request_time, response_time, request_param, 
+      response_body)
+    values (#{logId,jdbcType=BIGINT}, #{clusterId,jdbcType=VARCHAR}, #{clusterName,jdbcType=VARCHAR}, 
+      #{activityLogId,jdbcType=VARCHAR}, #{actionName,jdbcType=VARCHAR}, #{planId,jdbcType=VARCHAR}, 
+      #{requestTime,jdbcType=TIMESTAMP}, #{responseTime,jdbcType=TIMESTAMP}, #{requestParam,jdbcType=LONGVARCHAR}, 
+      #{responseBody,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.InfoClusterFullLogWithBLOBs">
+    insert into info_cluster_full_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="logId != null">
+        log_id,
+      </if>
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="clusterName != null">
+        cluster_name,
+      </if>
+      <if test="activityLogId != null">
+        activity_log_id,
+      </if>
+      <if test="actionName != null">
+        action_name,
+      </if>
+      <if test="planId != null">
+        plan_id,
+      </if>
+      <if test="requestTime != null">
+        request_time,
+      </if>
+      <if test="responseTime != null">
+        response_time,
+      </if>
+      <if test="requestParam != null">
+        request_param,
+      </if>
+      <if test="responseBody != null">
+        response_body,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="logId != null">
+        #{logId,jdbcType=BIGINT},
+      </if>
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterName != null">
+        #{clusterName,jdbcType=VARCHAR},
+      </if>
+      <if test="activityLogId != null">
+        #{activityLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="actionName != null">
+        #{actionName,jdbcType=VARCHAR},
+      </if>
+      <if test="planId != null">
+        #{planId,jdbcType=VARCHAR},
+      </if>
+      <if test="requestTime != null">
+        #{requestTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="responseTime != null">
+        #{responseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="requestParam != null">
+        #{requestParam,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="responseBody != null">
+        #{responseBody,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.InfoClusterFullLogWithBLOBs">
+    update info_cluster_full_log
+    <set>
+      <if test="clusterId != null">
+        cluster_id = #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterName != null">
+        cluster_name = #{clusterName,jdbcType=VARCHAR},
+      </if>
+      <if test="activityLogId != null">
+        activity_log_id = #{activityLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="actionName != null">
+        action_name = #{actionName,jdbcType=VARCHAR},
+      </if>
+      <if test="planId != null">
+        plan_id = #{planId,jdbcType=VARCHAR},
+      </if>
+      <if test="requestTime != null">
+        request_time = #{requestTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="responseTime != null">
+        response_time = #{responseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="requestParam != null">
+        request_param = #{requestParam,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="responseBody != null">
+        response_body = #{responseBody,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where log_id = #{logId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sunbox.domain.InfoClusterFullLogWithBLOBs">
+    update info_cluster_full_log
+    set cluster_id = #{clusterId,jdbcType=VARCHAR},
+      cluster_name = #{clusterName,jdbcType=VARCHAR},
+      activity_log_id = #{activityLogId,jdbcType=VARCHAR},
+      action_name = #{actionName,jdbcType=VARCHAR},
+      plan_id = #{planId,jdbcType=VARCHAR},
+      request_time = #{requestTime,jdbcType=TIMESTAMP},
+      response_time = #{responseTime,jdbcType=TIMESTAMP},
+      request_param = #{requestParam,jdbcType=LONGVARCHAR},
+      response_body = #{responseBody,jdbcType=LONGVARCHAR}
+    where log_id = #{logId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.InfoClusterFullLog">
+    update info_cluster_full_log
+    set cluster_id      = #{clusterId,jdbcType=VARCHAR},
+        cluster_name    = #{clusterName,jdbcType=VARCHAR},
+        activity_log_id = #{activityLogId,jdbcType=VARCHAR},
+        action_name     = #{actionName,jdbcType=VARCHAR},
+        plan_id         = #{planId,jdbcType=VARCHAR},
+        request_time    = #{requestTime,jdbcType=TIMESTAMP},
+        response_time   = #{responseTime,jdbcType=TIMESTAMP}
+    where log_id = #{logId,jdbcType=BIGINT}
+  </update>
+
+  <delete id="deleteByResponseTime" parameterType="java.util.Date">
+    delete
+    from info_cluster_full_log
+    where response_time <![CDATA[<]]> #{responseTime, jdbcType=TIMESTAMP}
+  </delete>
+</mapper>

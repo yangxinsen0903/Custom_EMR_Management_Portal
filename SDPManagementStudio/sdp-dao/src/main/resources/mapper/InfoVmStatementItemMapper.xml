@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.InfoVmStatementItemMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoVmStatementItem">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="statement_id" jdbcType="VARCHAR" property="statementId"/>
+        <result column="vm_name" jdbcType="VARCHAR" property="vmName"/>
+        <result column="vm_state" jdbcType="VARCHAR" property="vmState"/>
+        <result column="nic_id" jdbcType="VARCHAR" property="nicId"/>
+        <result column="nic_state" jdbcType="VARCHAR" property="nicState"/>
+        <result column="private_ip" jdbcType="VARCHAR" property="privateIp"/>
+        <result column="cluster_id" jdbcType="VARCHAR" property="clusterId"/>
+        <result column="cluster_name" jdbcType="VARCHAR" property="clusterName"/>
+        <result column="vm_role" jdbcType="VARCHAR" property="vmRole"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="host_name" jdbcType="VARCHAR" property="hostName"/>
+        <result column="purchase_type" jdbcType="VARCHAR" property="purchaseType"/>
+        <result column="sku" jdbcType="VARCHAR" property="sku"/>
+        <result column="cpu" jdbcType="INTEGER" property="cpu"/>
+        <result column="memory" jdbcType="INTEGER" property="memory"/>
+        <result column="zone_name" jdbcType="VARCHAR" property="zoneName"/>
+        <result column="subnet" jdbcType="VARCHAR" property="subnet"/>
+        <result column="physical_zone" jdbcType="VARCHAR" property="physicalZone"/>
+        <result column="vm_tags" jdbcType="VARCHAR" property="vmTags"/>
+        <result column="vm_source" jdbcType="VARCHAR" property="vmSource"/>
+        <result column="vm_created_time" jdbcType="VARCHAR" property="vmCreatedTime"/>
+        <result column="created_time" jdbcType="VARCHAR" property="createdTime"/>
+        <result column="modified_time" jdbcType="VARCHAR" property="modifiedTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        statement_id,
+        vm_name,
+        vm_state,
+        nic_id,
+        nic_state,
+        private_ip,
+        cluster_id,
+        cluster_name,
+        vm_role,
+        group_name,
+        host_name,
+        purchase_type,
+        sku,
+        cpu,
+        memory,
+        zone_name,
+        subnet,
+        physical_zone,
+        vm_tags,
+        vm_source,
+        vm_created_time,
+        created_time,
+        modified_time
+    </sql>
+    <select id="countByStatementIdAndVmSource" resultType="int">
+        select
+        count(id)
+        from info_vm_statement_item ivsi  inner join
+             conf_cluster ic  on ivsi.cluster_id = ic.cluster_id
+        <where>
+             ivsi.statement_id = #{statementId} and ivsi.vm_source = #{vmSource}
+            <if test="region != null and region != ''">
+               and ic.region = #{region}
+            </if>
+        </where>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from info_vm_statement_item
+        where id = #{id}
+    </select>
+    <select id="selectByStatementId" resultType="com.sunbox.domain.InfoVmStatementItem">
+        select
+        <include refid="Base_Column_List"/>
+        from info_vm_statement_item
+        where statement_id = #{statementId}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from info_vm_statement_item
+        where id = #{id}
+    </delete>
+    <insert id="insert" parameterType="com.sunbox.domain.InfoVmStatementItem">
+        insert into info_vm_statement_item (
+        statement_id,
+        vm_name,
+        vm_state,
+        nic_id,
+        nic_state,
+        private_ip,
+        cluster_id,
+        cluster_name,
+        vm_role,
+        group_name,
+        host_name,
+        purchase_type,
+        sku,
+        cpu,
+        memory,
+        zone_name,
+        subnet,
+        physical_zone,
+        vm_tags,
+        vm_source,
+        vm_created_time,
+        created_time,
+        modified_time
+        ) values (
+        #{statementId},
+        #{vmName},
+        #{vmState},
+        #{nicId},
+        #{nicState},
+        #{privateIp},
+        #{clusterId},
+        #{clusterName},
+        #{vmRole},
+        #{groupName},
+        #{hostName},
+        #{purchaseType},
+        #{sku},
+        #{cpu},
+        #{memory},
+        #{zoneName},
+        #{subnet},
+        #{physicalZone},
+        #{vmTags},
+        #{vmSource},
+        #{vmCreatedTime},
+        #{createdTime},
+        #{modifiedTime}
+        )
+    </insert>
+</mapper>

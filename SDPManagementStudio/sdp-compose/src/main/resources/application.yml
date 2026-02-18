@@ -1,0 +1,12 @@
+server:
+  port: 30462
+  undertow:
+    io-threads: 8
+    worker-threads: 1024
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+logging:
+  config: ${LOGBACK_FILE_PATH:classpath:log/logback-custom.xml}
+spring:
+  datasource:
+    showsql: true

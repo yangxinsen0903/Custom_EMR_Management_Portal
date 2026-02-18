@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpscale.mapper.ConfGroupElasticScalingRuleMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.ConfGroupElasticScalingRule">
+        <id column="es_rule_id" jdbcType="VARCHAR" property="esRuleId"/>
+        <result column="group_es_id" jdbcType="VARCHAR" property="groupEsId"/>
+        <result column="es_rule_name" jdbcType="VARCHAR" property="esRuleName"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="scaling_type" jdbcType="INTEGER" property="scalingType"/>
+        <result column="per_saling_cout" jdbcType="INTEGER" property="perSalingCout"/>
+        <result column="load_metric" jdbcType="VARCHAR" property="loadMetric"/>
+        <result column="window_size" jdbcType="INTEGER" property="windowSize"/>
+        <result column="aggregate_type" jdbcType="VARCHAR" property="aggregateType"/>
+        <result column="operator" jdbcType="VARCHAR" property="operator"/>
+        <result column="threshold" jdbcType="DOUBLE" property="threshold"/>
+        <result column="repeat_count" jdbcType="INTEGER" property="repeatCount"/>
+        <result column="freezing_time" jdbcType="INTEGER" property="freezingTime"/>
+        <result column="rule_sorted" jdbcType="INTEGER" property="ruleSorted"/>
+        <result column="is_valid" jdbcType="INTEGER" property="isValid"/>
+        <result column="cluster_id" jdbcType="VARCHAR" property="clusterId"/>
+        <result column="is_graceful_scalein" jdbcType="INTEGER" property="isGracefulScalein"/>
+        <result column="scalein_waitingtime" jdbcType="INTEGER" property="scaleinWaitingtime"/>
+        <result column="enable_afterstart_script" jdbcType="INTEGER" property="enableAfterstartScript"/>
+        <result column="enable_beforestart_script" jdbcType="INTEGER" property="enableBeforestartScript"/>
+        <result column="createdby" jdbcType="VARCHAR" property="createdby"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="modifiedby" jdbcType="VARCHAR" property="modifiedby"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        es_rule_id, group_es_id, es_rule_name, scaling_type, per_saling_cout,
+        load_metric,group_name,is_graceful_scalein,scalein_waitingtime,enable_afterstart_script,enable_beforestart_script,
+        window_size, aggregate_type, operator, threshold, repeat_count, freezing_time,rule_sorted,is_valid,cluster_id,
+        createdby,created_time, modifiedby, modified_time
+    </sql>
+    <select id="selectValidRuleList" resultMap="BaseResultMap">
+        select
+        es_rule_id, a.group_es_id, es_rule_name, scaling_type, per_saling_cout,
+        load_metric,a.group_name,a.is_graceful_scalein,a.scalein_waitingtime,a.enable_afterstart_script,a.enable_beforestart_script,
+        window_size, aggregate_type, operator, threshold, repeat_count,
+        freezing_time,rule_sorted,a.is_valid,a.cluster_id,
+        a.createdby,a.created_time, a.modifiedby, a.modified_time,b.max_count,b.min_count
+        from conf_group_elastic_scaling_rule a inner join conf_group_elastic_scaling b on a.group_es_id = b.group_es_id
+        where a.is_valid=1
+    </select>
+    <select id="selectDistinctValidRuleList" resultMap="BaseResultMap">
+        select distinct cluster_id, load_metric,window_size
+        from conf_group_elastic_scaling_rule
+        where is_valid = 1
+        and rule_no in(select max(rule_no) from conf_group_elastic_scaling_rule where is_valid = 1 group by cluster_id,load_metric,window_size)
+        and rule_no%${serverCount}=${serverIndex}
+    </select>
+    <!-- 更新数据 -->
+    <update id="updateByGroupEsId">
+        update conf_group_elastic_scaling_rule
+        <set>
+            <if test="esRuleId != null">
+                es_rule_id = #{esRuleId},
+            </if>
+            <if test="groupEsId != null">
+                group_es_id = #{groupEsId},
+            </if>
+            <if test="esRuleName != null">
+                es_rule_name = #{esRuleName},
+            </if>
+            <if test="scalingType != null">
+                scaling_type = #{scalingType},
+            </if>
+            <if test="perSalingCout != null">
+                per_saling_cout = #{perSalingCout},
+            </if>
+            <if test="loadMetric != null">
+                load_metric = #{loadMetric},
+            </if>
+            <if test="windowSize != null">
+                window_size = #{windowSize},
+            </if>
+            <if test="aggregateType != null">
+                aggregate_type = #{aggregateType},
+            </if>
+            <if test="operator != null">
+                operator = #{operator},
+            </if>
+            <if test="threshold != null">
+                threshold = #{threshold},
+            </if>
+            <if test="repeatCount != null">
+                repeat_count = #{repeatCount},
+            </if>
+            <if test="freezingTime != null">
+                freezing_time = #{freezingTime},
+            </if>
+            <if test="createdby != null">
+                createdby = #{createdby},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime},
+            </if>
+            <if test="modifiedby != null">
+                modifiedby = #{modifiedby},
+            </if>
+            <if test="modifiedTime != null">
+                modified_time = #{modifiedTime},
+            </if>
+            <if test="ruleSorted != null">
+                rule_sorted = #{ruleSorted},
+            </if>
+            <if test="clusterId != null">
+                cluster_id = #{clusterId},
+            </if>
+            <if test="enableBeforestartScript != null">
+                enable_beforestart_script = #{enableBeforestartScript},
+            </if>
+            <if test="enableAfterstartScript != null">
+                enable_afterstart_script = #{enableAfterstartScript},
+            </if>
+            <if test="isValid != null">
+                is_valid = #{isValid},
+            </if>
+            <if test="groupName != null">
+                group_name = #{groupName},
+            </if>
+            <if test="isGracefulScalein != null">
+                is_graceful_scalein = #{isGracefulScalein},
+            </if>
+            <if test="scaleinWaitingtime != null">
+                scalein_waitingtime = #{scaleinWaitingtime},
+            </if>
+        </set>
+        where group_es_id = #{groupEsId}
+    </update>
+</mapper>

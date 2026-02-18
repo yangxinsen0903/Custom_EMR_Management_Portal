@@ -1,0 +1,48 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ansible-api
+  namespace: resource-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ansible-api
+  template:
+    metadata:
+      labels:
+        app: ansible-api
+    spec:
+      containers:
+        - name: ansible-api
+          image: {{ACR}}.azurecr.io/ansible-api:{{TAG_ID}}
+          resources:
+            limits:
+              cpu: 2
+              memory: 4096Mi
+            requests:
+              cpu: 2
+              memory: 4096Mi
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8082
+          volumeMounts:
+            - name: sp-cert-volume
+              mountPath: /mnt/certificates
+              readOnly: true
+          envFrom:
+            - secretRef:
+                name: rm-all-secret
+          env:
+            - name: AZURE_CLIENT_CERT_PATH
+              value: /mnt/certificates/certificate.pem
+      volumes:
+        - name: sp-cert-volume
+          secret:
+            secretName: rm-sp-cert-secret
+            optional: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler

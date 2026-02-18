@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.ConfClusterAppsConfigMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.ConfClusterAppsConfig">
+    <id column="app_config_item_id" jdbcType="VARCHAR" property="appConfigItemId" />
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="app_name" jdbcType="VARCHAR" property="appName" />
+    <result column="app_config_classification" jdbcType="VARCHAR" property="appConfigClassification" />
+    <result column="config_item" jdbcType="VARCHAR" property="configItem" />
+    <result column="config_val" jdbcType="VARCHAR" property="configVal" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    app_config_item_id, cluster_id, app_name, app_config_classification, config_item, 
+    config_val, is_delete, createdby, created_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from conf_cluster_apps_config
+    where app_config_item_id = #{appConfigItemId,jdbcType=VARCHAR}
+  </select>
+    <select id="getAppConfigsByConfigId" resultType="com.sunbox.domain.ConfClusterAppsConfig">
+      select
+      <include refid="Base_Column_List" />
+      from conf_cluster_apps_config
+      where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from conf_cluster_apps_config
+    where app_config_item_id = #{appConfigItemId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.ConfClusterAppsConfig">
+    insert into conf_cluster_apps_config (app_config_item_id, cluster_id, app_name, 
+      app_config_classification, config_item, config_val, 
+      is_delete, createdby, created_time
+      )
+    values (#{appConfigItemId,jdbcType=VARCHAR}, #{clusterId,jdbcType=VARCHAR}, #{appName,jdbcType=VARCHAR}, 
+      #{appConfigClassification,jdbcType=VARCHAR}, #{configItem,jdbcType=VARCHAR}, #{configVal,jdbcType=VARCHAR}, 
+      #{isDelete,jdbcType=INTEGER}, #{createdby,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.ConfClusterAppsConfig">
+    insert into conf_cluster_apps_config
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="appConfigItemId != null">
+        app_config_item_id,
+      </if>
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="appName != null">
+        app_name,
+      </if>
+      <if test="appConfigClassification != null">
+        app_config_classification,
+      </if>
+      <if test="configItem != null">
+        config_item,
+      </if>
+      <if test="configVal != null">
+        config_val,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="appConfigItemId != null">
+        #{appConfigItemId,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="appName != null">
+        #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="appConfigClassification != null">
+        #{appConfigClassification,jdbcType=VARCHAR},
+      </if>
+      <if test="configItem != null">
+        #{configItem,jdbcType=VARCHAR},
+      </if>
+      <if test="configVal != null">
+        #{configVal,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.ConfClusterAppsConfig">
+    update conf_cluster_apps_config
+    <set>
+      <if test="clusterId != null">
+        cluster_id = #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="appName != null">
+        app_name = #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="appConfigClassification != null">
+        app_config_classification = #{appConfigClassification,jdbcType=VARCHAR},
+      </if>
+      <if test="configItem != null">
+        config_item = #{configItem,jdbcType=VARCHAR},
+      </if>
+      <if test="configVal != null">
+        config_val = #{configVal,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where app_config_item_id = #{appConfigItemId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.ConfClusterAppsConfig">
+    update conf_cluster_apps_config
+    set cluster_id = #{clusterId,jdbcType=VARCHAR},
+      app_name = #{appName,jdbcType=VARCHAR},
+      app_config_classification = #{appConfigClassification,jdbcType=VARCHAR},
+      config_item = #{configItem,jdbcType=VARCHAR},
+      config_val = #{configVal,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      createdby = #{createdby,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where app_config_item_id = #{appConfigItemId,jdbcType=VARCHAR}
+  </update>
+</mapper>

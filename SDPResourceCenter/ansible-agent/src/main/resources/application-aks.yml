@@ -1,0 +1,58 @@
+spring:
+  datasource:
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+azure:
+  credential:
+    clientid: ${AZURE_CLIENT_ID}
+    clientsecret: ${AZURE_CLIENT_SECRET}
+    clientCert: ${AZURE_CLIENT_CERT_PATH:}
+    clientAuth: ${AZURE_CLIENT_AUTH:secret}
+    tenantid: ${AZURE_TENANT_ID}
+  default-subscriptionId: ${AZURE_DEFAULT_SUBSCRIPTION_ID}
+  keyvault:
+    uri: https://${SDP_ANSIBLE_KV_NAME}.vault.azure.net/
+  servicebus:
+    namespace: ${SDP_RM_SERVICE_BUS_NAMESPACE}.servicebus.windows.net
+    topicnameapi: ${ANSIBLE_AGENT_TOPIC}
+    topicnamebak: ${ANSIBLE_PLAYBOOK_TASK_TOPIC}
+    subnameapi: sub1
+custom:
+  log:
+    root: /app/logs
+    upload:
+      url: ${SDP_LOG_UPLOAD_URL}
+      storageAccount: ${SDP_RM_SA}
+      container: ${SDP_LOG_UPLOAD_SA_CONTAINER}
+springfox:
+  documentation:
+    swagger:
+      use-model-v3: false
+ansible:
+  workdir: /etc/ansible/
+  inventory:
+    hosts:
+      path: /etc/ansible/
+      name: hosts
+    nodename: "[webservers]"
+  cfg:
+    path: /etc/ansible/
+    name: ansible.cfg
+  known:
+    hosts:
+      fullpathname: /root/.ssh/known_hosts
+  ssh:
+    connection:
+      timeout: 60
+      retry: 10
+  forks: 5
+  remote:
+    port: ${ANSIBLE_REMOTE_PORT}
+  playbookrootpath: /usr/bin/ansible-playbook
+  scriptpath: /home/sunbox/
+  privatekeyname: ansiblePrivateKey.pem
+  keysecretname: ${SDP_ANSIBLE_KV_SECRET_NAME}
+host:
+  pod-name: ${MY_POD_NAME}
+  pod-ip: ${MY_POD_IP}

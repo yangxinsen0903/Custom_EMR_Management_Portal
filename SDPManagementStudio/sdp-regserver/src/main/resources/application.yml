@@ -1,0 +1,43 @@
+spring:
+  profiles:
+    active: test
+  application:
+    name: igscloud-server
+  security:
+    user:
+      name: igs
+      password: igscd
+server:
+  port: 30000
+  servlet:
+    context-path: /
+
+
+---
+spring:
+  profiles: product
+eureka:
+  server:
+    enable-self-preservation: false
+  instance:
+    hostname: peer1
+    instance-id: ${spring.application.name}:${spring.application.instance_id}:${random.value}
+  client:
+    fetch-registry: false
+    registerWithEureka: false
+    service-url:
+      defaultZone: http://igs:igscd@10.248.252.14:30000/eureka
+---
+spring:
+  profiles: test
+eureka:
+  server:
+    enable-self-preservation: false
+  instance:
+    hostname: peer1
+    instance-id: ${spring.application.name}:${spring.application.instance_id}:${random.value}
+  client:
+    fetch-registry: false
+    registerWithEureka: false
+    service-url:
+      defaultZone: http://igs:igscd@127.0.0.1:30000/eureka

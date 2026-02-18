@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.igsadmin.mapper.AdminUserDao">
+
+    <sql id="Base_Column_List">
+		t.id,
+		t.username,
+		t.password,
+		t.status,t.tel,t.createtime
+	</sql>
+
+
+    <insert id="save" parameterType="com.sunbox.sdpadmin.core.model.AdminUser">
+        insert into vm_admin_user (`id`,  `password`, `username`, `createtime`, `status`,`tel`)
+        values ( #{id}, #{password}, #{username}, #{createtime}, #{status} , #{tel} );
+    </insert>
+    
+    <update id="update" parameterType="com.sunbox.sdpadmin.core.model.AdminUser">
+        update vm_admin_user
+        <set>
+            <if test="password!=null">
+                `password` = #{password},
+            </if>
+            <if test="status!=null">
+                status=#{status},
+            </if>
+
+        </set>
+
+        where `id` = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String">
+        delete from vm_admin_user where id = #{id}
+    </delete>
+
+    <select id="getAdminUserById" parameterType="java.lang.String" resultType="com.sunbox.sdpadmin.core.model.AdminUser">
+        select id, username, password, status, createtime,tel from vm_admin_user where id = #{id}
+    </select>
+
+    <select id="getAdminUserByName" parameterType="java.lang.String" resultType="com.sunbox.sdpadmin.core.model.AdminUser">
+        select id, username, password, status, createtime,tel from vm_admin_user where username = #{username}
+    </select>
+
+    <select id="verifyLoginInfo" parameterType="java.util.Map" resultType="com.sunbox.sdpadmin.core.model.AdminUser">
+        select id, username, password, status, createtime,tel from vm_admin_user where username = #{username} and status = 1
+        <if test="password != null and password != ''">
+            AND password = #{password}
+        </if>
+    </select>
+
+    <select id="pageList" parameterType="java.util.Map" resultType="com.sunbox.sdpadmin.core.model.AdminUser">
+        SELECT
+            t.id,
+            t.username,
+            t. PASSWORD,
+            t. STATUS,
+            t.tel,
+            t.createtime,
+            group_concat(c.role SEPARATOR '、') role
+        FROM vm_admin_user AS t
+        LEFT JOIN vm_admin_user_role b ON t.id = b.userid
+        LEFT JOIN vm_admin_role c ON b.rid = c.id
+        <trim prefix="WHERE" prefixOverrides="AND | OR" >
+            <if test="username != null and username != ''">
+                AND t.username like CONCAT(CONCAT('%', #{username}), '%')
+            </if>
+            <if test="tel != null and tel != ''">
+                AND t.tel = #{tel}
+            </if>
+            <if test="status != null and status != ''">
+                AND t.status = #{status}
+            </if>
+        </trim>
+        GROUP BY t.id
+        ORDER BY createtime ASC
+        LIMIT #{page}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" parameterType="java.util.HashMap" resultType="int">
+        SELECT count(1)
+        FROM vm_admin_user AS t
+        <trim prefix="WHERE" prefixOverrides="AND|or" >
+            <if test="username != null and username != ''">
+                AND t.username like CONCAT(CONCAT('%', #{username}), '%')
+            </if>
+            <if test="tel != null and tel != ''">
+                AND t.tel = #{tel}
+            </if>
+            <if test="status != null and status != ''">
+                AND t.status = #{status}
+            </if>
+        </trim>
+
+    </select>
+
+</mapper>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.InfoClusterAmbariHostDeleteMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoClusterAmbariHostDelete">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="ambari_cluster_name" jdbcType="VARCHAR" property="ambariClusterName" />
+    <result column="host_name" jdbcType="VARCHAR" property="hostName" />
+    <result column="ambari_server_ip" jdbcType="VARCHAR" property="ambariServerIp" />
+    <result column="plan_id" jdbcType="VARCHAR" property="planId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="retry_count" jdbcType="INTEGER" property="retryCount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, cluster_id, ambari_cluster_name, host_name, ambari_server_ip, plan_id, status, 
+    retry_count, created_time, modified_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from info_cluster_ambari_host_delete
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByClusterIdAndHostName" resultType="com.sunbox.domain.InfoClusterAmbariHostDelete">
+    select
+    <include refid="Base_Column_List" />
+    from info_cluster_ambari_host_delete
+    where cluster_id = #{clusterId,jdbcType=VARCHAR} and host_name = #{hostName,jdbcType=VARCHAR}
+  </select>
+  <select id="selectNeedClearHostsByCreateTime" resultType="com.sunbox.domain.InfoClusterAmbariHostDelete">
+    select ba.* from info_cluster_ambari_host_delete ba
+    inner join info_cluster_vm cvm on ba.cluster_id = cvm.cluster_id and ba.host_name = cvm.host_name
+    and cvm.state =-1 and ba.created_time &lt; SUBDATE(now(),INTERVAL #{duration,jdbcType=INTEGER} second)
+    and (ba.status is null or ba.status=0)
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from info_cluster_ambari_host_delete
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.InfoClusterAmbariHostDelete">
+    insert into info_cluster_ambari_host_delete (id, cluster_id, ambari_cluster_name, 
+      host_name, ambari_server_ip, plan_id, 
+      status, retry_count, created_time, 
+      modified_time)
+    values (#{id,jdbcType=BIGINT}, #{clusterId,jdbcType=VARCHAR}, #{ambariClusterName,jdbcType=VARCHAR}, 
+      #{hostName,jdbcType=VARCHAR}, #{ambariServerIp,jdbcType=VARCHAR}, #{planId,jdbcType=VARCHAR},
+      #{status,jdbcType=INTEGER}, #{retryCount,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.InfoClusterAmbariHostDelete">
+    insert into info_cluster_ambari_host_delete
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="ambariClusterName != null">
+        ambari_cluster_name,
+      </if>
+      <if test="hostName != null">
+        host_name,
+      </if>
+      <if test="ambariServerIp != null">
+        ambari_server_ip,
+      </if>
+      <if test="planId != null">
+        plan_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="retryCount != null">
+        retry_count,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="ambariClusterName != null">
+        #{ambariClusterName,jdbcType=VARCHAR},
+      </if>
+      <if test="hostName != null">
+        #{hostName,jdbcType=VARCHAR},
+      </if>
+      <if test="ambariServerIp != null">
+        #{ambariServerIp,jdbcType=VARCHAR},
+      </if>
+      <if test="planId != null">
+        #{planId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="retryCount != null">
+        #{retryCount,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.InfoClusterAmbariHostDelete">
+    update info_cluster_ambari_host_delete
+    <set>
+      <if test="clusterId != null">
+        cluster_id = #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="ambariClusterName != null">
+        ambari_cluster_name = #{ambariClusterName,jdbcType=VARCHAR},
+      </if>
+      <if test="hostName != null">
+        host_name = #{hostName,jdbcType=VARCHAR},
+      </if>
+      <if test="ambariServerIp != null">
+        ambari_server_ip = #{ambariServerIp,jdbcType=VARCHAR},
+      </if>
+      <if test="planId != null">
+        plan_id = #{planId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="retryCount != null">
+        retry_count = #{retryCount,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.InfoClusterAmbariHostDelete">
+    update info_cluster_ambari_host_delete
+    set cluster_id = #{clusterId,jdbcType=VARCHAR},
+      ambari_cluster_name = #{ambariClusterName,jdbcType=VARCHAR},
+      host_name = #{hostName,jdbcType=VARCHAR},
+      ambari_server_ip = #{ambariServerIp,jdbcType=VARCHAR},
+      plan_id = #{planId,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      retry_count = #{retryCount,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

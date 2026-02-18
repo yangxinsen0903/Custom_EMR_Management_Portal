@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <springProperty scope="context" name="appname" source="spring.application.name"></springProperty>
+    <springProperty scope="context" default="./logs" name="logrootdir" source="logconfig.root"></springProperty>
+    <springProperty scope="context" default="info" name="loglevel" source="logconfig.level"></springProperty>
+    <contextName>${appname}</contextName>
+    <property name="logRoot" value="${logrootdir:-./logs}"/>
+    <property name="logpath" value="%d{yyyyMMdd_HH}"></property>
+
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName [%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{clusterId},%X{planId}] [%thread] %-5level %logger{50}:%L %caller{0} - %msg%n"></property>
+
+    <!--<property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [${appname}] [%tid] [%thread] %-5level %logger{50}:%L %caller{0} - %msg%n"></property>-->
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logRoot}/${appname}-log.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logRoot}/${appname}_${logpath}.zip</fileNamePattern>
+            <maxHistory>168</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+
+    <root level="${loglevel}">
+        <appender-ref ref="console"/>
+        <appender-ref ref="file"/>
+    </root>
+
+    <logger name="${appname}"/>
+    <logger name="org.redisson" level="WARN"/>
+    <logger name="io.netty" level="WARN"/>
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.apache.http" level="WARN"/>
+    <logger name="com.netflix" level="WARN"/>
+</configuration>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.BaseImagesMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.BaseImages">
+    <id column="img_id" jdbcType="VARCHAR" property="imgId" />
+    <result column="os_image_id" jdbcType="VARCHAR" property="osImageId" />
+    <result column="os_image_type" jdbcType="VARCHAR" property="osImageType" />
+    <result column="os_version" jdbcType="VARCHAR" property="osVersion" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    img_id, os_image_id, os_image_type, os_version, created_time, createdby
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from base_images
+    where img_id = #{imgId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from base_images
+    where img_id = #{imgId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.BaseImages">
+    insert into base_images (img_id, os_image_id, os_image_type, 
+      os_version, created_time, createdby
+      )
+    values (#{imgId,jdbcType=VARCHAR}, #{osImageId,jdbcType=VARCHAR}, #{osImageType,jdbcType=VARCHAR}, 
+      #{osVersion,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{createdby,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.BaseImages">
+    insert into base_images
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="imgId != null">
+        img_id,
+      </if>
+      <if test="osImageId != null">
+        os_image_id,
+      </if>
+      <if test="osImageType != null">
+        os_image_type,
+      </if>
+      <if test="osVersion != null">
+        os_version,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="imgId != null">
+        #{imgId,jdbcType=VARCHAR},
+      </if>
+      <if test="osImageId != null">
+        #{osImageId,jdbcType=VARCHAR},
+      </if>
+      <if test="osImageType != null">
+        #{osImageType,jdbcType=VARCHAR},
+      </if>
+      <if test="osVersion != null">
+        #{osVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.BaseImages">
+    update base_images
+    <set>
+      <if test="osImageId != null">
+        os_image_id = #{osImageId,jdbcType=VARCHAR},
+      </if>
+      <if test="osImageType != null">
+        os_image_type = #{osImageType,jdbcType=VARCHAR},
+      </if>
+      <if test="osVersion != null">
+        os_version = #{osVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where img_id = #{imgId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.BaseImages">
+    update base_images
+    set os_image_id = #{osImageId,jdbcType=VARCHAR},
+      os_image_type = #{osImageType,jdbcType=VARCHAR},
+      os_version = #{osVersion,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      createdby = #{createdby,jdbcType=VARCHAR}
+    where img_id = #{imgId,jdbcType=VARCHAR}
+  </update>
+</mapper>

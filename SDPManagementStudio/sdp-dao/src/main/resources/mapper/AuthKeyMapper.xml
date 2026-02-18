@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.AuthKeyMapper">
+
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.ApiAuthKey">
+        <id column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="access_key" jdbcType="VARCHAR" property="accessKey"/>
+        <result column="secret_key" jdbcType="VARCHAR" property="secretKey"/>
+        <result column="permission" jdbcType="VARCHAR" property="permission"/>
+        <result column="expiration_date" jdbcType="TIMESTAMP" property="expirationDate"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="createdby" jdbcType="VARCHAR" property="createdby"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="modifiedby" jdbcType="VARCHAR" property="modifiedby"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+      id, user_id, name, access_key, secret_key, permission, expiration_date, status, created_time, createdby, modified_time, modifiedby
+    </sql>
+
+    <insert id="insert" parameterType="com.sunbox.domain.ApiAuthKey">
+        insert into api_auth_key (  `user_id`,  `name`, `access_key`,`secret_key`,`permission`,`expiration_date`, `status`,`created_time`,`createdby`, `modified_time`,`modifiedby`)
+        values ( #{userId}, #{name}, #{accessKey}, #{secretKey}, #{permission}, #{expirationDate}, #{status}, #{createdTime}, #{createdby}, #{modifiedTime}, #{modifiedby} );
+    </insert>
+
+    <select id="selectAllByName" resultType="com.sunbox.domain.ApiAuthKey">
+        select
+        <include refid="Base_Column_List" />
+        from api_auth_key
+        where  1=1
+        <if test="name != null and name != ''">
+            AND name like CONCAT(CONCAT('%', #{name}), '%')
+        </if>
+        ORDER BY created_time DESC
+        LIMIT #{pageIndex}, #{pageSize}
+    </select>
+
+    <select id="selectCountByName" resultType="java.lang.Integer">
+        select
+        count(1)
+        from api_auth_key
+        where  1=1
+        <if test="name != null and name != ''">
+            AND name like CONCAT(CONCAT('%', #{name}), '%')
+        </if>
+    </select>
+
+    <select id="selectAllByAk" resultType="com.sunbox.domain.ApiAuthKey">
+        select
+        <include refid="Base_Column_List" />
+        from api_auth_key
+        where  1=1
+        <if test="accessKey != null and accessKey != ''">
+            AND access_key = #{accessKey}
+        </if>
+    </select>
+    <select id="selectAllExpire" resultType="com.sunbox.domain.ApiAuthKey">
+        select
+        <include refid="Base_Column_List"/>
+        from api_auth_key
+        where expiration_date &lt;= now()
+        and status &lt;&gt; 'EXPIRED'
+    </select>
+
+    <update id="updateByPrimaryKey">
+        update api_auth_key
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="permission != null">
+                permission = #{permission,jdbcType=VARCHAR},
+            </if>
+            <if test="expirationDate != null">
+                expiration_date = #{expirationDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedTime != null">
+                modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedby != null">
+                modifiedby = #{modifiedby,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from api_auth_key
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+</mapper>

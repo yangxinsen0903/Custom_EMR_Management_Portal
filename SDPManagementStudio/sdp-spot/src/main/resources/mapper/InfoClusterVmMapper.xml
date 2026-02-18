@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpspot.mapper.InfoClusterVmMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoClusterVm">
+        <id column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+        <id column="vm_name" jdbcType="VARCHAR" property="vmName" />
+        <result column="vm_conf_id" jdbcType="VARCHAR" property="vmConfId" />
+        <result column="host_name" jdbcType="VARCHAR" property="hostName" />
+        <result column="internalIp" jdbcType="VARCHAR" property="internalip" />
+        <result column="default_username" jdbcType="VARCHAR" property="defaultUsername" />
+        <result column="vm_role" jdbcType="VARCHAR" property="vmRole"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="group_id" jdbcType="VARCHAR" property="groupId"/>
+        <result column="ambari_config_group" jdbcType="VARCHAR" property="ambariConfigGroup"/>
+        <result column="sku_name" jdbcType="VARCHAR" property="skuName" />
+        <result column="purchase_type" jdbcType="VARCHAR" property="purchaseType" />
+        <result column="imageid" jdbcType="VARCHAR" property="imageid" />
+        <result column="state" jdbcType="INTEGER" property="state" />
+        <result column="scalein_task_id" jdbcType="VARCHAR" property="scaleinTaskId"/>
+        <result column="scaleout_task_id" jdbcType="VARCHAR" property="scaleoutTaskId"/>
+        <result column="create_transcation_id" jdbcType="VARCHAR" property="createTranscationId" />
+        <result column="create_job_id" jdbcType="VARCHAR" property="createJobId" />
+        <result column="scale_vm_detail_id" jdbcType="VARCHAR" property="scaleVmDetailId"/>
+        <result column="create_begtime" jdbcType="TIMESTAMP" property="createBegtime" />
+        <result column="create_endtime" jdbcType="TIMESTAMP" property="createEndtime" />
+        <result column="health_check_time" jdbcType="TIMESTAMP" property="healthCheckTime" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        cluster_id, vm_name, vm_conf_id, host_name, internalIp, default_username, vm_role,group_name,sku_name,
+        purchase_type, imageid,state, create_transcation_id, create_job_id, create_begtime, create_endtime,scalein_task_id,
+        scaleout_task_id,scale_vm_detail_id,group_id,ambari_config_group,health_check_time
+    </sql>
+    <select id="findByVmName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from info_cluster_vm
+        where vm_name = #{vmName,jdbcType=VARCHAR}
+        and purchase_type = #{purchaseType,jdbcType=VARCHAR}
+        and state = #{state,jdbcType=INTEGER}
+    </select>
+    <select id="listByVmName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from info_cluster_vm
+        where vm_name = #{vmName,jdbcType=VARCHAR}
+        and purchase_type = #{purchaseType,jdbcType=VARCHAR}
+        and state = #{state,jdbcType=INTEGER}
+    </select>
+    <select id="listByPurchaseType" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from info_cluster_vm
+        where purchase_type = #{purchaseType,jdbcType=VARCHAR}
+        and state = #{state,jdbcType=INTEGER}
+    </select>
+    <select id="listByClusterIdAndGroupIdAndPurchaseType" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and group_id = #{groupId,jdbcType=VARCHAR}
+        and purchase_type = #{purchaseType,jdbcType=VARCHAR}
+        and state = #{state,jdbcType=INTEGER}
+    </select>
+    <select id="countByPurchaseType" resultMap="BaseResultMap">
+        select count(1) from info_cluster_vm
+        where purchase_type = #{purchaseType,jdbcType=VARCHAR}
+        and state = #{state,jdbcType=INTEGER}
+    </select>
+    <select id="countByClusterIdAndGroupIdAndPurchaseType" resultType="int">
+        select count(1) from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and group_id = #{groupId,jdbcType=VARCHAR}
+        and purchase_type = #{purchaseType,jdbcType=VARCHAR}
+        and state = #{state,jdbcType=INTEGER}
+    </select>
+    <select id="countByClusterIdAndGroupIdAndPurchaseTypeAndStates" resultType="int">
+        select count(1) from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and group_id = #{groupId,jdbcType=VARCHAR}
+        and purchase_type = #{purchaseType,jdbcType=VARCHAR}
+        and (state = #{state1,jdbcType=INTEGER} or state = #{state2,jdbcType=INTEGER})
+    </select>
+    <select id="countByClusterIdAndGroupIdAndPurchaseTypeAndState" resultType="int">
+        select count(1) from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and group_id = #{groupId,jdbcType=VARCHAR}
+        and purchase_type = #{purchaseType,jdbcType=VARCHAR}
+        and state = #{state,jdbcType=INTEGER}
+    </select>
+    <update id="updateHealthCheckTime" parameterType="com.sunbox.domain.InfoClusterVm">
+        update info_cluster_vm
+        set health_check_time = #{healthCheckTime,jdbcType=TIMESTAMP}
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and vm_name = #{vmName,jdbcType=VARCHAR}
+    </update>
+    <select id="findTop1IdByInternalIpOrderByCreatedTimeDesc" resultMap="BaseResultMap">
+        select
+        cluster_id,
+        vm_name,
+        host_name,
+        internalIp
+        from info_cluster_vm
+        where internalIp = #{internalIp,jdbcType=VARCHAR}
+        and state = #{state,jdbcType=INTEGER}
+        order by create_begtime desc
+        limit 1
+    </select>
+    <select id="findOne" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from info_cluster_vm
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+        and group_id = #{groupId,jdbcType=VARCHAR}
+        and vm_name = #{vmName,jdbcType=VARCHAR}
+    </select>
+</mapper>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpscale.mapper.InfoGroupFullCustodyElasticScalingLogMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoGroupFullCustodyElasticScalingLog">
+        <id column="es_full_log_id" jdbcType="BIGINT" property="esFullLogId"/>
+        <result column="es_rule_id" jdbcType="VARCHAR" property="esRuleId"/>
+        <result column="cluster_id" jdbcType="VARCHAR" property="clusterId"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="is_start_scaling" jdbcType="INTEGER" property="isStartScaling"/>
+        <result column="scaling_type" jdbcType="VARCHAR" property="scalingType"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="compute_value" jdbcType="DOUBLE" property="computeValue"/>
+        <result column="task_result" jdbcType="VARCHAR" property="taskResult"/>
+        <result column="task_result_message" jdbcType="VARCHAR" property="taskResultMessage"/>
+        <result column="task_id" jdbcType="VARCHAR" property="taskId"/>
+        <result column="metric_values" jdbcType="VARCHAR" property="metricValues"/>
+        <result column="scaling_count" jdbcType="INTEGER" property="scalingCount"/>
+    </resultMap>
+    <insert id="insertSelective" parameterType="com.sunbox.domain.InfoGroupFullCustodyElasticScalingLog"  useGeneratedKeys="true" keyProperty="esFullLogId" keyColumn="es_full_log_id">
+        insert into info_group_full_custody_elastic_scaling_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="esFullLogId != null">
+                es_full_log_id,
+            </if>
+            <if test="esRuleId != null">
+                es_rule_id,
+            </if>
+            <if test="clusterId != null">
+                cluster_id,
+            </if>
+            <if test="groupName != null">
+                group_name,
+            </if>
+            <if test="isStartScaling != null">
+                is_start_scaling,
+            </if>
+            <if test="scalingType != null">
+                scaling_type,
+            </if>
+            <if test="createdTime != null">
+                created_time,
+            </if>
+            <if test="computeValue != null">
+                compute_value,
+            </if>
+            <if test="taskResult != null">
+                task_result,
+            </if>
+            <if test="taskResultMessage != null">
+                task_result_message,
+            </if>
+            <if test="taskId != null">
+                task_id,
+            </if>
+            <if test="metricValues != null">
+                metric_values,
+            </if>
+            <if test="scalingCount != null">
+                scaling_count,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="esFullLogId != null">
+                #{esFullLogId,jdbcType=BIGINT},
+            </if>
+            <if test="esRuleId != null">
+                #{esRuleId,jdbcType=VARCHAR},
+            </if>
+            <if test="clusterId != null">
+                #{clusterId,jdbcType=VARCHAR},
+            </if>
+            <if test="groupName != null">
+                #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="isStartScaling != null">
+                #{isStartScaling,jdbcType=INTEGER},
+            </if>
+            <if test="scalingType != null">
+                #{scalingType,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="computeValue != null">
+                #{computeValue,jdbcType=DOUBLE},
+            </if>
+            <if test="taskResult != null">
+                #{taskResult,jdbcType=VARCHAR},
+            </if>
+            <if test="taskResultMessage != null">
+                #{taskResultMessage,jdbcType=VARCHAR},
+            </if>
+            <if test="taskId != null">
+                #{taskId,jdbcType=VARCHAR},
+            </if>
+            <if test="metricValues != null">
+                #{metricValues,jdbcType=VARCHAR},
+            </if>
+            <if test="scalingCount != null">
+                #{scalingCount,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="update">
+        update info_group_full_custody_elastic_scaling_log
+        <set>
+            <if test="esRuleId != null">
+                es_rule_id = #{esRuleId,jdbcType=VARCHAR},
+            </if>
+            <if test="clusterId != null">
+                cluster_id = #{clusterId,jdbcType=VARCHAR},
+            </if>
+            <if test="groupName != null">
+                group_name = #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="isStartScaling != null">
+                is_start_scaling = #{isStartScaling,jdbcType=INTEGER},
+            </if>
+            <if test="scalingType != null">
+                scaling_type = #{scalingType,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="computeValue != null">
+                compute_value = #{computeValue,jdbcType=DOUBLE},
+            </if>
+            <if test="taskResult != null">
+                task_result = #{taskResult,jdbcType=VARCHAR},
+            </if>
+            <if test="taskResultMessage != null">
+                task_result_message = #{taskResultMessage,jdbcType=VARCHAR},
+            </if>
+            <if test="taskId != null">
+                task_id = #{taskId,jdbcType=VARCHAR},
+            </if>
+            <if test="metricValues != null">
+                metric_values = #{metricValues,jdbcType=VARCHAR},
+            </if>
+            <if test="scalingCount != null">
+                scaling_count = #{scalingCount,jdbcType=INTEGER}
+            </if>
+        </set>
+        where es_full_log_id = #{esFullLogId}
+    </update>
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.BaseUserRoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.BaseUserRole">
+        <id column="user_id" jdbcType="VARCHAR" property="userId" />
+        <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+        <result column="role_code" jdbcType="VARCHAR" property="roleCode" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_id, role_name, role_code
+    </sql>
+
+    <insert id="insert" parameterType="com.sunbox.domain.BaseUserRole">
+        insert into base_user_role (user_id, role_name, role_code )
+        values (#{userId,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, #{roleCode,jdbcType=VARCHAR}  )
+    </insert>
+
+    <update id="updateUserRole">
+        update base_user_role
+        <set>
+            <if test="roleName != null and roleName != ''">
+                role_name = #{roleName},
+            </if>
+
+            <if test="roleCode != null and roleCode != ''">
+                role_code = #{roleCode},
+            </if>
+
+        </set>
+        where user_id = #{userId}
+
+    </update>
+
+    <delete id="deleteByUserId" parameterType="java.lang.String">
+        delete from base_user_role
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </delete>
+    <select id="selectRoleByUser" resultType="com.sunbox.domain.BaseUserRole">
+      select  <include refid="Base_Column_List" /> from base_user_role
+        where user_id = #{userId}
+    </select>
+    <select id="selectAllByPrimaryKeys" resultType="com.sunbox.domain.BaseUserRole">
+        select  <include refid="Base_Column_List" />
+        from base_user_role
+        where
+        user_id IN
+        <foreach collection="userIdList" open="(" separator="," close=")" item="item" index="index">
+            #{item}
+        </foreach>
+    </select>
+
+
+</mapper>

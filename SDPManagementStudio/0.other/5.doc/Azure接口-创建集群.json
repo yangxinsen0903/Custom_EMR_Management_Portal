@@ -1,0 +1,140 @@
+{
+    "apiVersion": "string",
+    "clusterName": "cluster-2-eastus2",
+    "clusterTags": {
+      "name": "eric",
+      "clusterName": "cluster-2-eastus2",
+      "hello": "sdp"
+    },
+    "region": "eastus2",
+    "requestTimestamp": "string",
+    "transactionId": "string",
+    "virtualMachineGroups": [
+      {
+        "beginIndex": 0,
+        "count": 0,
+        "groupName": "group-1",
+        "provisionType": "Azure_Fleet",
+        "virtualMachineSpec": {
+          "baseProfile": {
+            "customOSImageId": "/subscriptions/bba32ad2-4ac4-4bc3-8c34-ad8b2475d857/resourceGroups/rg-sdp-sit-clean-install/providers/Microsoft.Compute/galleries/sdpgallery/images/sdp-bigdata-stack/versions/0.0.1",
+            "dataDiskCount": 2,
+            "dataDiskSizeGB": 20,
+            "dataDiskSku": "Premium_LRS",
+            "hostNameSuffix": "fleet.sdp.com",
+            "marketplaceOSImageName": "string",
+            "nsgResourceId": "/subscriptions/bba32ad2-4ac4-4bc3-8c34-ad8b2475d857/resourcegroups/fleet-rg-eric/providers/Microsoft.Network/networkSecurityGroups/fleet_test",
+            "osDiskSizeGB": 100,
+            "osDiskSku": "Premium_LRS",
+            "osImageType": "string",
+            "secondaryZone": "2",
+            "sshPublicKey": "",
+            "sshKeyVaultId": "/subscriptions/bba32ad2-4ac4-4bc3-8c34-ad8b2475d857/resourceGroups/rg-sdp-sit-clean-install/providers/Microsoft.KeyVault/vaults/sit-clean-install-kv",
+            "sshPublicKeySecretName": "sdp-sit-ssh-public-key",
+            "sshPublicKeyType": "KeyVaultSecret",
+            "startupScriptBlobUrl": "https://sdprmtest.blob.core.windows.net/scripts/myscript.sh",
+            "subnetResourceId": "/subscriptions/bba32ad2-4ac4-4bc3-8c34-ad8b2475d857/resourceGroups/fleet-rg-eric/providers/Microsoft.Network/virtualNetworks/eric-fleet-arm-vnet/subnets/default",
+            "userAssignedIdentityResourceIds": [
+              "/subscriptions/bba32ad2-4ac4-4bc3-8c34-ad8b2475d857/resourceGroups/fleet-rg-eric/providers/Microsoft.ManagedIdentity/userAssignedIdentities/fleet_mi"
+            ],
+            "userName": "azureuser",
+            "zone": "1"
+          },
+          "regularProfile": {
+            "allocationStrategy": "Prioritized",
+            "capacity": 2,
+            "minCapacity": 0
+          },
+          "vmSizesProfile": [
+            {
+                "name":"standard_d2s_v5",
+                "rank":0
+            },
+            {
+                "name":"standard_d2ds_v5",
+                "rank":1
+            },
+            {
+                "name":"standard_d4ds_v5",
+                "rank":2
+            }
+          ],
+          "spotProfile": {
+            "allocationStrategy": "CapacityOptimized",
+            "capacity": 3,
+            "evictionPolicy": "Delete",
+            "maintain": true,
+            "maxPricePerVM": "0.05",
+            "minCapacity": 0
+          },
+          "virtualMachineTags": {
+              "group": "group-1",
+              "cluster": "cluster-2-eastus2"
+          }
+        }
+      },
+      {
+        "beginIndex": 0,
+        "count": 0,
+        "groupName": "group-2",
+        "provisionType": "Azure_Fleet",
+        "virtualMachineSpec": {
+          "baseProfile": {
+            "customOSImageId": "/subscriptions/bba32ad2-4ac4-4bc3-8c34-ad8b2475d857/resourceGroups/rg-sdp-sit-clean-install/providers/Microsoft.Compute/galleries/sdpgallery/images/sdp-bigdata-stack/versions/0.0.1",
+            "dataDiskCount": 2,
+            "dataDiskSizeGB": 20,
+            "dataDiskSku": "Premium_LRS",
+            "hostNameSuffix": "fleet.sdp.com",
+            "marketplaceOSImageName": "string",
+            "nsgResourceId": "/subscriptions/bba32ad2-4ac4-4bc3-8c34-ad8b2475d857/resourcegroups/fleet-rg-eric/providers/Microsoft.Network/networkSecurityGroups/fleet_test",
+            "osDiskSizeGB": 100,
+            "osDiskSku": "Premium_LRS",
+            "osImageType": "string",
+            "zone": "1",
+            "secondaryZone": "2",
+            "sshPublicKey": "",
+            "sshKeyVaultId": "/subscriptions/bba32ad2-4ac4-4bc3-8c34-ad8b2475d857/resourceGroups/rg-sdp-sit-clean-install/providers/Microsoft.KeyVault/vaults/sit-clean-install-kv",
+            "sshPublicKeySecretName": "sdp-sit-ssh-public-key",
+            "sshPublicKeyType": "KeyVaultSecret",
+            "startupScriptBlobUrl": "https://sdprmtest.blob.core.windows.net/scripts/myscript.sh",
+            "subnetResourceId": "/subscriptions/bba32ad2-4ac4-4bc3-8c34-ad8b2475d857/resourceGroups/fleet-rg-eric/providers/Microsoft.Network/virtualNetworks/eric-fleet-arm-vnet/subnets/default",
+            "userAssignedIdentityResourceIds": [
+              "/subscriptions/bba32ad2-4ac4-4bc3-8c34-ad8b2475d857/resourceGroups/fleet-rg-eric/providers/Microsoft.ManagedIdentity/userAssignedIdentities/fleet_mi"
+            ],
+            "userName": "azureuser"
+          },
+          "regularProfile": {
+            "allocationStrategy": "Prioritized",
+            "capacity": 2,
+            "minCapacity": 0
+          },
+          "vmSizesProfile": [
+            {
+                "name":"standard_d2s_v5",
+                "rank":0
+            },
+            {
+                "name":"standard_d2ds_v5",
+                "rank":1
+            },
+            {
+                "name":"standard_d4ds_v5",
+                "rank":2
+            }
+          ],
+          "spotProfile": {
+            "allocationStrategy": "CapacityOptimized",
+            "capacity": 3,
+            "evictionPolicy": "Delete",
+            "maintain": true,
+            "maxPricePerVM": "0.05",
+            "minCapacity": 0
+          },
+          "virtualMachineTags": {
+              "group": "group-2",
+              "cluster": "cluster-2-eastus2"
+          }
+        }
+      }
+    ]
+  }

@@ -1,0 +1,1 @@
+update config_detail set avalue='1' where application ='sdp-compose' and  akey ='ambari.api.debug';

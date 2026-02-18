@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.ConfScalingTaskVmNeoMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.ConfScalingTaskVm">
+    <id column="vm_detail_id" jdbcType="VARCHAR" property="vmDetailId" />
+    <result column="task_id" jdbcType="VARCHAR" property="taskId" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="os_imageid" jdbcType="VARCHAR" property="osImageid" />
+    <result column="os_image_type" jdbcType="VARCHAR" property="osImageType" />
+    <result column="os_version" jdbcType="VARCHAR" property="osVersion" />
+    <result column="os_volume_size" jdbcType="INTEGER" property="osVolumeSize" />
+    <result column="os_volume_type" jdbcType="VARCHAR" property="osVolumeType" />
+    <result column="vcpus" jdbcType="VARCHAR" property="vcpus" />
+    <result column="memory" jdbcType="VARCHAR" property="memory" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="purchase_type" jdbcType="INTEGER" property="purchaseType" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="vm_conf_id" jdbcType="VARCHAR" property="vmConfId"/>
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    vm_detail_id, task_id, sku, os_imageid, os_image_type, os_version, os_volume_size, 
+    os_volume_type, vcpus, memory, count, purchase_type, state, created_time, createdby,vm_conf_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from conf_scaling_task_vm
+    where vm_detail_id = #{vmDetailId,jdbcType=VARCHAR}
+  </select>
+    <select id="getScalingVmConfig" resultType="com.sunbox.domain.ConfScalingTaskVm">
+      select
+      <include refid="Base_Column_List" />
+      from conf_scaling_task_vm
+      where task_id = #{taskId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from conf_scaling_task_vm
+    where vm_detail_id = #{vmDetailId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.ConfScalingTaskVm">
+    insert into conf_scaling_task_vm (vm_detail_id, task_id, sku, 
+      os_imageid, os_image_type, os_version, 
+      os_volume_size, os_volume_type, vcpus, 
+      memory, count, purchase_type, 
+      state, created_time, createdby,vm_conf_id
+      )
+    values (#{vmDetailId,jdbcType=VARCHAR}, #{taskId,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, 
+      #{osImageid,jdbcType=VARCHAR}, #{osImageType,jdbcType=VARCHAR}, #{osVersion,jdbcType=VARCHAR}, 
+      #{osVolumeSize,jdbcType=INTEGER}, #{osVolumeType,jdbcType=VARCHAR}, #{vcpus,jdbcType=VARCHAR}, 
+      #{memory,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER}, #{purchaseType,jdbcType=INTEGER}, 
+      #{state,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}, #{createdby,jdbcType=VARCHAR}, #{vmConfId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.ConfScalingTaskVm">
+    insert into conf_scaling_task_vm
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="vmDetailId != null">
+        vm_detail_id,
+      </if>
+      <if test="taskId != null">
+        task_id,
+      </if>
+      <if test="sku != null">
+        sku,
+      </if>
+      <if test="osImageid != null">
+        os_imageid,
+      </if>
+      <if test="osImageType != null">
+        os_image_type,
+      </if>
+      <if test="osVersion != null">
+        os_version,
+      </if>
+      <if test="osVolumeSize != null">
+        os_volume_size,
+      </if>
+      <if test="osVolumeType != null">
+        os_volume_type,
+      </if>
+      <if test="vcpus != null">
+        vcpus,
+      </if>
+      <if test="memory != null">
+        memory,
+      </if>
+      <if test="count != null">
+        count,
+      </if>
+      <if test="purchaseType != null">
+        purchase_type,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="vmDetailId != null">
+        #{vmDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null">
+        #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="sku != null">
+        #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="osImageid != null">
+        #{osImageid,jdbcType=VARCHAR},
+      </if>
+      <if test="osImageType != null">
+        #{osImageType,jdbcType=VARCHAR},
+      </if>
+      <if test="osVersion != null">
+        #{osVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="osVolumeSize != null">
+        #{osVolumeSize,jdbcType=INTEGER},
+      </if>
+      <if test="osVolumeType != null">
+        #{osVolumeType,jdbcType=VARCHAR},
+      </if>
+      <if test="vcpus != null">
+        #{vcpus,jdbcType=VARCHAR},
+      </if>
+      <if test="memory != null">
+        #{memory,jdbcType=VARCHAR},
+      </if>
+      <if test="count != null">
+        #{count,jdbcType=INTEGER},
+      </if>
+      <if test="purchaseType != null">
+        #{purchaseType,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateCount" parameterType="com.sunbox.domain.ConfScalingTaskVm">
+    update conf_scaling_task_vm
+    set
+    count = #{count,jdbcType=INTEGER}
+    where task_id = #{taskId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.ConfScalingTaskVm">
+    update conf_scaling_task_vm
+    <set>
+      <if test="taskId != null">
+        task_id = #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="sku != null">
+        sku = #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="osImageid != null">
+        os_imageid = #{osImageid,jdbcType=VARCHAR},
+      </if>
+      <if test="osImageType != null">
+        os_image_type = #{osImageType,jdbcType=VARCHAR},
+      </if>
+      <if test="osVersion != null">
+        os_version = #{osVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="osVolumeSize != null">
+        os_volume_size = #{osVolumeSize,jdbcType=INTEGER},
+      </if>
+      <if test="osVolumeType != null">
+        os_volume_type = #{osVolumeType,jdbcType=VARCHAR},
+      </if>
+      <if test="vcpus != null">
+        vcpus = #{vcpus,jdbcType=VARCHAR},
+      </if>
+      <if test="memory != null">
+        memory = #{memory,jdbcType=VARCHAR},
+      </if>
+      <if test="count != null">
+        count = #{count,jdbcType=INTEGER},
+      </if>
+      <if test="purchaseType != null">
+        purchase_type = #{purchaseType,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where vm_detail_id = #{vmDetailId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.ConfScalingTaskVm">
+    update conf_scaling_task_vm
+    set task_id = #{taskId,jdbcType=VARCHAR},
+      sku = #{sku,jdbcType=VARCHAR},
+      os_imageid = #{osImageid,jdbcType=VARCHAR},
+      os_image_type = #{osImageType,jdbcType=VARCHAR},
+      os_version = #{osVersion,jdbcType=VARCHAR},
+      os_volume_size = #{osVolumeSize,jdbcType=INTEGER},
+      os_volume_type = #{osVolumeType,jdbcType=VARCHAR},
+      vcpus = #{vcpus,jdbcType=VARCHAR},
+      memory = #{memory,jdbcType=VARCHAR},
+      count = #{count,jdbcType=INTEGER},
+      purchase_type = #{purchaseType,jdbcType=INTEGER},
+      state = #{state,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      createdby = #{createdby,jdbcType=VARCHAR}
+    where vm_detail_id = #{vmDetailId,jdbcType=VARCHAR}
+  </update>
+</mapper>

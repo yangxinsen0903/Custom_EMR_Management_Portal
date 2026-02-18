@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpadmin.mapper.InfoGroupElasticScalingRuleLogMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoGroupElasticScalingRuleLog">
+    <id column="es_rule_log_id" jdbcType="BIGINT" property="esRuleLogId" />
+    <result column="es_rule_id" jdbcType="VARCHAR" property="esRuleId" />
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="load_metric" jdbcType="VARCHAR" property="loadMetric" />
+    <result column="aggregate_type" jdbcType="VARCHAR" property="aggregateType" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="threshold" jdbcType="DOUBLE" property="threshold" />
+    <result column="metric_val" jdbcType="DOUBLE" property="metricVal" />
+    <result column="is_start_scaling" jdbcType="INTEGER" property="isStartScaling" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    es_rule_log_id, es_rule_id, cluster_id, load_metric, aggregate_type, operator, threshold, 
+    metric_val, is_start_scaling, created_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from info_group_elastic_scaling_rule_log
+    where es_rule_log_id = #{esRuleLogId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from info_group_elastic_scaling_rule_log
+    where es_rule_log_id = #{esRuleLogId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.InfoGroupElasticScalingRuleLog">
+    insert into info_group_elastic_scaling_rule_log (es_rule_log_id, es_rule_id, cluster_id, 
+      load_metric, aggregate_type, operator, 
+      threshold, metric_val, is_start_scaling, 
+      created_time)
+    values (#{esRuleLogId,jdbcType=BIGINT}, #{esRuleId,jdbcType=VARCHAR}, #{clusterId,jdbcType=VARCHAR}, 
+      #{loadMetric,jdbcType=VARCHAR}, #{aggregateType,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, 
+      #{threshold,jdbcType=DOUBLE}, #{metricVal,jdbcType=DOUBLE}, #{isStartScaling,jdbcType=INTEGER}, 
+      #{createdTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.InfoGroupElasticScalingRuleLog">
+    insert into info_group_elastic_scaling_rule_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="esRuleLogId != null">
+        es_rule_log_id,
+      </if>
+      <if test="esRuleId != null">
+        es_rule_id,
+      </if>
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="loadMetric != null">
+        load_metric,
+      </if>
+      <if test="aggregateType != null">
+        aggregate_type,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="threshold != null">
+        threshold,
+      </if>
+      <if test="metricVal != null">
+        metric_val,
+      </if>
+      <if test="isStartScaling != null">
+        is_start_scaling,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="esRuleLogId != null">
+        #{esRuleLogId,jdbcType=BIGINT},
+      </if>
+      <if test="esRuleId != null">
+        #{esRuleId,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="loadMetric != null">
+        #{loadMetric,jdbcType=VARCHAR},
+      </if>
+      <if test="aggregateType != null">
+        #{aggregateType,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="threshold != null">
+        #{threshold,jdbcType=DOUBLE},
+      </if>
+      <if test="metricVal != null">
+        #{metricVal,jdbcType=DOUBLE},
+      </if>
+      <if test="isStartScaling != null">
+        #{isStartScaling,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.InfoGroupElasticScalingRuleLog">
+    update info_group_elastic_scaling_rule_log
+    <set>
+      <if test="esRuleId != null">
+        es_rule_id = #{esRuleId,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterId != null">
+        cluster_id = #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="loadMetric != null">
+        load_metric = #{loadMetric,jdbcType=VARCHAR},
+      </if>
+      <if test="aggregateType != null">
+        aggregate_type = #{aggregateType,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="threshold != null">
+        threshold = #{threshold,jdbcType=DOUBLE},
+      </if>
+      <if test="metricVal != null">
+        metric_val = #{metricVal,jdbcType=DOUBLE},
+      </if>
+      <if test="isStartScaling != null">
+        is_start_scaling = #{isStartScaling,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where es_rule_log_id = #{esRuleLogId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.InfoGroupElasticScalingRuleLog">
+    update info_group_elastic_scaling_rule_log
+    set es_rule_id = #{esRuleId,jdbcType=VARCHAR},
+      cluster_id = #{clusterId,jdbcType=VARCHAR},
+      load_metric = #{loadMetric,jdbcType=VARCHAR},
+      aggregate_type = #{aggregateType,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR},
+      threshold = #{threshold,jdbcType=DOUBLE},
+      metric_val = #{metricVal,jdbcType=DOUBLE},
+      is_start_scaling = #{isStartScaling,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where es_rule_log_id = #{esRuleLogId,jdbcType=BIGINT}
+  </update>
+  <select id="findTop1OrderByDesc" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from info_group_elastic_scaling_rule_log
+    where
+    cluster_id = #{clusterId,jdbcType=VARCHAR}
+    and es_rule_id = #{esRuleId,jdbcType=VARCHAR}
+    order by created_time desc
+    limit 1
+  </select>
+</mapper>

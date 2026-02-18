@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.DailyPlanReportMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.DailyPlanReport">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="report_id" jdbcType="VARCHAR" property="reportId"/>
+        <result column="operation_name" jdbcType="VARCHAR" property="operationName"/>
+        <result column="success_count" jdbcType="INTEGER" property="successCount"/>
+        <result column="failure_count" jdbcType="INTEGER" property="failureCount"/>
+        <result column="total_count" jdbcType="INTEGER" property="totalCount"/>
+        <result column="timeout_count" jdbcType="INTEGER" property="timeoutCount"/>
+        <result column="success_rate" jdbcType="DOUBLE" property="successRate"/>
+        <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="report_date" jdbcType="TIMESTAMP" property="reportDate"/>
+        <result column="region" jdbcType="VARCHAR" property="region"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        report_id,
+        operation_name,
+        success_count,
+        failure_count,
+        total_count,
+        timeout_count,
+        success_rate,
+        begin_time,
+        end_time,
+        report_date,
+        region
+    </sql>
+    <select id="selectByReportId" resultType="com.sunbox.domain.DailyPlanReport">
+        select
+        <include refid="Base_Column_List"/>
+        from daily_plan_report
+        where report_id = #{reportId} and region=#{region}
+        order by begin_time desc
+    </select>
+    <select id="countByReportId" resultType="java.lang.Integer">
+        select
+        count(id)
+        from daily_plan_report
+        where report_id = #{reportId} and region=#{region}
+    </select>
+    <select id="selectByTime" resultType="com.sunbox.domain.DailyPlanReport">
+        select
+        <include refid="Base_Column_List"/>
+        from daily_plan_report
+        where begin_time <![CDATA[ >= ]]> #{beginTime}
+        and end_time <![CDATA[ <= ]]> #{endTime}
+        <if test="region != null and region !=''">
+            and region = #{region}
+        </if>
+        order by report_id desc
+    </select>
+    <insert id="insert" parameterType="com.sunbox.domain.DailyPlanReport">
+        insert into daily_plan_report (
+        id,
+        report_id,
+        operation_name,
+        success_count,
+        failure_count,
+        total_count,
+        timeout_count,
+        success_rate,
+        begin_time,
+        end_time,
+        report_date,
+        region
+        ) values (
+        #{id},
+        #{reportId},
+        #{operationName},
+        #{successCount},
+        #{failureCount},
+        #{totalCount},
+        #{timeoutCount},
+        #{successRate},
+        #{beginTime},
+        #{endTime},
+        #{reportDate},
+        #{region}
+        )
+    </insert>
+</mapper>

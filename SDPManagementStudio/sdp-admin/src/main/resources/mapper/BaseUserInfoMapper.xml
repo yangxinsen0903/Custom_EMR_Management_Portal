@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpadmin.mapper.BaseUserInfoMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.BaseUserInfo">
+    <id column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="dept_id" jdbcType="VARCHAR" property="deptId" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modifiedby" jdbcType="VARCHAR" property="modifiedby" />
+    <result column="em_number" jdbcType="VARCHAR" property="emNumber" />
+  </resultMap>
+  <sql id="Base_Column_List">
+      user_id, user_name, real_name, dept_id, dept_name, password, created_time, createdby, modified_time,
+    modifiedby, em_number
+  </sql>
+
+  <select id="selectAllByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from base_user_info
+    where 1=1
+    <if test="userId != null and userId!=''">
+      and user_id like concat('%',#{userId,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+
+  <select id="selectAllCountByUsername" resultType="integer">
+    select
+    count(*)
+    from base_user_info
+    where 1=1
+    <if test="username != null and username!=''">
+      and user_name like concat('%',#{username,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="realName != null and realName!=''">
+      and real_name like concat('%',#{realName,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+  <select id="selectAllByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from base_user_info
+    where 1=1
+    <if test="username != null and username!=''">
+      and user_name like concat('%',#{username,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="realName != null and realName!=''">
+      and real_name like concat('%',#{realName,jdbcType=VARCHAR},'%')
+    </if>
+    ORDER BY created_time DESC
+    LIMIT #{pageIndex}, #{pageSize};
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from base_user_info
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from base_user_info
+    where user_name = #{username,jdbcType=VARCHAR}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from base_user_info
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.BaseUserInfo">
+    insert into base_user_info (user_id, user_name, real_name, dept_id,
+      dept_name, password, created_time, 
+      createdby, modified_time, modifiedby,em_number
+      )
+    values (#{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, #{deptId,jdbcType=VARCHAR},
+      #{deptName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{createdby,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifiedby,jdbcType=VARCHAR}, #{emNumber,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.BaseUserInfo">
+    insert into base_user_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="realName != null">
+        real_name,
+      </if>
+      <if test="deptId != null">
+        dept_id,
+      </if>
+      <if test="deptName != null">
+        dept_name,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="modifiedby != null">
+        modifiedby,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="deptId != null">
+        #{deptId,jdbcType=VARCHAR},
+      </if>
+      <if test="deptName != null">
+        #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedby != null">
+        #{modifiedby,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.BaseUserInfo">
+    update base_user_info
+    <set>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="deptId != null">
+        dept_id = #{deptId,jdbcType=VARCHAR},
+      </if>
+      <if test="deptName != null">
+        dept_name = #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedby != null">
+        modifiedby = #{modifiedby,jdbcType=VARCHAR},
+      </if>
+      <if test="emNumber != null">
+        em_number = #{emNumber,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.BaseUserInfo">
+    update base_user_info
+    set user_name = #{userName,jdbcType=VARCHAR},
+      real_name = #{realName,jdbcType=VARCHAR},
+      dept_id = #{deptId,jdbcType=VARCHAR},
+      dept_name = #{deptName,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      createdby = #{createdby,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      modifiedby = #{modifiedby,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectAllUserId" resultType="java.util.Map">
+    select  userinfo.user_id as userId, userinfo.user_name as userName
+    from base_user_info  userinfo
+    left join base_user_role user_role on userinfo.user_name = user_role.user_id
+    left join base_user_region userregion on userinfo.user_name=userregion.user_id
+    left join meta_data_item region on userregion.region=region.region and region.type='SupportedRegionList'
+     where 1=1
+    <if test="userName != null and userName!=''">
+      and userinfo.user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="realName != null and realName!=''">
+      and userinfo.real_name like concat('%',#{realName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="roleCode != null and roleCode!=''">
+      and user_role.role_code = #{roleCode,jdbcType=VARCHAR}
+    </if>
+    <if test="region != null and region!=''">
+      and userregion.region = #{region,jdbcType=VARCHAR}
+    </if>
+    group by  userinfo.user_id
+    ORDER BY userinfo.created_time DESC
+    LIMIT #{pageIndex}, #{pageSize}
+  </select>
+
+  <select id="selectCountByUserRole" resultType="java.lang.Integer">
+    select count(1)
+    from(
+    select   userinfo.user_id
+    from base_user_info  userinfo
+    left join base_user_role user_role on userinfo.user_name = user_role.user_id
+    left  join base_user_region userregion on userinfo.user_name=userregion.user_id
+    left join meta_data_item region on userregion.region=region.region and region.type='SupportedRegionList'
+    where 1=1
+    <if test="userName != null and userName!=''">
+      and userinfo.user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="realName != null and realName!=''">
+      and userinfo.real_name like concat('%',#{realName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="roleCode != null and roleCode!=''">
+      and user_role.role_code = #{roleCode,jdbcType=VARCHAR}
+    </if>
+    <if test="region != null and region!=''">
+      and userregion.region = #{region,jdbcType=VARCHAR}
+    </if>
+    group by  userinfo.user_id
+    ) userTemp
+  </select>
+
+  <select id="selectAllByPrimaryKeys" resultType="com.sunbox.domain.BaseUserInfo">
+    select
+    <include refid="Base_Column_List" />
+    from base_user_info
+    where
+    user_name IN
+    <foreach collection="userIdList" open="(" separator="," close=")" item="item" index="index">
+      #{item}
+    </foreach>
+
+  </select>
+
+
+</mapper>

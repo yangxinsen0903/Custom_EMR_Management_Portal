@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+azure:
+  default-subscriptionId: ${AZURE_DEFAULT_SUBSCRIPTION_ID}
+rm:
+  api:
+    url: ${RM_API_JOB_URL}
+custom:
+  log:
+    root: /app/logs
+    upload:
+      url: ${SDP_LOG_UPLOAD_URL}
+      storageAccount: ${SDP_RM_SA}
+      container: ${SDP_LOG_UPLOAD_SA_CONTAINER}

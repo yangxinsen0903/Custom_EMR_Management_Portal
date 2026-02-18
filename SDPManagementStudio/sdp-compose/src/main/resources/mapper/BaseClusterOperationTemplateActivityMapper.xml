@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.BaseClusterOperationTemplateActivityMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.BaseClusterOperationTemplateActivity">
+    <id column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="template_id" jdbcType="VARCHAR" property="templateId" />
+    <result column="activity_type" jdbcType="VARCHAR" property="activityType" />
+    <result column="activity_name" jdbcType="VARCHAR" property="activityName" />
+    <result column="activity_cnname" jdbcType="VARCHAR" property="activityCnname" />
+    <result column="sort_no" jdbcType="INTEGER" property="sortNo" />
+    <result column="timeout" jdbcType="INTEGER" property="timeout" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    activity_id, template_id, activity_type, activity_name, activity_cnname,sort_no, timeout, createdby,
+    created_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from base_cluster_operation_template_activity
+    where activity_id = #{activityId,jdbcType=VARCHAR}
+  </select>
+    <select id="selectByTemplateId" resultType="com.sunbox.domain.BaseClusterOperationTemplateActivity">
+      select
+      <include refid="Base_Column_List" />
+      from base_cluster_operation_template_activity
+      where template_id = #{templateId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from base_cluster_operation_template_activity
+    where activity_id = #{activityId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.BaseClusterOperationTemplateActivity">
+    insert into base_cluster_operation_template_activity (activity_id, template_id, activity_type, 
+      activity_name,activity_cnname,sort_no, timeout,
+      createdby, created_time)
+    values (#{activityId,jdbcType=VARCHAR}, #{templateId,jdbcType=VARCHAR}, #{activityType,jdbcType=VARCHAR}, 
+      #{activityName,jdbcType=VARCHAR}, #{activityCnname,jdbcType=VARCHAR},#{sortNo,jdbcType=INTEGER}, #{timeout,jdbcType=INTEGER},
+      #{createdby,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.BaseClusterOperationTemplateActivity">
+    insert into base_cluster_operation_template_activity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="activityId != null">
+        activity_id,
+      </if>
+      <if test="templateId != null">
+        template_id,
+      </if>
+      <if test="activityType != null">
+        activity_type,
+      </if>
+      <if test="activityName != null">
+        activity_name,
+      </if>
+      <if test="activityCnname != null">
+        activity_cnname,
+      </if>
+      <if test="sortNo != null">
+        sort_no,
+      </if>
+      <if test="timeout != null">
+        timeout,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="activityId != null">
+        #{activityId,jdbcType=VARCHAR},
+      </if>
+      <if test="templateId != null">
+        #{templateId,jdbcType=VARCHAR},
+      </if>
+      <if test="activityType != null">
+        #{activityType,jdbcType=VARCHAR},
+      </if>
+      <if test="activityName != null">
+        #{activityName,jdbcType=VARCHAR},
+      </if>
+      <if test="activityCnname != null">
+        #{activityCnname,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNo != null">
+        #{sortNo,jdbcType=INTEGER},
+      </if>
+      <if test="timeout != null">
+        #{timeout,jdbcType=INTEGER},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.BaseClusterOperationTemplateActivity">
+    update base_cluster_operation_template_activity
+    <set>
+      <if test="templateId != null">
+        template_id = #{templateId,jdbcType=VARCHAR},
+      </if>
+      <if test="activityType != null">
+        activity_type = #{activityType,jdbcType=VARCHAR},
+      </if>
+      <if test="activityName != null">
+        activity_name = #{activityName,jdbcType=VARCHAR},
+      </if>
+      <if test="activityCnname != null">
+        activity_cnname = #{activityCnname,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNo != null">
+        sort_no = #{sortNo,jdbcType=INTEGER},
+      </if>
+      <if test="timeout != null">
+        timeout = #{timeout,jdbcType=INTEGER},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where activity_id = #{activityId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.BaseClusterOperationTemplateActivity">
+    update base_cluster_operation_template_activity
+    set template_id = #{templateId,jdbcType=VARCHAR},
+      activity_type = #{activityType,jdbcType=VARCHAR},
+      activity_name = #{activityName,jdbcType=VARCHAR},
+      activity_cnname = #{activityCnname,jdbcType=VARCHAR},
+      sort_no = #{sortNo,jdbcType=INTEGER},
+      timeout = #{timeout,jdbcType=INTEGER},
+      createdby = #{createdby,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where activity_id = #{activityId,jdbcType=VARCHAR}
+  </update>
+</mapper>

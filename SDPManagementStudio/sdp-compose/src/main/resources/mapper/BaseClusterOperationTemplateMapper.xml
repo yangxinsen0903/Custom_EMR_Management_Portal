@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.BaseClusterOperationTemplateMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.BaseClusterOperationTemplate">
+    <id column="template_id" jdbcType="VARCHAR" property="templateId" />
+    <result column="release_version" jdbcType="VARCHAR" property="releaseVersion" />
+    <result column="operation_name" jdbcType="VARCHAR" property="operationName" />
+    <result column="operation_description" jdbcType="VARCHAR" property="operationDescription" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    template_id, release_version, operation_name, operation_description, is_delete, createdby, 
+    created_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from base_cluster_operation_template
+    where template_id = #{templateId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByCondition" resultType="com.sunbox.domain.BaseClusterOperationTemplate" parameterType="map">
+    select
+    <include refid="Base_Column_List" />
+    from base_cluster_operation_template
+    where is_delete=0
+    <if test="releaseVersion != null">
+      and release_version = #{releaseVersion,jdbcType=VARCHAR}
+    </if>
+    <if test="operationName != null">
+      and operation_name = #{operationName,jdbcType=VARCHAR}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from base_cluster_operation_template
+    where template_id = #{templateId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.BaseClusterOperationTemplate">
+    insert into base_cluster_operation_template (template_id, release_version, operation_name, 
+      operation_description, is_delete, createdby, 
+      created_time)
+    values (#{templateId,jdbcType=VARCHAR}, #{releaseVersion,jdbcType=VARCHAR}, #{operationName,jdbcType=VARCHAR}, 
+      #{operationDescription,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER}, #{createdby,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.BaseClusterOperationTemplate">
+    insert into base_cluster_operation_template
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="templateId != null">
+        template_id,
+      </if>
+      <if test="releaseVersion != null">
+        release_version,
+      </if>
+      <if test="operationName != null">
+        operation_name,
+      </if>
+      <if test="operationDescription != null">
+        operation_description,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="templateId != null">
+        #{templateId,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseVersion != null">
+        #{releaseVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="operationName != null">
+        #{operationName,jdbcType=VARCHAR},
+      </if>
+      <if test="operationDescription != null">
+        #{operationDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.BaseClusterOperationTemplate">
+    update base_cluster_operation_template
+    <set>
+      <if test="releaseVersion != null">
+        release_version = #{releaseVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="operationName != null">
+        operation_name = #{operationName,jdbcType=VARCHAR},
+      </if>
+      <if test="operationDescription != null">
+        operation_description = #{operationDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where template_id = #{templateId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.BaseClusterOperationTemplate">
+    update base_cluster_operation_template
+    set release_version = #{releaseVersion,jdbcType=VARCHAR},
+      operation_name = #{operationName,jdbcType=VARCHAR},
+      operation_description = #{operationDescription,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      createdby = #{createdby,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where template_id = #{templateId,jdbcType=VARCHAR}
+  </update>
+</mapper>

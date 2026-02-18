@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ansible-api
+  namespace: resource-manager
+spec:
+  ports:
+    - protocol: TCP
+      port: 8082
+      targetPort: 8082
+  selector:
+    app: ansible-api
+  type: LoadBalancer

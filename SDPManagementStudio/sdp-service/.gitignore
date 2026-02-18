@@ -1,0 +1,33 @@
+/target/*
+!.mvn/wrapper/maven-wrapper.jar
+/log*
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+*.log
+*.DS_Store
+.DS_Store
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+/build/
+/server/*
+/sdp-scale/target/*
+0.other/0.db/.back_SDPMS/SDPMS-backup-2023116204204.pdma.json
+0.other/0.db/.back_SDPMS/SDPMS-backup-2023117163600.pdma.json
+.vscode/settings.json
+/sdp-spot/target/*

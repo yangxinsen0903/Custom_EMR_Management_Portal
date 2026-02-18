@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.BaseReleaseAppsMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.BaseReleaseApps">
+    <id column="release_version" jdbcType="VARCHAR" property="releaseVersion" />
+    <id column="app_name" jdbcType="VARCHAR" property="appName" />
+    <result column="app_verison" jdbcType="VARCHAR" property="appVerison" />
+    <result column="required" jdbcType="INTEGER" property="required" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    release_version, app_name, app_verison, required, created_by, created_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.sunbox.domain.BaseReleaseAppsKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from base_release_apps
+    where release_version = #{releaseVersion,jdbcType=VARCHAR}
+      and app_name = #{appName,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.sunbox.domain.BaseReleaseAppsKey">
+    delete from base_release_apps
+    where release_version = #{releaseVersion,jdbcType=VARCHAR}
+      and app_name = #{appName,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.BaseReleaseApps">
+    insert into base_release_apps (release_version, app_name, app_verison, 
+      required, created_by, created_time
+      )
+    values (#{releaseVersion,jdbcType=VARCHAR}, #{appName,jdbcType=VARCHAR}, #{appVerison,jdbcType=VARCHAR}, 
+      #{required,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.BaseReleaseApps">
+    insert into base_release_apps
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="releaseVersion != null">
+        release_version,
+      </if>
+      <if test="appName != null">
+        app_name,
+      </if>
+      <if test="appVerison != null">
+        app_verison,
+      </if>
+      <if test="required != null">
+        required,
+      </if>
+      <if test="createdBy != null">
+        created_by,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="releaseVersion != null">
+        #{releaseVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="appName != null">
+        #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="appVerison != null">
+        #{appVerison,jdbcType=VARCHAR},
+      </if>
+      <if test="required != null">
+        #{required,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.BaseReleaseApps">
+    update base_release_apps
+    <set>
+      <if test="appVerison != null">
+        app_verison = #{appVerison,jdbcType=VARCHAR},
+      </if>
+      <if test="required != null">
+        required = #{required,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where release_version = #{releaseVersion,jdbcType=VARCHAR}
+      and app_name = #{appName,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.BaseReleaseApps">
+    update base_release_apps
+    set app_verison = #{appVerison,jdbcType=VARCHAR},
+      required = #{required,jdbcType=INTEGER},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where release_version = #{releaseVersion,jdbcType=VARCHAR}
+      and app_name = #{appName,jdbcType=VARCHAR}
+  </update>
+</mapper>

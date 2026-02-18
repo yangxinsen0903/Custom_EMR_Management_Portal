@@ -1,0 +1,44 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: regserver
+  labels:
+    app: regserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: regserver
+  template:
+    metadata:
+      labels:
+        app: regserver
+    spec:
+      containers:
+        - name: regserver
+          resources:
+            requests:
+              memory: 2Gi
+              cpu: 1
+            limits:
+              memory: 4Gi
+              cpu: 2
+          image: acrsbxdevaks.azurecr.io/regserver:1.1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 30000
+      imagePullSecrets:
+        - name: acr-secret-pwd
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: regserver
+spec:
+  type: ClusterIP
+  ports:
+    - port: 30000
+      targetPort: 30000
+  selector:
+    app: regserver

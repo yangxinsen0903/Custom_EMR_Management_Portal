@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.ClusterDestroyTaskMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.ClusterDestroyTask">
+    <id column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="cluster_name" jdbcType="VARCHAR" property="clusterName" />
+    <result column="is_white_addr" jdbcType="INTEGER" property="isWhiteAddr" />
+    <result column="start_destroy_time" jdbcType="TIMESTAMP" property="startDestroyTime" />
+    <result column="end_destroy_time" jdbcType="TIMESTAMP" property="endDestroyTime" />
+    <result column="destroy_task_id" jdbcType="VARCHAR" property="destroyTaskId" />
+    <result column="destroy_status" jdbcType="VARCHAR" property="destroyStatus" />
+    <result column="f_del" jdbcType="INTEGER" property="fDel" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modifiedby" jdbcType="VARCHAR" property="modifiedby" />
+    <result column="id" jdbcType="BIGINT" property="id" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    cluster_id, cluster_name, is_white_addr, start_destroy_time, end_destroy_time, destroy_task_id, 
+    destroy_status, f_del, created_time, createdby, modified_time, modifiedby,id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cluster_destroy_task
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByStatus" resultType="com.sunbox.domain.ClusterDestroyTask">
+    select
+    <include refid="Base_Column_List" />
+    from cluster_destroy_task
+    where  1=1
+    <if test="destroy_status != null and destroy_status != ''">
+      AND destroy_status = #{destroy_status,jdbcType=VARCHAR}
+    </if>
+    ORDER BY created_time DESC
+    LIMIT #{count}
+  </select>
+  <select id="selectByStatusList" resultType="com.sunbox.domain.ClusterDestroyTask">
+    select
+    <include refid="Base_Column_List" />
+    from cluster_destroy_task
+    where  destroy_status in
+    <foreach collection="destroy_status"  item="status" separator="," open="(" close=")">
+      #{status,jdbcType=VARCHAR}
+    </foreach>
+    ORDER BY created_time DESC
+  </select>
+  <select id="selectByNameAndStatus" resultType="com.sunbox.domain.ClusterDestroyTask">
+    select
+    <include refid="Base_Column_List" />
+    from cluster_destroy_task
+    <where>
+      <if test="clusterName != null and clusterName != ''">
+        AND cluster_name like CONCAT(CONCAT('%', #{clusterName}), '%')
+       </if>
+      <if test="destroyStatus != null and destroyStatus != ''">
+        AND destroy_status = #{destroyStatus,jdbcType=VARCHAR}
+      </if>
+    </where>
+    ORDER BY created_time DESC
+    limit #{pageStart},#{pageLimit}
+  </select>
+
+  <select id="countByNameAndStatus" resultType="int">
+    select
+    count(1)
+    from cluster_destroy_task
+    <where>
+      <if test="clusterName != null and clusterName != ''">
+        AND cluster_name like CONCAT(CONCAT('%', #{clusterName}), '%')
+      </if>
+      <if test="destroyStatus != null and destroyStatus != ''">
+        AND destroy_status = #{destroyStatus,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="selectByClusterId" resultType="com.sunbox.domain.ClusterDestroyTask">
+    select
+    <include refid="Base_Column_List" />
+    from cluster_destroy_task
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from cluster_destroy_task
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" keyColumn="cluster_id" keyProperty="clusterId" parameterType="com.sunbox.domain.ClusterDestroyTask" useGeneratedKeys="true">
+    insert into cluster_destroy_task (cluster_name, is_white_addr, start_destroy_time, 
+      end_destroy_time, destroy_task_id, destroy_status, f_del,
+      created_time, createdby, modified_time,
+      modifiedby)
+    values (#{clusterName,jdbcType=VARCHAR}, #{isWhiteAddr,jdbcType=INTEGER}, #{startDestroyTime,jdbcType=TIMESTAMP}, 
+      #{endDestroyTime,jdbcType=TIMESTAMP}, #{destroyTaskId,jdbcType=VARCHAR}, #{destroyStatus,jdbcType=VARCHAR},  #{fDel,jdbcType=INTEGER},
+      #{createdTime,jdbcType=TIMESTAMP}, #{createdby,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{modifiedby,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.sunbox.domain.ClusterDestroyTask" useGeneratedKeys="true">
+    insert into cluster_destroy_task
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="clusterName != null">
+        cluster_name,
+      </if>
+      <if test="isWhiteAddr != null">
+        is_white_addr,
+      </if>
+      <if test="startDestroyTime != null">
+        start_destroy_time,
+      </if>
+      <if test="endDestroyTime != null">
+        end_destroy_time,
+      </if>
+      <if test="destroyTaskId != null">
+        destroy_task_id,
+      </if>
+      <if test="destroyStatus != null">
+        destroy_status,
+      </if>
+      <if test="fDel != null">
+        f_del,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="modifiedby != null">
+        modifiedby,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterName != null">
+        #{clusterName,jdbcType=VARCHAR},
+      </if>
+      <if test="isWhiteAddr != null">
+        #{isWhiteAddr,jdbcType=INTEGER},
+      </if>
+      <if test="startDestroyTime != null">
+        #{startDestroyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDestroyTime != null">
+        #{endDestroyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="destroyTaskId != null">
+        #{destroyTaskId,jdbcType=VARCHAR},
+      </if>
+      <if test="destroyStatus != null">
+        #{destroyStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="fDel != null">
+        #{fDel,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedby != null">
+        #{modifiedby,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.ClusterDestroyTask">
+    update cluster_destroy_task
+    <set>
+      <if test="clusterName != null">
+        cluster_name = #{clusterName,jdbcType=VARCHAR},
+      </if>
+      <if test="isWhiteAddr != null">
+        is_white_addr = #{isWhiteAddr,jdbcType=INTEGER},
+      </if>
+      <if test="startDestroyTime != null">
+        start_destroy_time = #{startDestroyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDestroyTime != null">
+        end_destroy_time = #{endDestroyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="destroyTaskId != null">
+        destroy_task_id = #{destroyTaskId,jdbcType=VARCHAR},
+      </if>
+      <if test="destroyStatus != null">
+        destroy_status = #{destroyStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="fDel != null">
+        f_del = #{fDel,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedby != null">
+        modifiedby = #{modifiedby,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.ClusterDestroyTask">
+    update cluster_destroy_task
+    set cluster_name = #{clusterName,jdbcType=VARCHAR},
+      is_white_addr = #{isWhiteAddr,jdbcType=INTEGER},
+      start_destroy_time = #{startDestroyTime,jdbcType=TIMESTAMP},
+      end_destroy_time = #{endDestroyTime,jdbcType=TIMESTAMP},
+      destroy_task_id = #{destroyTaskId,jdbcType=VARCHAR},
+      destroy_status = #{destroyStatus,jdbcType=VARCHAR},
+      f_del = #{fDel,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      createdby = #{createdby,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      modifiedby = #{modifiedby,jdbcType=VARCHAR}
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateBatchTaskById">
+    update cluster_destroy_task
+    set destroy_status = #{destroy_status,jdbcType=VARCHAR},
+    <if test="start_destroy_time != null">
+      start_destroy_time = #{start_destroy_time,jdbcType=TIMESTAMP},
+    </if>
+    <if test="end_destroy_time != null">
+      end_destroy_time = #{end_destroy_time,jdbcType=TIMESTAMP},
+    </if>
+    modified_time = now(),
+    modifiedby = 'system'
+    where cluster_id in
+    <foreach collection="clusterIds" item="clusterId" separator="," open="(" close=")">
+      #{clusterId,jdbcType=VARCHAR}
+    </foreach>
+  </update>
+  <update id="updateBatchTaskByIds">
+    update cluster_destroy_task
+    set destroy_status = #{destroy_status,jdbcType=VARCHAR},
+    <if test="start_destroy_time != null">
+      start_destroy_time = #{start_destroy_time,jdbcType=TIMESTAMP},
+    </if>
+    <if test="end_destroy_time != null">
+      end_destroy_time = #{end_destroy_time,jdbcType=TIMESTAMP},
+    </if>
+    modified_time = now(),
+    modifiedby = 'system'
+    where id in
+    <foreach collection="ids" item="id" separator="," open="(" close=")">
+      #{id}
+    </foreach>
+  </update>
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.OsImageMapper">
+
+    <resultMap id="StackVersionMap" type="java.util.HashMap">
+        <result column="release_version" property="releaseVersion" javaType="java.lang.String"/>
+        <result column="os_image_id" property="osImageId" javaType="java.lang.String"/>
+    </resultMap>
+
+    <select id="queryStackVersionImage" resultMap="StackVersionMap">
+        select ver.release_version as release_version, bi.os_image_id as os_image_id
+        from base_release_version ver
+               left join base_release_vm_img img on ver.release_version = img.release_version and img.vm_role = 'ambari'
+               left join base_images  bi on img.img_id = bi.img_id
+
+    </select>
+
+</mapper>

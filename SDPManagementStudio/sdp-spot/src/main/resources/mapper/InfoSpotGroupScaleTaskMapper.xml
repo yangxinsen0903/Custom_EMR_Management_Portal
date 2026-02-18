@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpspot.mapper.InfoSpotGroupScaleTaskMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoSpotGroupScaleTask">
+    <id column="task_id" jdbcType="VARCHAR" property="taskId" />
+    <result column="cluster_id" jdbcType="VARCHAR" property="clusterId" />
+    <result column="group_id" jdbcType="VARCHAR" property="groupId" />
+    <result column="vm_role" jdbcType="VARCHAR" property="vmRole" />
+    <result column="scale_method" jdbcType="INTEGER" property="scaleMethod" />
+    <result column="scale_count" jdbcType="INTEGER" property="scaleCount" />
+    <result column="actual_count" jdbcType="INTEGER" property="actualCount" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifiedby" jdbcType="VARCHAR" property="modifiedby" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="beg_time" jdbcType="TIMESTAMP" property="begTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    task_id, cluster_id, group_id, vm_role, scale_method, scale_count, actual_count, state, createdby,
+    created_time, modifiedby, modified_time, beg_time, end_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from info_spot_group_scale_task
+    where task_id = #{taskId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from info_spot_group_scale_task
+    where task_id = #{taskId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sunbox.domain.InfoSpotGroupScaleTask">
+    insert into info_spot_group_scale_task (task_id, cluster_id, group_id, vm_role,
+      scale_method, scale_count, actual_count, 
+      state, createdby, created_time)
+    values (#{taskId,jdbcType=VARCHAR}, #{clusterId,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR}, #{vmRole,jdbcType=VARCHAR},
+      #{scaleMethod,jdbcType=INTEGER}, #{scaleCount,jdbcType=INTEGER}, #{actualCount,jdbcType=INTEGER},
+      #{state,jdbcType=INTEGER}, #{createdby,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sunbox.domain.InfoSpotGroupScaleTask">
+    insert into info_spot_group_scale_task
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="taskId != null">
+        task_id,
+      </if>
+      <if test="clusterId != null">
+        cluster_id,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="vmRole != null">
+        vm_role,
+      </if>
+      <if test="scaleMethod != null">
+        scale_method,
+      </if>
+      <if test="scaleCount != null">
+        scale_count,
+      </if>
+      <if test="actualCount != null">
+        actual_count,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifiedby != null">
+        modifiedby,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="begTime != null">
+        beg_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="taskId != null">
+        #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="clusterId != null">
+        #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="vmRole != null">
+        #{vmRole,jdbcType=VARCHAR},
+      </if>
+      <if test="scaleMethod != null">
+        #{scaleMethod,jdbcType=INTEGER},
+      </if>
+      <if test="scaleCount != null">
+        #{scaleCount,jdbcType=INTEGER},
+      </if>
+      <if test="actualCount != null">
+        #{actualCount,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedby != null">
+        #{modifiedby,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="begTime != null">
+        #{begTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.InfoSpotGroupScaleTask">
+    update info_spot_group_scale_task
+    <set>
+      <if test="clusterId != null">
+        cluster_id = #{clusterId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="scaleMethod != null">
+        scale_method = #{scaleMethod,jdbcType=INTEGER},
+      </if>
+      <if test="scaleCount != null">
+        scale_count = #{scaleCount,jdbcType=INTEGER},
+      </if>
+      <if test="actualCount != null">
+        actual_count = #{actualCount,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedby != null">
+        modifiedby = #{modifiedby,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="begTime != null">
+        beg_time = #{begTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where task_id = #{taskId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.InfoSpotGroupScaleTask">
+    update info_spot_group_scale_task
+    set cluster_id = #{clusterId,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=VARCHAR},
+      vm_role = #{vmRole,jdbcType=VARCHAR},
+      scale_method = #{scaleMethod,jdbcType=INTEGER},
+      scale_count = #{scaleCount,jdbcType=INTEGER},
+      actual_count = #{actualCount,jdbcType=INTEGER},
+      state = #{state,jdbcType=INTEGER},
+      createdby = #{createdby,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifiedby = #{modifiedby,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      beg_time = #{begTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP}
+    where task_id = #{taskId,jdbcType=VARCHAR}
+  </update>
+  <select id="countByClusterIdAndNotState" resultType="int">
+    select count(1) from info_spot_group_scale_task
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    and group_id = #{groupId,jdbcType=VARCHAR}
+    and vm_role = #{vmRole,jdbcType=VARCHAR}
+    and (state <![CDATA[ <> ]]> #{state1,jdbcType=INTEGER}
+      and state <![CDATA[ <> ]]> #{state2,jdbcType=INTEGER})
+  </select>
+  <select id="findLatestByClusterIdAndNotState" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from info_spot_group_scale_task
+    where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    and group_id = #{groupId,jdbcType=VARCHAR}
+    and vm_role = #{vmRole,jdbcType=VARCHAR}
+    and (state <![CDATA[ <> ]]> #{state1,jdbcType=INTEGER}
+    and state <![CDATA[ <> ]]> #{state2,jdbcType=INTEGER})
+    order by created_time desc
+    limit 1
+  </select>
+  <update id="updateState" parameterType="com.sunbox.domain.InfoSpotGroupScaleTask">
+    update info_spot_group_scale_task
+    set state = #{state,jdbcType=INTEGER},
+    modifiedby = #{modifiedby,jdbcType=VARCHAR},
+    modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where task_id = #{taskId,jdbcType=VARCHAR}
+  </update>
+</mapper>

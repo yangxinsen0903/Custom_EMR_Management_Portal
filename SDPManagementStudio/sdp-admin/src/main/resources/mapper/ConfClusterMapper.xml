@@ -1,0 +1,647 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpadmin.mapper.ConfClusterMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.ConfCluster">
+        <!--@mbg.generated-->
+        <!--@Table conf_cluster-->
+        <id column="cluster_id" jdbcType="VARCHAR" property="clusterId"/>
+        <result column="cluster_name" jdbcType="VARCHAR" property="clusterName"/>
+        <result column="cluster_release_ver" jdbcType="VARCHAR" property="clusterReleaseVer"/>
+        <result column="region" jdbcType="VARCHAR" property="region"/>
+        <result column="scene" jdbcType="VARCHAR" property="scene"/>
+        <result column="vnet" jdbcType="VARCHAR" property="vnet"/>
+        <result column="zone" jdbcType="VARCHAR" property="zone"/>
+        <result column="zone_name" jdbcType="VARCHAR" property="zoneName"/>
+        <result column="subnet" jdbcType="VARCHAR" property="subnet"/>
+        <result column="config_type" jdbcType="VARCHAR" property="configType"/>
+        <result column="master_security_group" jdbcType="VARCHAR" property="masterSecurityGroup"/>
+        <result column="slave_security_group" jdbcType="VARCHAR" property="slaveSecurityGroup"/>
+        <result column="log_path" jdbcType="VARCHAR" property="logPath"/>
+        <result column="keypair_id" jdbcType="VARCHAR" property="keypairId"/>
+        <result column="delete_protected" jdbcType="VARCHAR" property="deleteProtected"/>
+        <result column="instance_collection_type" jdbcType="VARCHAR" property="instanceCollectionType"/>
+        <result column="publicIp_available" jdbcType="VARCHAR" property="publicipAvailable"/>
+        <result column="ambari_dburl" jdbcType="VARCHAR" property="ambariDburl"/>
+        <result column="ambari_port" jdbcType="VARCHAR" property="ambariPort"/>
+        <result column="ambari_database" jdbcType="VARCHAR" property="ambariDatabase"/>
+        <result column="ambari_db_autocreate" jdbcType="INTEGER" property="ambariDbAutocreate"/>
+        <result column="is_embed_ambaridb" jdbcType="INTEGER" property="isEmbedAmbariDb"/>
+        <result column="hive_metadata_dburl" jdbcType="VARCHAR" property="hiveMetadataDburl"/>
+        <result column="hive_metadata_port" jdbcType="VARCHAR" property="hiveMetadataPort"/>
+        <result column="hive_metadata_database" jdbcType="VARCHAR" property="hiveMetadataDatabase"/>
+        <result column="ambari_acount" jdbcType="VARCHAR" property="ambariAcount"/>
+        <result column="src_cluster_id" jdbcType="VARCHAR" property="srcClusterId"/>
+        <result column="is_ha" jdbcType="INTEGER" property="isHa"/>
+        <result column="vm_mi" jdbcType="VARCHAR" property="vmMI"/>
+        <result column="vm_mi_tenant_id" jdbcType="VARCHAR" property="vmMITenantId"/>
+        <result column="vm_mi_client_id" jdbcType="VARCHAR" property="vmMIClientId"/>
+        <result column="log_mi_tenant_id" jdbcType="VARCHAR" property="logMITenantId"/>
+        <result column="log_mi_client_id" jdbcType="VARCHAR" property="logMIClientId"/>
+        <result column="log_mi" jdbcType="VARCHAR" property="logMI"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="createdby" jdbcType="VARCHAR" property="createdby"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="modifiedby" jdbcType="VARCHAR" property="modifiedby"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="enable_ganglia" jdbcType="INTEGER" property="enableGanglia"/>
+        <result column="creation_mode" jdbcType="VARCHAR" property="creationMode"/>
+        <result column="subscription_id" jdbcType="VARCHAR" property="subscriptionId"/>
+        <result column="is_parallel_scale" jdbcType="INTEGER" property="isParallelScale"/>
+        <result column="is_white_addr" jdbcType="INTEGER" property="isWhiteAddr"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        cluster_id, cluster_name, cluster_release_ver, region, scene, vnet, subnet, config_type,
+        master_security_group, slave_security_group, log_path, keypair_id, delete_protected,
+        instance_collection_type, publicIp_available, ambari_dburl, ambari_port, ambari_database,
+        ambari_db_autocreate,hive_metadata_dburl,
+        hive_metadata_port, hive_metadata_database, ambari_acount, src_cluster_id, is_ha, `state`, createdby,
+        created_time, modifiedby, modified_time,
+        vm_mi, log_mi,vm_mi_tenant_id, vm_mi_client_id, log_mi_tenant_id, log_mi_client_id, zone,
+        zone_name,is_embed_ambaridb,enable_ganglia,subscription_id,is_parallel_scale,is_white_addr
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from conf_cluster
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectClusterNameByPrimaryKey" parameterType="java.lang.String" resultType="java.lang.String">
+        select cluster_name
+        from conf_cluster
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        <!--@mbg.generated-->
+        delete from conf_cluster
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.sunbox.domain.ConfCluster">
+        <!--@mbg.generated-->
+        insert into conf_cluster (cluster_id, cluster_name, cluster_release_ver,
+        region, scene, vnet,
+        subnet, config_type, master_security_group,
+        slave_security_group, log_path, keypair_id,
+        delete_protected, instance_collection_type,
+        publicIp_available, ambari_dburl, ambari_port, ambari_database, ambari_db_autocreate,hive_metadata_dburl,
+        hive_metadata_port, hive_metadata_database, ambari_acount, src_cluster_id, is_ha, `state`,
+        createdby, created_time, modifiedby,vm_mi_tenant_id, vm_mi_client_id, log_mi_tenant_id, log_mi_client_id,
+        zone,zone_name,
+        modified_time,is_embed_ambaridb,enable_ganglia,subscription_id)
+        values (#{clusterId,jdbcType=VARCHAR}, #{clusterName,jdbcType=VARCHAR}, #{clusterReleaseVer,jdbcType=VARCHAR},
+        #{region,jdbcType=VARCHAR}, #{scene,jdbcType=VARCHAR}, #{vnet,jdbcType=VARCHAR},
+        #{subnet,jdbcType=VARCHAR}, #{configType,jdbcType=VARCHAR}, #{masterSecurityGroup,jdbcType=VARCHAR},
+        #{slaveSecurityGroup,jdbcType=VARCHAR}, #{logPath,jdbcType=VARCHAR}, #{keypairId,jdbcType=VARCHAR},
+        #{deleteProtected,jdbcType=VARCHAR}, #{instanceCollectionType,jdbcType=VARCHAR},
+        #{publicipAvailable,jdbcType=VARCHAR}, #{ambariDburl,jdbcType=VARCHAR}, #{ambariPort,jdbcType=VARCHAR},
+        #{ambariDatabase,jdbcType=VARCHAR},
+        #{ambariDbAutocreate,jdbcType=INTEGER}, #{hiveMetadataDburl,jdbcType=VARCHAR},
+        #{hiveMetadataPort,jdbcType=VARCHAR}, #{hiveMetadataDatabase,jdbcType=VARCHAR},
+        #{ambariAcount,jdbcType=VARCHAR}, #{srcClusterId,jdbcType=VARCHAR}, #{isHa,jdbcType=INTEGER},
+        #{state,jdbcType=INTEGER},
+        #{createdby,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifiedby,jdbcType=VARCHAR},
+        #{vmMITenantId,jdbcType=VARCHAR}, #{vmMIClientId,jdbcType=VARCHAR},
+        #{logMITenantId,jdbcType=VARCHAR}, #{logMIClientId,jdbcType=VARCHAR},
+        #{zone,jdbcType=VARCHAR}, #{zone_name,jdbcType=VARCHAR},
+        #{modifiedTime,jdbcType=TIMESTAMP}, #{isEmbedAmbariDb,jdbcType=INTEGER}, #{enableGanglia,jdbcType=INTEGER},
+        #{subscriptionId,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.sunbox.domain.ConfCluster">
+        <!--@mbg.generated-->
+        insert into conf_cluster
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="clusterId != null">
+                cluster_id,
+            </if>
+            <if test="clusterName != null">
+                cluster_name,
+            </if>
+            <if test="clusterReleaseVer != null">
+                cluster_release_ver,
+            </if>
+            <if test="region != null">
+                region,
+            </if>
+            <if test="scene != null">
+                scene,
+            </if>
+            <if test="zone != null">
+                zone,
+            </if>
+
+            <if test="zoneName != null">
+                zone_name,
+            </if>
+            <if test="vnet != null">
+                vnet,
+            </if>
+            <if test="subnet != null">
+                subnet,
+            </if>
+            <if test="configType != null">
+                config_type,
+            </if>
+            <if test="masterSecurityGroup != null">
+                master_security_group,
+            </if>
+            <if test="slaveSecurityGroup != null">
+                slave_security_group,
+            </if>
+            <if test="logPath != null">
+                log_path,
+            </if>
+            <if test="keypairId != null">
+                keypair_id,
+            </if>
+            <if test="deleteProtected != null">
+                delete_protected,
+            </if>
+            <if test="instanceCollectionType != null">
+                instance_collection_type,
+            </if>
+            <if test="publicipAvailable != null">
+                publicIp_available,
+            </if>
+            <if test="ambariDburl != null">
+                ambari_dburl,
+            </if>
+            <if test="ambariPort != null and ambariPort != ''">
+                ambari_port,
+            </if>
+            <if test="ambariDatabase != null and ambariDatabase != ''">
+                ambari_database,
+            </if>
+            <if test="ambariDbAutocreate != null and ambariDbAutocreate != ''">
+                ambari_db_autocreate,
+            </if>
+            <if test="hiveMetadataDburl != null">
+                hive_metadata_dburl,
+            </if>
+            <if test="hiveMetadataPort != null and hiveMetadataPort != ''">
+                hive_metadata_port,
+            </if>
+            <if test="hiveMetadataDatabase != null and hiveMetadataDatabase != ''">
+                hive_metadata_database,
+            </if>
+            <if test="ambariAcount != null">
+                ambari_acount,
+            </if>
+            <if test="srcClusterId != null">
+                src_cluster_id,
+            </if>
+            <if test="isHa != null">
+                is_ha,
+            </if>
+            <if test="state != null">
+                `state`,
+            </if>
+            <if test="createdby != null">
+                createdby,
+            </if>
+            <if test="createdTime != null">
+                created_time,
+            </if>
+            <if test="modifiedby != null">
+                modifiedby,
+            </if>
+            <if test="modifiedTime != null">
+                modified_time,
+            </if>
+            <if test="vmMI != null">
+                vm_mi,
+            </if>
+            <if test="logMI != null">
+                log_mi,
+            </if>
+            <if test="vmMIClientId != null">
+                vm_mi_client_id,
+            </if>
+            <if test="vmMITenantId != null">
+                vm_mi_tenant_id,
+            </if>
+            <if test="logMIClientId != null">
+                log_mi_client_id,
+            </if>
+            <if test="logMITenantId != null">
+                log_mi_tenant_id,
+            </if>
+            <if test="isEmbedAmbariDb != null">
+                is_embed_ambaridb,
+            </if>
+            <if test="enableGanglia != null">
+                enable_ganglia,
+            </if>
+            <if test="creationMode != null">
+                creation_mode,
+            </if>
+            <if test="subscriptionId != null">
+                subscription_id,
+            </if>
+            <if test="isWhiteAddr != null">
+                is_white_addr,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="clusterId != null">
+                #{clusterId,jdbcType=VARCHAR},
+            </if>
+            <if test="clusterName != null">
+                #{clusterName,jdbcType=VARCHAR},
+            </if>
+            <if test="clusterReleaseVer != null">
+                #{clusterReleaseVer,jdbcType=VARCHAR},
+            </if>
+            <if test="region != null">
+                #{region,jdbcType=VARCHAR},
+            </if>
+            <if test="scene != null">
+                #{scene,jdbcType=VARCHAR},
+            </if>
+            <if test="zone != null">
+                #{zone,jdbcType=VARCHAR},
+            </if>
+            <if test="zoneName != null">
+                #{zoneName,jdbcType=VARCHAR},
+            </if>
+            <if test="vnet != null">
+                #{vnet,jdbcType=VARCHAR},
+            </if>
+            <if test="subnet != null">
+                #{subnet,jdbcType=VARCHAR},
+            </if>
+            <if test="configType != null">
+                #{configType,jdbcType=VARCHAR},
+            </if>
+            <if test="masterSecurityGroup != null">
+                #{masterSecurityGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="slaveSecurityGroup != null">
+                #{slaveSecurityGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="logPath != null">
+                #{logPath,jdbcType=VARCHAR},
+            </if>
+            <if test="keypairId != null">
+                #{keypairId,jdbcType=VARCHAR},
+            </if>
+            <if test="deleteProtected != null">
+                #{deleteProtected,jdbcType=VARCHAR},
+            </if>
+            <if test="instanceCollectionType != null">
+                #{instanceCollectionType,jdbcType=VARCHAR},
+            </if>
+            <if test="publicipAvailable != null">
+                #{publicipAvailable,jdbcType=VARCHAR},
+            </if>
+            <if test="ambariDburl != null">
+                #{ambariDburl,jdbcType=VARCHAR},
+            </if>
+            <if test="ambariPort != null and ambariPort != ''">
+                #{ambariPort,jdbcType=VARCHAR},
+            </if>
+            <if test="ambariDatabase != null and ambariDatabase != ''">
+                #{ambariDatabase,jdbcType=VARCHAR},
+            </if>
+            <if test="ambariDbAutocreate != null and ambariDbAutocreate != ''">
+                #{ambariDbAutocreate,jdbcType=INTEGER},
+            </if>
+            <if test="hiveMetadataDburl != null">
+                #{hiveMetadataDburl,jdbcType=VARCHAR},
+            </if>
+            <if test="hiveMetadataPort != null and hiveMetadataPort != ''">
+                #{hiveMetadataPort,jdbcType=VARCHAR},
+            </if>
+            <if test="hiveMetadataDatabase != null and hiveMetadataDatabase != ''">
+                #{hiveMetadataDatabase,jdbcType=VARCHAR},
+            </if>
+            <if test="ambariAcount != null">
+                #{ambariAcount,jdbcType=VARCHAR},
+            </if>
+            <if test="srcClusterId != null">
+                #{srcClusterId,jdbcType=VARCHAR},
+            </if>
+            <if test="isHa != null">
+                #{isHa,jdbcType=INTEGER},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+            <if test="createdby != null">
+                #{createdby,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedby != null">
+                #{modifiedby,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedTime != null">
+                #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="vmMI != null">
+                #{vmMI,jdbcType=VARCHAR},
+            </if>
+            <if test="logMI != null">
+                #{logMI,jdbcType=VARCHAR},
+            </if>
+
+            <if test="vmMIClientId != null">
+                #{vmMIClientId,jdbcType=VARCHAR},
+            </if>
+
+            <if test="vmMITenantId != null">
+                #{vmMITenantId,jdbcType=VARCHAR},
+            </if>
+
+            <if test="logMIClientId != null">
+                #{logMIClientId,jdbcType=VARCHAR},
+            </if>
+
+            <if test="logMITenantId != null">
+                #{logMITenantId,jdbcType=VARCHAR},
+            </if>
+            <if test="isEmbedAmbariDb != null">
+                #{isEmbedAmbariDb,jdbcType=INTEGER},
+            </if>
+            <if test="enableGanglia != null">
+                #{enableGanglia,jdbcType=INTEGER},
+            </if>
+            <if test="creationMode != null">
+                #{creationMode,jdbcType=VARCHAR},
+            </if>
+            <if test="subscriptionId != null">
+                #{subscriptionId,jdbcType=VARCHAR},
+            </if>
+            <if test="isWhiteAddr != null">
+                #{isWhiteAddr,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.ConfCluster">
+        update conf_cluster
+        <set>
+            <if test="clusterName != null">
+                cluster_name = #{clusterName,jdbcType=VARCHAR},
+            </if>
+            <if test="clusterReleaseVer != null">
+                cluster_release_ver = #{clusterReleaseVer,jdbcType=VARCHAR},
+            </if>
+            <if test="region != null">
+                region = #{region,jdbcType=VARCHAR},
+            </if>
+            <if test="scene != null">
+                scene = #{scene,jdbcType=VARCHAR},
+            </if>
+            <if test="zone != null">
+                zone = #{zone,jdbcType=VARCHAR},
+            </if>
+            <if test="zoneName != null">
+                zone_name = #{zoneName,jdbcType=VARCHAR},
+            </if>
+            <if test="vnet != null">
+                vnet = #{vnet,jdbcType=VARCHAR},
+            </if>
+            <if test="subnet != null">
+                subnet = #{subnet,jdbcType=VARCHAR},
+            </if>
+            <if test="configType != null">
+                config_type = #{configType,jdbcType=VARCHAR},
+            </if>
+            <if test="masterSecurityGroup != null">
+                master_security_group = #{masterSecurityGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="slaveSecurityGroup != null">
+                slave_security_group = #{slaveSecurityGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="logPath != null">
+                log_path = #{logPath,jdbcType=VARCHAR},
+            </if>
+            <if test="keypairId != null">
+                keypair_id = #{keypairId,jdbcType=VARCHAR},
+            </if>
+            <if test="deleteProtected != null">
+                delete_protected = #{deleteProtected,jdbcType=VARCHAR},
+            </if>
+            <if test="instanceCollectionType != null">
+                instance_collection_type = #{instanceCollectionType,jdbcType=VARCHAR},
+            </if>
+            <if test="publicipAvailable != null">
+                publicIp_available = #{publicipAvailable,jdbcType=VARCHAR},
+            </if>
+            <if test="ambariDburl != null">
+                ambari_dburl = #{ambariDburl,jdbcType=VARCHAR},
+            </if>
+            <if test="ambariPort != null and ambariPort != ''">
+                ambari_port = #{ambariPort,jdbcType=VARCHAR},
+            </if>
+            <if test="ambariDatabase != null and ambariDatabase != ''">
+                ambari_database = #{ambariDatabase,jdbcType=VARCHAR},
+            </if>
+            <if test="ambariDbAutocreate != null and ambariDbAutocreate != ''">
+                ambari_db_autocreate= #{ambariDbAutocreate,jdbcType=INTEGER},
+            </if>
+            <if test="hiveMetadataDburl != null">
+                hive_metadata_dburl = #{hiveMetadataDburl,jdbcType=VARCHAR},
+            </if>
+            <if test="hiveMetadataPort != null">
+                hive_metadata_port = #{hiveMetadataPort,jdbcType=VARCHAR},
+            </if>
+            <if test="hiveMetadataDatabase != null">
+                hive_metadata_database = #{hiveMetadataDatabase,jdbcType=VARCHAR},
+            </if>
+            <if test="ambariAcount != null">
+                ambari_acount = #{ambariAcount,jdbcType=VARCHAR},
+            </if>
+            <if test="srcClusterId != null">
+                src_cluster_id = #{srcClusterId,jdbcType=VARCHAR},
+            </if>
+            <if test="isHa != null">
+                is_ha = #{isHa,jdbcType=INTEGER},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="createdby != null">
+                createdby = #{createdby,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedby != null">
+                modifiedby = #{modifiedby,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedTime != null">
+                modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="vmMI != null">
+                vm_mi = #{vmMI,jdbcType=VARCHAR},
+            </if>
+            <if test="logMI != null">
+                log_mi = #{logMI,jdbcType=VARCHAR},
+            </if>
+            <if test="vmMITenantId != null">
+                vm_mi_tenant_id = #{vmMITenantId,jdbcType=VARCHAR},
+            </if>
+            <if test="vmMIClientId != null">
+                vm_mi_client_id = #{vmMIClientId,jdbcType=VARCHAR},
+            </if>
+
+            <if test="logMITenantId != null">
+                log_mi_tenant_id = #{logMITenantId,jdbcType=VARCHAR},
+            </if>
+            <if test="logMIClientId != null">
+                log_mi_client_id = #{logMIClientId,jdbcType=VARCHAR},
+            </if>
+            <if test="isEmbedAmbariDb != null">
+                is_embed_ambaridb= #{isEmbedAmbariDb,jdbcType=INTEGER},
+            </if>
+            <if test="enableGanglia != null">
+                enable_ganglia = #{enableGanglia,jdbcType=INTEGER},
+            </if>
+            <if test="subscriptionId != null">
+                subscription_id = #{subscriptionId,jdbcType=VARCHAR},
+            </if>
+            <if test="isParallelScale != null">
+                is_parallel_scale = #{isParallelScale,jdbcType=INTEGER},
+            </if>
+            <if test="isWhiteAddr != null">
+                is_white_addr = #{isWhiteAddr,jdbcType=INTEGER}
+            </if>
+        </set>
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.ConfCluster">
+        update conf_cluster
+        set cluster_name = #{clusterName,jdbcType=VARCHAR},
+        cluster_release_ver = #{clusterReleaseVer,jdbcType=VARCHAR},
+        region = #{region,jdbcType=VARCHAR},
+        scene = #{scene,jdbcType=VARCHAR},
+        vnet = #{vnet,jdbcType=VARCHAR},
+        zone = #{zone,jdbcType=VARCHAR},
+        zone_name = #{zoneName,jdbcType=VARCHAR},
+        subnet = #{subnet,jdbcType=VARCHAR},
+        config_type = #{configType,jdbcType=VARCHAR},
+        master_security_group = #{masterSecurityGroup,jdbcType=VARCHAR},
+        slave_security_group = #{slaveSecurityGroup,jdbcType=VARCHAR},
+        log_path = #{logPath,jdbcType=VARCHAR},
+        keypair_id = #{keypairId,jdbcType=VARCHAR},
+        delete_protected = #{deleteProtected,jdbcType=VARCHAR},
+        instance_collection_type = #{instanceCollectionType,jdbcType=VARCHAR},
+        publicIp_available = #{publicipAvailable,jdbcType=VARCHAR},
+        ambari_dburl = #{ambariDburl,jdbcType=VARCHAR},
+        ambari_port = #{ambariPort,jdbcType=VARCHAR},
+        ambari_database = #{ambariDatabase,jdbcType=VARCHAR},
+        ambari_db_autocreate= #{ambariDbAutocreate,jdbcType=INTEGER},
+        hive_metadata_dburl = #{hiveMetadataDburl,jdbcType=VARCHAR},
+        hive_metadata_port = #{hiveMetadataPort,jdbcType=VARCHAR},
+        hive_metadata_database = #{hiveMetadataDatabase,jdbcType=VARCHAR},
+        ambari_acount = #{ambariAcount,jdbcType=VARCHAR},
+        src_cluster_id = #{srcClusterId,jdbcType=VARCHAR},
+        subscription_id= #{subscriptionId,jdbcType=VARCHAR},
+        is_ha = #{isHa,jdbcType=INTEGER},
+        state = #{state,jdbcType=INTEGER},
+        createdby = #{createdby,jdbcType=VARCHAR},
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+        modifiedby = #{modifiedby,jdbcType=VARCHAR},
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+        vm_mi = #{vmMI, jdbcType=VARCHAR},
+        log_mi = #{logMI, jdbcType=VARCHAR},
+        vm_mi_tenant_id = #{vmMITenantId, jdbcType=VARCHAR},
+        vm_mi_client_id = #{vmMIClientId, jdbcType=VARCHAR},
+        log_mi_tenant_id = #{logMITenantId, jdbcType=VARCHAR},
+        log_mi_client_id = #{logMIClientId, jdbcType=VARCHAR},
+        is_embed_ambaridb= #{isEmbedAmbariDb,jdbcType=INTEGER},
+        enable_ganglia = #{enableGanglia,jdbcType=INTEGER},
+        is_parallel_scale = #{isParallelScale,jdbcType=INTEGER}
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectByObject" parameterType="map" resultType="java.util.Map">
+        select
+        cc.cluster_id, cc.cluster_name, cc.cluster_release_ver, cc.region, cc.scene, cc.zone, cc.zone_name, cc.vnet,
+        cc.subnet, cc.config_type,
+        cc.master_security_group, cc.slave_security_group, cc.log_path, cc.keypair_id, cc.delete_protected,
+        cc.instance_collection_type, cc.publicIp_available, cc.`state`, cc.createdby, cc.created_time, cc.modifiedby,
+        cc.modified_time, cc.vm_mi, cc.log_mi, cc.vm_mi_tenant_id, cc.vm_mi_client_id, cc.log_mi_tenant_id,
+        cc.log_mi_client_id,cc.subscription_id,
+        ic.cluster_create_begtime, ic.cluster_create_endtime
+        from conf_cluster cc left join info_cluster ic on ic.cluster_id=cc.cluster_id
+        where 1=1
+        <if test="region!=null and region!=''">
+            and cc.region = #{region,jdbcType=VARCHAR}
+        </if>
+        <if test="clusterName!=null and clusterName!=''">
+            and cc.cluster_name = #{clusterName,jdbcType=VARCHAR}
+        </if>
+        <if test="clusterId!=null and clusterId!=''">
+            and cc.cluster_Id = #{clusterId,jdbcType=VARCHAR}
+        </if>
+        <if test="emrStatus!=null">
+            and cc.state in
+            <foreach collection="emrStatus" index="index" open="(" close=")" separator="," item="item">
+                #{item}
+            </foreach>
+        </if>
+        <if test="ambariHost!=null and ambariHost!='1'">
+            and ic.ambari_host is not null and ic.ambari_host != ''
+        </if>
+        <if test="atfer!=null and atfer!=''">
+            and ic.cluster_create_begtime <![CDATA[>=]]> #{atfer,jdbcType=VARCHAR}
+        </if>
+        <if test="before!=null and before!=''">
+            and ic.cluster_create_endtime <![CDATA[<]]> #{before,jdbcType=VARCHAR}
+        </if>
+        order by cc.created_time desc
+    </select>
+    <select id="findTop1ByObject" parameterType="map" resultType="com.sunbox.domain.ConfCluster">
+        select
+        <include refid="Base_Column_List"/>
+        from conf_cluster
+        where 1=1
+        <if test="clusterName!=null and clusterName!=''">
+            and cluster_name = #{clusterName,jdbcType=VARCHAR}
+        </if>
+        <if test="emrStatus!=null">
+            and state in
+            <foreach collection="emrStatus" index="index" open="(" close=")" separator="," item="item">
+                #{item}
+            </foreach>
+        </if>
+        order by created_time desc
+        limit 1
+    </select>
+    <select id="selectByObjectInnerICV" parameterType="map" resultType="java.util.Map">
+        select
+        cc.cluster_id, cc.cluster_name, cc.cluster_release_ver, cc.region, cc.state
+        from conf_cluster cc inner join info_cluster_vm icv on cc.cluster_id = icv.cluster_id
+        where 1 = 1
+        <if test="region!=null and region!=''">
+            and cc.region = #{region,jdbcType=VARCHAR}
+        </if>
+        <if test="emrStatus!=null">
+            and cc.state in
+            <foreach collection="emrStatus" index="index" open="(" close=")" separator="," item="item">
+                #{item}
+            </foreach>
+        </if>
+        group by cc.cluster_id
+    </select>
+
+    <select id="selectStateGroupByState" parameterType="map" resultType="java.util.Map">
+        select state, count(state) as state_count
+        from conf_cluster
+        group by state
+    </select>
+    <select id="selectByClusterIds" resultType="com.sunbox.domain.ConfCluster">
+        select
+        <include refid="Base_Column_List"/>
+        from conf_cluster
+            where cluster_id in
+        <foreach collection="clusterIds"  item="clusterId" separator="," open="(" close=")">
+            #{clusterId,jdbcType=VARCHAR}
+        </foreach>
+    </select>
+</mapper>

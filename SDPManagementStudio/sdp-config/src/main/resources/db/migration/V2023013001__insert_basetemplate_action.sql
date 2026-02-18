@@ -1,0 +1,3 @@
+REPLACE INTO base_cluster_operation_template_activity (activity_id,template_id,activity_type,activity_cnname,activity_name,sort_no,timeout,createdby,created_time) VALUES
+ ('876f5369-79f0-11ed-85b7-6045bdc7fdca','034f75e9-7227-11ed-85b7-6045bdc7fdca','InstallSDP','启动安装TEZUI','installTezUI',17,0,'system',NULL),
+ ('776f53c9-79f0-11ed-85b7-6045bdc7fdca','034f75e9-7227-11ed-85b7-6045bdc7fdca','InstallSDP','查询TEZUI安装执行进展','queryPlayJobStatus',18,0,'system',NULL);

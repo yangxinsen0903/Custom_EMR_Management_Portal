@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.igsadmin.mapper.AdminUserRoleDao">
+    <insert id="saveAll" parameterType="list">
+        insert into vm_admin_user_role (`userid`, `rid`)
+        values
+        <foreach collection="list" item="userRole" separator=",">
+            (#{userRole.userid}, #{userRole.rid})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByUserId" parameterType="java.lang.String">
+        delete from vm_admin_user_role where userid = #{userId}
+    </delete>
+
+    <select id="getUserRoleListByUserId" parameterType="java.lang.String" resultType="com.sunbox.sdpadmin.core.model.AdminUserRole">
+        select rid, userid from vm_admin_user_role where userid = #{userId}
+    </select>
+</mapper>

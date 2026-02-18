@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.AmbariConfigTypeMapper">
+    <resultMap type="com.sunbox.domain.ambari.AmbariConfigType" id="AmbariConfigTypeMap">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="serviceId" column="service_id" jdbcType="BIGINT"/>
+        <result property="componentId" column="component_id" jdbcType="BIGINT"/>
+        <result property="code" column="code" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="fileType" column="file_type" jdbcType="VARCHAR"/>
+        <result property="isFileContent" column="is_file_content" jdbcType="TINYINT"/>
+        <result property="mappingCode" column="mapping_code" jdbcType="VARCHAR"/>
+        <result property="createdBy" column="created_by" jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="updatedBy" column="updated_by" jdbcType="VARCHAR"/>
+        <result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 通过ID查询单条数据 -->
+    <select id="queryById" resultMap="AmbariConfigTypeMap">
+        select
+        id,service_id,component_id,code,name,file_type,is_file_content,mapping_code,created_by,created_time,updated_by,updated_time
+        from ambari_config_type
+        where id = #{id}
+    </select>
+
+    <!--分页查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="AmbariConfigTypeMap">
+        select
+        id,service_id,component_id,code,name,file_type,is_file_content,mapping_code,created_by,created_time,updated_by,updated_time
+        from ambari_config_type
+        <where>
+            <if test="ambariConfigType.id != null ">
+                and id = #{ambariConfigType.id}
+            </if>
+            <if test="ambariConfigType.serviceId != null">
+                and service_id = #{ambariConfigType.serviceId}
+            </if>
+            <if test="ambariConfigType.componentId != null ">
+                and component_id = #{ambariConfigType.componentId}
+            </if>
+            <if test="ambariConfigType.code != null and ambariConfigType.code != ''">
+                and code = #{ambariConfigType.code}
+            </if>
+            <if test="ambariConfigType.name != null and ambariConfigType.name != ''">
+                and name = #{ambariConfigType.name}
+            </if>
+            <if test="ambariConfigType.fileType != null and ambariConfigType.fileType != ''">
+                and file_type = #{ambariConfigType.fileType}
+            </if>
+            <if test="ambariConfigType.isFileContent != null ">
+                and is_file_content = #{ambariConfigType.isFileContent}
+            </if>
+            <if test="ambariConfigType.mappingCode != null and ambariConfigType.mappingCode != ''">
+                and mapping_code = #{ambariConfigType.mappingCode}
+            </if>
+            <if test="ambariConfigType.createdBy != null and ambariConfigType.createdBy != ''">
+                and created_by = #{ambariConfigType.createdBy}
+            </if>
+            <if test="ambariConfigType.createdTime != null ">
+                and created_time = #{ambariConfigType.createdTime}
+            </if>
+            <if test="ambariConfigType.updatedBy != null and ambariConfigType.updatedBy != ''">
+                and updated_by = #{ambariConfigType.updatedBy}
+            </if>
+            <if test="ambariConfigType.updatedTime != null ">
+                and updated_time = #{ambariConfigType.updatedTime}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from ambari_config_type
+        <where>
+            <if test="ambariConfigType.id != null ">
+                and id = #{ambariConfigType.id}
+            </if>
+            <if test="ambariConfigType.serviceId != null">
+                and service_id = #{ambariConfigType.serviceId}
+            </if>
+            <if test="ambariConfigType.componentId != null ">
+                and component_id = #{ambariConfigType.componentId}
+            </if>
+            <if test="ambariConfigType.code != null and ambariConfigType.code != ''">
+                and code = #{ambariConfigType.code}
+            </if>
+            <if test="ambariConfigType.name != null and ambariConfigType.name != ''">
+                and name = #{ambariConfigType.name}
+            </if>
+            <if test="ambariConfigType.fileType != null and ambariConfigType.fileType != ''">
+                and file_type = #{ambariConfigType.fileType}
+            </if>
+            <if test="ambariConfigType.isFileContent != null ">
+                and is_file_content = #{ambariConfigType.isFileContent}
+            </if>
+            <if test="ambariConfigType.mappingCode != null and ambariConfigType.mappingCode != ''">
+                and mapping_code = #{ambariConfigType.mappingCode}
+            </if>
+            <if test="ambariConfigType.createdBy != null and ambariConfigType.createdBy != ''">
+                and created_by = #{ambariConfigType.createdBy}
+            </if>
+            <if test="ambariConfigType.createdTime != null ">
+                and created_time = #{ambariConfigType.createdTime}
+            </if>
+            <if test="ambariConfigType.updatedBy != null and ambariConfigType.updatedBy != ''">
+                and updated_by = #{ambariConfigType.updatedBy}
+            </if>
+            <if test="ambariConfigType.updatedTime != null ">
+                and updated_time = #{ambariConfigType.updatedTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增数据-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into ambari_config_type(id,service_id,component_id,code,name,file_type,is_file_content,mapping_code,created_by,created_time,updated_by,updated_time)
+        values (#{id},#{serviceId},#{componentId},#{code},#{name},#{fileType},#{isFileContent},#{mappingCode},#{createdBy},#{createdTime},#{updatedBy},#{updatedTime})
+    </insert>
+
+    <!-- 批量新增数据 -->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into ambari_config_type(id,service_id,component_id,code,name,file_type,is_file_content,mapping_code,created_by,created_time,updated_by,updated_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id},#{entity.serviceId},#{entity.componentId},#{entity.code},#{entity.name},#{entity.fileType},#{entity.isFileContent},#{entity.mappingCode},#{entity.createdBy},#{entity.createdTime},#{entity.updatedBy},#{entity.updatedTime})
+        </foreach>
+    </insert>
+
+    <!-- 批量新增或按主键更新数据 -->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into ambari_config_type(id,service_id,component_id,code,name,file_type,is_file_content,mapping_code,created_by,created_time,updated_by,updated_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id},#{entity.serviceId},#{entity.componentId},#{entity.code},#{entity.name},#{entity.fileType},#{entity.isFileContent},#{entity.mappingCode},#{entity.createdBy},#{entity.createdTime},#{entity.updatedBy},#{entity.updatedTime})
+        </foreach>
+        on duplicate key update
+        id=values(id),
+        service_id=values(service_id),
+        component_id=values(component_id),
+        code=values(code),
+        name=values(name),
+        file_type=values(file_type),
+        is_file_content=values(is_file_content),
+        mapping_code=values(mapping_code),
+        created_by=values(created_by),
+        created_time=values(created_time),
+        updated_by=values(updated_by),
+        updated_time=values(updated_time)
+    </insert>
+
+    <!-- 更新数据 -->
+    <update id="update">
+        update ambari_config_type
+        <set>
+            <if test="id != null ">
+                id = #{id},
+            </if>
+            <if test="serviceId != null">
+                service_id = #{serviceId},
+            </if>
+            <if test="componentId != null ">
+                component_id = #{componentId},
+            </if>
+            <if test="code != null and code != ''">
+                code = #{code},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="fileType != null and fileType != ''">
+                file_type = #{fileType},
+            </if>
+            <if test="isFileContent != null ">
+                is_file_content = #{isFileContent},
+            </if>
+            <if test="mappingCode != null and mappingCode != ''">
+                mapping_code = #{mappingCode},
+            </if>
+            <if test="createdBy != null and createdBy != ''">
+                created_by = #{createdBy},
+            </if>
+            <if test="createdTime != null ">
+                created_time = #{createdTime},
+            </if>
+            <if test="updatedBy != null and updatedBy != ''">
+                updated_by = #{updatedBy},
+            </if>
+            <if test="updatedTime != null ">
+                updated_time = #{updatedTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from ambari_config_type where id = #{id}
+    </delete>
+</mapper>

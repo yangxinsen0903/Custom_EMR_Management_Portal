@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.ConfigDetailMapper">
+  <resultMap id="BaseResultMap" type="com.sunbox.domain.ConfigDetail">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="akey" jdbcType="VARCHAR" property="akey" />
+    <result column="avalue" jdbcType="VARCHAR" property="avalue" />
+    <result column="application" jdbcType="VARCHAR" property="application" />
+    <result column="profile" jdbcType="VARCHAR" property="profile" />
+    <result column="label" jdbcType="VARCHAR" property="label" />
+    <result column="mwtype" jdbcType="VARCHAR" property="mwtype" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, akey, avalue, `application`, profile, `label`, mwtype
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from config_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByaKey" resultType="com.sunbox.domain.ConfigDetail">
+    select
+    <include refid="Base_Column_List" />
+    from config_detail
+    where akey = #{akey,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from config_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.sunbox.domain.ConfigDetail"  useGeneratedKeys="true">
+    insert into config_detail (akey, avalue, `application`, 
+      profile, `label`, mwtype
+      )
+    values (#{akey,jdbcType=VARCHAR}, #{avalue,jdbcType=VARCHAR}, #{application,jdbcType=VARCHAR}, 
+      #{profile,jdbcType=VARCHAR}, #{label,jdbcType=VARCHAR}, #{mwtype,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.sunbox.domain.ConfigDetail"  useGeneratedKeys="true">
+    insert into config_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="akey != null">
+        akey,
+      </if>
+      <if test="avalue != null">
+        avalue,
+      </if>
+      <if test="application != null">
+        `application`,
+      </if>
+      <if test="profile != null">
+        profile,
+      </if>
+      <if test="label != null">
+        `label`,
+      </if>
+      <if test="mwtype != null">
+        mwtype,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="akey != null">
+        #{akey,jdbcType=VARCHAR},
+      </if>
+      <if test="avalue != null">
+        #{avalue,jdbcType=VARCHAR},
+      </if>
+      <if test="application != null">
+        #{application,jdbcType=VARCHAR},
+      </if>
+      <if test="profile != null">
+        #{profile,jdbcType=VARCHAR},
+      </if>
+      <if test="label != null">
+        #{label,jdbcType=VARCHAR},
+      </if>
+      <if test="mwtype != null">
+        #{mwtype,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.ConfigDetail">
+    update config_detail
+    <set>
+      <if test="akey != null">
+        akey = #{akey,jdbcType=VARCHAR},
+      </if>
+      <if test="avalue != null">
+        avalue = #{avalue,jdbcType=VARCHAR},
+      </if>
+      <if test="application != null">
+        `application` = #{application,jdbcType=VARCHAR},
+      </if>
+      <if test="profile != null">
+        profile = #{profile,jdbcType=VARCHAR},
+      </if>
+      <if test="label != null">
+        `label` = #{label,jdbcType=VARCHAR},
+      </if>
+      <if test="mwtype != null">
+        mwtype = #{mwtype,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.ConfigDetail">
+    update config_detail
+    set akey = #{akey,jdbcType=VARCHAR},
+      avalue = #{avalue,jdbcType=VARCHAR},
+      `application` = #{application,jdbcType=VARCHAR},
+      profile = #{profile,jdbcType=VARCHAR},
+      `label` = #{label,jdbcType=VARCHAR},
+      mwtype = #{mwtype,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByaKey" parameterType="com.sunbox.domain.ConfigDetail">
+    update config_detail
+    <set>
+      <if test="avalue != null">
+        avalue = #{avalue,jdbcType=VARCHAR},
+      </if>
+      <if test="application != null">
+        `application` = #{application,jdbcType=VARCHAR},
+      </if>
+      <if test="profile != null">
+        profile = #{profile,jdbcType=VARCHAR},
+      </if>
+      <if test="label != null">
+        `label` = #{label,jdbcType=VARCHAR},
+      </if>
+      <if test="mwtype != null">
+        mwtype = #{mwtype,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where akey = #{akey,jdbcType=VARCHAR}
+  </update>
+</mapper>

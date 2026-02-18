@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.dao.mapper.InfoVmStatementMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.InfoVmStatement">
+        <id column="statement_id" jdbcType="VARCHAR" property="statementId"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="region" jdbcType="VARCHAR" property="region"/>
+        <result column="created_time" jdbcType="VARCHAR" property="createdTime"/>
+        <result column="modified_time" jdbcType="VARCHAR" property="modifiedTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        statement_id,
+        region,
+        status,
+        created_time,
+        modified_time
+    </sql>
+    <update id="updateStatus">
+        update info_vm_statement
+        set status = #{status},
+        modified_time = #{modifiedTime}
+        where statement_id = #{statementId}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from info_vm_statement
+        where statement_id = #{statementId}
+    </select>
+
+    <select id="selectByPrimaryKeyAndRegion" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from info_vm_statement
+        where statement_id = #{statementId} and region = #{region}
+    </select>
+
+
+    <select id="selectByCreatedTime" resultType="com.sunbox.domain.InfoVmStatement">
+        select
+        <include refid="Base_Column_List"/>
+        from info_vm_statement
+        where created_time <![CDATA[ >= ]]> #{beginTime}
+        and created_time <![CDATA[ <= ]]> #{endTime}
+    </select>
+    <select id="selectLatest" resultType="com.sunbox.domain.InfoVmStatement">
+        select
+        <include refid="Base_Column_List"/>
+        from info_vm_statement
+        order by created_time desc
+        limit 1
+    </select>
+    <select id="queryByCreatedTime" resultType="com.sunbox.domain.InfoVmStatement">
+        select
+        <include refid="Base_Column_List"/>
+        from info_vm_statement
+        where created_time <![CDATA[ >= ]]> #{beginTime}
+        and created_time <![CDATA[ <= ]]> #{endTime}
+        <if test="region != null and region != ''">
+            and region = #{region}
+        </if>
+        order by created_time desc
+        limit #{pageStart},#{pageLimit}
+    </select>
+    <select id="countByCreatedTime" resultType="int">
+        select
+        count(statement_id)
+        from info_vm_statement
+        where created_time <![CDATA[ >= ]]> #{beginTime}
+        and created_time <![CDATA[ <= ]]> #{endTime}
+        <if test="region != null and region != ''">
+            and region = #{region}
+        </if>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from info_vm_statement
+        where statement_id = #{statementId}
+    </delete>
+    <insert id="insert" parameterType="com.sunbox.domain.InfoVmStatement">
+        insert into info_vm_statement (
+        statement_id,
+        region,
+        status,
+        created_time,
+        modified_time
+        ) values (
+        #{statementId},
+        #{region},
+        #{status},
+        #{createdTime},
+        #{modifiedTime}
+        )
+    </insert>
+</mapper>

@@ -1,0 +1,227 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- none
+pool:
+  name: SDP-DEV-AGENT-POOL
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: Big Data Platform Customization/pipelines
+stages:
+- stage: build
+  jobs:
+  - template: build.yml@templates  # Template reference
+    parameters:
+      repoName: 'Sunbox-SDP'
+      branchName: '$(Build.SourceBranchName)'
+      buildSteps:
+      
+      - task: Docker@2
+        displayName: 'Sunbox-SDP-Compose'
+        inputs:
+          containerRegistry: 'acrisddevaks'
+          repository: 'sdp/sdp-compose'
+          command: 'buildAndPush'
+          Dockerfile: '**/sdp-compose/Dockerfile'
+          buildContext: '.'
+          tags: |
+            $(Build.BuildNumber)
+            latest
+          addPipelineData: false
+      - task: Docker@2
+        displayName: 'Sunbox-SDP-Config'
+        inputs:
+          containerRegistry: 'acrisddevaks'
+          repository: 'sdp/sdp-config'
+          command: 'buildAndPush'
+          Dockerfile: '**/sdp-config/Dockerfile'
+          buildContext: '.'
+          tags: |
+            $(Build.BuildNumber)
+            latest
+          addPipelineData: false
+      - task: Docker@2
+        displayName: 'Sunbox-SDP-RegServer'
+        inputs:
+          containerRegistry: 'acrisddevaks'
+          repository: 'sdp/sdp-regserver'
+          command: 'buildAndPush'
+          Dockerfile: '**/sdp-regserver/Dockerfile'
+          buildContext: '.'
+          tags: |
+            $(Build.BuildNumber)
+            latest
+          addPipelineData: false
+      - task: Docker@2
+        displayName: 'Sunbox-SDP-Admin'
+        inputs:
+          containerRegistry: 'acrisddevaks'
+          repository: 'sdp/sdp-admin'
+          command: 'buildAndPush'
+          Dockerfile: '**/sdp-admin/Dockerfile'
+          buildContext: '.'
+          tags: |
+              $(build.buildnumber)
+              latest
+          addPipelineData: false
+      - task: Docker@2
+        displayName: 'Sunbox-SDP-Scale'
+        inputs:
+          containerRegistry: 'acrisddevaks'
+          repository: 'sdp/sdp-scale'
+          command: 'buildAndPush'
+          Dockerfile: '**/sdp-scale/Dockerfile'
+          buildContext: '.'
+          tags: |
+              $(build.buildnumber)
+              latest
+          addPipelineData: false
+      - task: Docker@2
+        displayName: 'Sunbox-SDP-Spot'
+        inputs:
+          containerRegistry: 'acrisddevaks'
+          repository: 'sdp/sdp-spot'
+          command: 'buildAndPush'
+          Dockerfile: '**/sdp-spot/Dockerfile'
+          buildContext: '.'
+          tags: |
+              $(build.buildnumber)
+              latest
+          addPipelineData: false
+      - task: Docker@2
+        displayName: 'Sunbox-SDP-Task'
+        inputs:
+          containerRegistry: 'acrisddevaks'
+          repository: 'sdp/sdp-task'
+          command: 'buildAndPush'
+          Dockerfile: '**/sdp-task/Dockerfile'
+          buildContext: '.'
+          tags: |
+              $(build.buildnumber)
+              latest
+          addPipelineData: false
+      - task: Docker@2
+        displayName: 'Sunbox-SDP-Vmsr'
+        inputs:
+          containerRegistry: 'acrisddevaks'
+          repository: 'sdp/sdp-vmsr'
+          command: 'buildAndPush'
+          Dockerfile: '**/sdp-vmsr/Dockerfile'
+          buildContext: '.'
+          tags: |
+            $(build.buildnumber)
+            latest
+          addPipelineData: false
+
+#- stage: dev
+#  jobs:
+#  - deployment: dev
+#    displayName: dev
+#    pool:
+#       #name: SDP-DEV-AGENT-POOL
+#       vmImage: Ubuntu-latest
+#    environment: dev
+#    variables:
+#    - group: DEPLOY-DEV-SUNBOX-SDP
+#    - group: DEPLOY-DEV-COMMON
+#    strategy:
+#      runOnce:
+#        deploy:
+#          steps:
+#          - download: current
+#            artifact: build.helm
+#          - task: KubectlInstaller@0
+#            inputs:
+#              kubectlVersion: 'latest'
+#            enabled: true
+#          - task: HelmInstaller@1
+#            inputs:
+#              helmVersionToInstall: '3.1.2'
+#          - task: replacetokens@3
+#            displayName: replace tokens
+#            inputs:
+#              rootDirectory: '$(Pipeline.Workspace)/build.helm'
+#              targetFiles: '**/*.yaml'
+#              encoding: 'auto'
+#              writeBOM: true
+#              verbosity: 'detailed'
+#              actionOnMissing: 'warn'
+#              keepToken: false
+#              tokenPrefix: '#{'
+#              tokenSuffix: '}#'
+
+#          - task: HelmDeploy@0
+#            displayName: 'sunbox-sdp-$(build.buildnumber)'
+#            inputs:
+#              connectionType: 'Azure Resource Manager'
+#              azureSubscription: 'SDP DEV Subscription'
+#              azureResourceGroup: 'isd-dev-aks'
+#              kubernetesCluster: 'aks-isd-dev-aks'
+#              useClusterAdmin: true
+#              namespace: 'sdp-dev'
+#              command: 'upgrade'
+#              chartType: 'FilePath'
+#              chartPath: '$(Pipeline.Workspace)/build.helm/sdp-$(build.buildnumber).tgz'
+#              releaseName: 'sdp'
+#              valueFile: '$(Pipeline.Workspace)/build.helm/values.yaml'
+#              recreate: true
+#              force: true
+#              waitForExecution: false
+- stage: sit
+  jobs:
+  - deployment: sit
+    displayName: sit
+    pool:
+       name: SDP-DEV-AGENT-POOL
+    environment: sit
+    variables:
+    - group: DEPLOY-SIT-SUNBOX-SDP
+    - group: DEPLOY-SIT-COMMON
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: build.helm
+          - task: KubectlInstaller@0
+            inputs:
+              kubectlVersion: 'latest'
+            enabled: true
+          - task: HelmInstaller@1
+            inputs:
+              helmVersionToInstall: '3.1.2'
+          - task: replacetokens@3
+            displayName: replace tokens
+            inputs:
+              rootDirectory: '$(Pipeline.Workspace)/build.helm'
+              targetFiles: '**/*.yaml'
+              encoding: 'auto'
+              writeBOM: true
+              verbosity: 'detailed'
+              actionOnMissing: 'warn'
+              keepToken: false
+              tokenPrefix: '#{'
+              tokenSuffix: '}#'
+
+          - task: HelmDeploy@0
+            displayName: 'sunbox-sdp-$(build.buildnumber)'
+            inputs:
+              connectionType: 'Azure Resource Manager'
+              azureSubscription: 'SDP DEV Subscription'
+              azureResourceGroup: 'isd-dev-aks'
+              kubernetesCluster: 'aks-isd-dev-aks'
+              useClusterAdmin: true
+              namespace: 'sdp-test-sit'
+              command: 'upgrade'
+              chartType: 'FilePath'
+              chartPath: '$(Pipeline.Workspace)/build.helm/sdp-$(build.buildnumber).tgz'
+              releaseName: 'sdp'
+              valueFile: '$(Pipeline.Workspace)/build.helm/values.yaml'
+              force: true
+              waitForExecution: false

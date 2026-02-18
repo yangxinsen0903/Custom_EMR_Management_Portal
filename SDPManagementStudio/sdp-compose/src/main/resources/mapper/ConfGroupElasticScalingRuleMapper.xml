@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.ConfGroupElasticScalingRuleMapper">
+    <resultMap id="BaseResultMap" type="com.sunbox.domain.ConfGroupElasticScalingRule">
+        <id column="es_rule_id" jdbcType="VARCHAR" property="esRuleId"/>
+        <result column="group_es_id" jdbcType="VARCHAR" property="groupEsId"/>
+        <result column="es_rule_name" jdbcType="VARCHAR" property="esRuleName"/>
+        <result column="scaling_type" jdbcType="INTEGER" property="scalingType"/>
+        <result column="per_saling_cout" jdbcType="INTEGER" property="perSalingCout"/>
+        <result column="load_metric" jdbcType="VARCHAR" property="loadMetric"/>
+        <result column="window_size" jdbcType="INTEGER" property="windowSize"/>
+        <result column="aggregate_type" jdbcType="VARCHAR" property="aggregateType"/>
+        <result column="operator" jdbcType="VARCHAR" property="operator"/>
+        <result column="threshold" jdbcType="DOUBLE" property="threshold"/>
+        <result column="repeat_count" jdbcType="INTEGER" property="repeatCount"/>
+        <result column="freezing_time" jdbcType="INTEGER" property="freezingTime"/>
+        <result column="createdby" jdbcType="VARCHAR" property="createdby"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="modifiedby" jdbcType="VARCHAR" property="modifiedby"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        es_rule_id
+        , group_es_id, es_rule_name, scaling_type, per_saling_cout, load_metric,
+        window_size, aggregate_type, operator, threshold, repeat_count, freezing_time, createdby,
+        created_time, modifiedby, modified_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from conf_group_elastic_scaling_rule
+        where es_rule_id = #{esRuleId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByClusterId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from conf_group_elastic_scaling_rule
+        where cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from conf_group_elastic_scaling_rule
+        where es_rule_id = #{esRuleId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.sunbox.domain.ConfGroupElasticScalingRule">
+        insert into conf_group_elastic_scaling_rule (es_rule_id, group_es_id, es_rule_name,
+        scaling_type, per_saling_cout, load_metric,
+        window_size, aggregate_type, operator,
+        threshold, repeat_count, freezing_time,
+        createdby, created_time, modifiedby,
+        modified_time)
+        values (#{esRuleId,jdbcType=VARCHAR}, #{groupEsId,jdbcType=VARCHAR}, #{esRuleName,jdbcType=VARCHAR},
+        #{scalingType,jdbcType=INTEGER}, #{perSalingCout,jdbcType=INTEGER}, #{loadMetric,jdbcType=VARCHAR},
+        #{windowSize,jdbcType=INTEGER}, #{aggregateType,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR},
+        #{threshold,jdbcType=DOUBLE}, #{repeatCount,jdbcType=INTEGER}, #{freezingTime,jdbcType=INTEGER},
+        #{createdby,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifiedby,jdbcType=VARCHAR},
+        #{modifiedTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.sunbox.domain.ConfGroupElasticScalingRule">
+        insert into conf_group_elastic_scaling_rule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="esRuleId != null">
+                es_rule_id,
+            </if>
+            <if test="groupEsId != null">
+                group_es_id,
+            </if>
+            <if test="esRuleName != null">
+                es_rule_name,
+            </if>
+            <if test="scalingType != null">
+                scaling_type,
+            </if>
+            <if test="perSalingCout != null">
+                per_saling_cout,
+            </if>
+            <if test="loadMetric != null">
+                load_metric,
+            </if>
+            <if test="windowSize != null">
+                window_size,
+            </if>
+            <if test="aggregateType != null">
+                aggregate_type,
+            </if>
+            <if test="operator != null">
+                operator,
+            </if>
+            <if test="threshold != null">
+                threshold,
+            </if>
+            <if test="repeatCount != null">
+                repeat_count,
+            </if>
+            <if test="freezingTime != null">
+                freezing_time,
+            </if>
+            <if test="createdby != null">
+                createdby,
+            </if>
+            <if test="createdTime != null">
+                created_time,
+            </if>
+            <if test="modifiedby != null">
+                modifiedby,
+            </if>
+            <if test="modifiedTime != null">
+                modified_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="esRuleId != null">
+                #{esRuleId,jdbcType=VARCHAR},
+            </if>
+            <if test="groupEsId != null">
+                #{groupEsId,jdbcType=VARCHAR},
+            </if>
+            <if test="esRuleName != null">
+                #{esRuleName,jdbcType=VARCHAR},
+            </if>
+            <if test="scalingType != null">
+                #{scalingType,jdbcType=INTEGER},
+            </if>
+            <if test="perSalingCout != null">
+                #{perSalingCout,jdbcType=INTEGER},
+            </if>
+            <if test="loadMetric != null">
+                #{loadMetric,jdbcType=VARCHAR},
+            </if>
+            <if test="windowSize != null">
+                #{windowSize,jdbcType=INTEGER},
+            </if>
+            <if test="aggregateType != null">
+                #{aggregateType,jdbcType=VARCHAR},
+            </if>
+            <if test="operator != null">
+                #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="threshold != null">
+                #{threshold,jdbcType=DOUBLE},
+            </if>
+            <if test="repeatCount != null">
+                #{repeatCount,jdbcType=INTEGER},
+            </if>
+            <if test="freezingTime != null">
+                #{freezingTime,jdbcType=INTEGER},
+            </if>
+            <if test="createdby != null">
+                #{createdby,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedby != null">
+                #{modifiedby,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedTime != null">
+                #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.sunbox.domain.ConfGroupElasticScalingRule">
+        update conf_group_elastic_scaling_rule
+        <set>
+            <if test="groupEsId != null">
+                group_es_id = #{groupEsId,jdbcType=VARCHAR},
+            </if>
+            <if test="esRuleName != null">
+                es_rule_name = #{esRuleName,jdbcType=VARCHAR},
+            </if>
+            <if test="scalingType != null">
+                scaling_type = #{scalingType,jdbcType=INTEGER},
+            </if>
+            <if test="perSalingCout != null">
+                per_saling_cout = #{perSalingCout,jdbcType=INTEGER},
+            </if>
+            <if test="loadMetric != null">
+                load_metric = #{loadMetric,jdbcType=VARCHAR},
+            </if>
+            <if test="windowSize != null">
+                window_size = #{windowSize,jdbcType=INTEGER},
+            </if>
+            <if test="aggregateType != null">
+                aggregate_type = #{aggregateType,jdbcType=VARCHAR},
+            </if>
+            <if test="operator != null">
+                operator = #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="threshold != null">
+                threshold = #{threshold,jdbcType=DOUBLE},
+            </if>
+            <if test="repeatCount != null">
+                repeat_count = #{repeatCount,jdbcType=INTEGER},
+            </if>
+            <if test="freezingTime != null">
+                freezing_time = #{freezingTime,jdbcType=INTEGER},
+            </if>
+            <if test="createdby != null">
+                createdby = #{createdby,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedby != null">
+                modifiedby = #{modifiedby,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedTime != null">
+                modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ruleSorted != null">
+                rule_sorted = #{ruleSorted,jdbcType=INTEGER},
+            </if>
+            <if test="clusterId != null">
+                cluster_id = #{clusterId,jdbcType=VARCHAR},
+            </if>
+            <if test="enableBeforestartScript != null">
+                enable_beforestart_script = #{enableBeforestartScript,jdbcType=INTEGER},
+            </if>
+            <if test="enableAfterstartScript != null">
+                enable_afterstart_script = #{enableAfterstartScript,jdbcType=INTEGER},
+            </if>
+            <if test="isValid != null">
+                is_valid = #{isValid,jdbcType=INTEGER},
+            </if>
+            <if test="groupName != null">
+                group_name = #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="isGracefulScalein != null">
+                is_graceful_scalein = #{isGracefulScalein,jdbcType=INTEGER},
+            </if>
+            <if test="scaleinWaitingtime != null">
+                scalein_waitingtime = #{scaleinWaitingtime,jdbcType=INTEGER},
+            </if>
+        </set>
+        where es_rule_id = #{esRuleId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.sunbox.domain.ConfGroupElasticScalingRule">
+        update conf_group_elastic_scaling_rule
+        set group_es_id = #{groupEsId,jdbcType=VARCHAR},
+        es_rule_name = #{esRuleName,jdbcType=VARCHAR},
+        scaling_type = #{scalingType,jdbcType=INTEGER},
+        per_saling_cout = #{perSalingCout,jdbcType=INTEGER},
+        load_metric = #{loadMetric,jdbcType=VARCHAR},
+        window_size = #{windowSize,jdbcType=INTEGER},
+        aggregate_type = #{aggregateType,jdbcType=VARCHAR},
+        operator = #{operator,jdbcType=VARCHAR},
+        threshold = #{threshold,jdbcType=DOUBLE},
+        repeat_count = #{repeatCount,jdbcType=INTEGER},
+        freezing_time = #{freezingTime,jdbcType=INTEGER},
+        createdby = #{createdby,jdbcType=VARCHAR},
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+        modifiedby = #{modifiedby,jdbcType=VARCHAR},
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+        where es_rule_id = #{esRuleId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateValid" parameterType="com.sunbox.domain.ConfGroupElasticScalingRule">
+        update conf_group_elastic_scaling_rule
+        set is_valid=#{isValid,jdbcType=INTEGER}
+        where cluster_id=#{clusterId,jdbcType=VARCHAR} and group_name=#{groupName,jdbcType=VARCHAR}
+    </update>
+</mapper>

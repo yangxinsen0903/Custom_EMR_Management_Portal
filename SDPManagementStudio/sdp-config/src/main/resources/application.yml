@@ -1,0 +1,59 @@
+server:
+  port: 25000
+db:
+  url: ${DB_URL:jdbc:mysql://sdp-mysql8-westus2.mysql.database.azure.com/sdpms_dev?useSSL=false}
+  username: ${DB_USERNAME:azureuser}
+  password: ${DB_PASSWORD:VITe3snoFSUo2/IV4aTsYCACjkFFgqsVz6+uwXYaY0SySXwmB2V4mH0qDL8nTyhodfXnYJD1KYLkS7XY65RfBw==}
+  key: ${DB_KEY:MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKWBnL7zd4ejTpxyPtTnlUYHhKiu3a+eP/dV9uP+aSEETAdER4SMqTi6QbLxgyE2vg1NaDlnR0kP7WIxxh9DJkkCAwEAAQ==}
+regserver:
+  url: ${REGSERVER_URL:http://igs:igscd@127.0.0.1:30000/eureka/}
+
+
+spring:
+  application:
+    name: sdp-config
+  profiles:
+    active: jdbc
+  cloud:
+    config:
+      server:
+        default-label: master
+        jdbc:
+          sql: SELECT akey, avalue FROM config_detail where application = ? and profile=? and label=?  union all select akey, avalue from config_core
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialization-mode: always
+    druid:
+      initial-size: 5
+      max-active: 200
+      min-idle: 5
+      max-wait: 6000
+      connect-properties: config.decrypt=true;config.decrypt.key=${spring.datasource.druid.config.key}
+      config:
+        key: ${db.key}
+        enabled: true
+    url: ${db.url}
+    username: ${db.username}
+    password: ${db.password}
+  security:
+    user:
+      name: igs
+      password: igsconfig123
+  flyway:
+    sql-migration-suffixes: ".sql"
+    sql-migration-prefix: "V"
+    sql-migration-separator: "__"
+    validate-on-migrate: true
+    baseline-on-migrate: true
+    enabled: true
+    encoding: UTF-8
+    locations: classpath:db/migration
+    placeholder-replacement: false
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${regserver.url}
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true

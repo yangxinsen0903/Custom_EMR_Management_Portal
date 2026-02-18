@@ -1,0 +1,29 @@
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+/log*
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+*.log
+*.DS_Store
+.DS_Store
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+/build/
+/server/*
+/node_modules/*

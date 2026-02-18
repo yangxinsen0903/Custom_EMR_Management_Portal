@@ -1,0 +1,1 @@
+ALTER TABLE conf_scaling_task_vm MODIFY COLUMN os_imageid varchar(300)  NULL COMMENT '镜像ID';

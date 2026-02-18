@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunbox.sdpcompose.mapper.AmbariConfigItemAttrMapper">
+    <resultMap type="com.sunbox.domain.ambari.AmbariConfigItemAttr" id="AmbariConfigItemAttrMap">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="stackCode" column="stack_code" jdbcType="VARCHAR"/>
+        <result property="serviceCode" column="service_code" jdbcType="VARCHAR"/>
+        <result property="componentCode" column="component_code" jdbcType="VARCHAR"/>
+        <result property="configTypeCode" column="config_type_code" jdbcType="VARCHAR"/>
+        <result property="tagName" column="tag_name" jdbcType="VARCHAR"/>
+        <result property="key" column="key" jdbcType="VARCHAR"/>
+        <result property="value" column="value" jdbcType="VARCHAR"/>
+        <result property="state" column="state" jdbcType="VARCHAR"/>
+        <result property="createdBy" column="created_by" jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="updatedBy" column="updated_by" jdbcType="VARCHAR"/>
+        <result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 通过ID查询单条数据 -->
+    <select id="queryById" resultMap="AmbariConfigItemAttrMap">
+        select
+        id,stack_code,service_code,component_code,config_type_code,tag_name,`key`,value,state,created_by,created_time,updated_by,updated_time
+        from ambari_config_item_attr
+        where id = #{id}
+    </select>
+
+    <!--分页查询指定行数据-->
+    <select id="queryByStackCodeAndServiceCode" resultMap="AmbariConfigItemAttrMap">
+        select
+        id,stack_code,service_code,component_code,config_type_code,tag_name,`key`,value,state,
+        created_by,created_time,updated_by,updated_time
+        from ambari_config_item_attr
+        where stack_code = #{stackCode} and state = 'VALID' and service_code in
+        <foreach collection="serviceCode" item="code" index="index" open="(" close=")" separator=",">
+            #{code}
+        </foreach>
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from ambari_config_item_attr
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="stackCode != null and stackCode != ''">
+                and stack_code = #{stackCode}
+            </if>
+            <if test="serviceCode != null and serviceCode != ''">
+                and service_code = #{serviceCode}
+            </if>
+            <if test="componentCode != null and componentCode != ''">
+                and component_code = #{componentCode}
+            </if>
+            <if test="configTypeCode != null and configTypeCode != ''">
+                and config_type_code = #{configTypeCode}
+            </if>
+            <if test="tagName != null and tagName != ''">
+                and tag_name = #{tagName}
+            </if>
+            <if test="`key` != null and `key` != ''">
+                and `key` = #{`key`}
+            </if>
+            <if test="value != null and value != ''">
+                and value = #{value}
+            </if>
+            <if test="state != null and state != ''">
+                and state = #{state}
+            </if>
+            <if test="createdBy != null and createdBy != ''">
+                and created_by = #{createdBy}
+            </if>
+            <if test="createdTime != null and createdTime != ''">
+                and created_time = #{createdTime}
+            </if>
+            <if test="updatedBy != null and updatedBy != ''">
+                and updated_by = #{updatedBy}
+            </if>
+            <if test="updatedTime != null and updatedTime != ''">
+                and updated_time = #{updatedTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增数据-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into ambari_config_item_attr(id,stack_code,service_code,component_code,config_type_code,tag_name,`key`,value,state,created_by,created_time,updated_by,updated_time)
+        values (#{id},#{stackCode},#{serviceCode},#{componentCode},#{configTypeCode},#{tagName},#{`key`},#{value},#{state},#{createdBy},#{createdTime},#{updatedBy},#{updatedTime})
+    </insert>
+
+    <!-- 批量新增数据 -->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into ambari_config_item_attr(id,stack_code,service_code,component_code,config_type_code,tag_name,`key`,value,state,created_by,created_time,updated_by,updated_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id},#{entity.stackCode},#{entity.serviceCode},#{entity.componentCode},#{entity.configTypeCode},#{entity.tagName},#{entity.`key`},#{entity.value},#{entity.state},#{entity.createdBy},#{entity.createdTime},#{entity.updatedBy},#{entity.updatedTime})
+        </foreach>
+    </insert>
+
+    <!-- 批量新增或按主键更新数据 -->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into ambari_config_item_attr(id,stack_code,service_code,component_code,config_type_code,tag_name,`key`,value,state,created_by,created_time,updated_by,updated_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id},#{entity.stackCode},#{entity.serviceCode},#{entity.componentCode},#{entity.configTypeCode},#{entity.tagName},#{entity.`key`},#{entity.value},#{entity.state},#{entity.createdBy},#{entity.createdTime},#{entity.updatedBy},#{entity.updatedTime})
+        </foreach>
+        on duplicate `key` update
+        id=values(id),
+        stack_code=values(stack_code),
+        service_code=values(service_code),
+        component_code=values(component_code),
+        config_type_code=values(config_type_code),
+        tag_name=values(tag_name),
+        `key`=values(`key`),
+        value=values(value),
+        state=values(state),
+        created_by=values(created_by),
+        created_time=values(created_time),
+        updated_by=values(updated_by),
+        updated_time=values(updated_time)
+    </insert>
+
+    <!-- 更新数据 -->
+    <update id="update">
+        update ambari_config_item_attr
+        <set>
+            <if test="id != null and id != ''">
+                id = #{id},
+            </if>
+            <if test="stackCode != null and stackCode != ''">
+                stack_code = #{stackCode},
+            </if>
+            <if test="serviceCode != null and serviceCode != ''">
+                service_code = #{serviceCode},
+            </if>
+            <if test="componentCode != null and componentCode != ''">
+                component_code = #{componentCode},
+            </if>
+            <if test="configTypeCode != null and configTypeCode != ''">
+                config_type_code = #{configTypeCode},
+            </if>
+            <if test="tagName != null and tagName != ''">
+                tag_name = #{tagName},
+            </if>
+            <if test="`key` != null and `key` != ''">
+                `key` = #{`key`},
+            </if>
+            <if test="value != null and value != ''">
+                value = #{value},
+            </if>
+            <if test="state != null and state != ''">
+                state = #{state},
+            </if>
+            <if test="createdBy != null and createdBy != ''">
+                created_by = #{createdBy},
+            </if>
+            <if test="createdTime != null and createdTime != ''">
+                created_time = #{createdTime},
+            </if>
+            <if test="updatedBy != null and updatedBy != ''">
+                updated_by = #{updatedBy},
+            </if>
+            <if test="updatedTime != null and updatedTime != ''">
+                updated_time = #{updatedTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from ambari_config_item_attr where id = #{id}
+    </delete>
+</mapper>
