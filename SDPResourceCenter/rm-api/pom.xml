@@ -81,9 +81,9 @@
                 <configuration>
                     <jdbc>
                         <driver>com.mysql.cj.jdbc.Driver</driver>
-                        <url>jdbc:mysql://emall.mysql.database.azure.com:3306/sdp</url>
-                        <user>emall</user>
-                        <password>Q1w2e3r4t5y6</password>
+                        <url>jdbc:xxx://emall.mysql.database.azure.com:3306/sdp</url>
+                        <user>user</user>
+                        <password>password</password>
                     </jdbc>
                     <generator>
                         <database>
