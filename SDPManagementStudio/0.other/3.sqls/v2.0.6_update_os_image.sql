@@ -1,3 +1,0 @@
--- 更新旧集群镜像参数
-update base_image_scripts set extra_vars = '-e "type=agent host={ambarihost} dburl={ambaridb} dbport={ambaridbport} dbname={ambaridbname} dbuser={dbuser} dbpass={dbpassword} domain={domain} wgetpath={wgetpath} clustername={clustername} logblob={logblob} username={username} clusterid={clusterid} ganglialist={ganglialist} installganglia={installganglia} zone={zone} miclientid={miclientid}"'
-where img_script_id = 'e2a719bea06c11ed922d6045bdc792d8' and img_id = '8596cf8ea06c11ed922d6045bdc792d8';

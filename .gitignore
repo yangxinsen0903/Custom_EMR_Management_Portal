@@ -1,0 +1,9 @@
+
+**/0.other/**
+**/.back_*/**
+**/*.pdma.json
+**/*.db
+**/dist/**
+**/target/**
+**/node_modules/**
+
